@@ -1,0 +1,16 @@
+{
+    "name": "vasilenkovi/init",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "taskforce\\": "classes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "SimpleVV",
+            "email": "simpleHelpD@yandex.ru"
+        }
+    ],
+    "require": {}
+}
