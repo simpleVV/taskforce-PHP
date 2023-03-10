@@ -13,6 +13,7 @@ ini_set('assert.exception', 1);
 $performerId = 81;
 $clientId = 234;
 $status = 'new';
+$finishDate = strtotime('2023/05/30');
 
 $cancelAction = new CancelAction();
 $completeAction = new CompleteAction();

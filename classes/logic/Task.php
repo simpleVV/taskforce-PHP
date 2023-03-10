@@ -7,6 +7,9 @@ use taskforce\logic\actions\CancelAction;
 use taskforce\logic\actions\CompleteAction;
 use taskforce\logic\actions\RefusalAction;
 use taskforce\logic\actions\RespondAction;
+use taskforce\utils\exception\ValidRoleException;
+use taskforce\utils\exception\ValidStatusException;
+use taskforce\utils\exception\ValidDateExeption;
 
 class Task
 {
@@ -19,7 +22,7 @@ class Task
     const ROLE_PERFORMER = "performer";
     const ROLE_CLIENT = "client";
 
-    private int $performerId;
+    private ?int $performerId;
     private int $clientId;
     private string $status;
     private DateTime $finishDate;
@@ -30,12 +33,12 @@ class Task
      * @param int|null $performerId - идентификатор исполнителя 
      * @return void
      */
-    public function __construct(string $status, int $clientId, int $performerId = null)
+    public function __construct(string $status, int $clientId, ?int $performerId)
     {
-        $this->setStatus($status);
-
         $this->performerId = $performerId;
         $this->clientId = $clientId;
+
+        $this->setStatus($status);
     }
 
     /**
@@ -47,9 +50,9 @@ class Task
     {
         $curDate = new DateTime();
 
-        if ($date > $curDate) {
-            $this->finishDate = $date;
-        }
+        $date > $curDate
+            ? $this->finishDate = $date
+            : throw new ValidDateExeption('Дата выполнения задания не может быть меньше текущей даты');
     }
 
     /**
@@ -71,7 +74,7 @@ class Task
     /**
      * Возвращает следующий статус задачи после выполненного действия  
      * @param string $action - выполненное действие 
-     * @return string|null - статус задания или null если нет статуса для выполненного действия
+     * @return ?string - статус задания или null если нет статуса для выполненного действия
      */
     public function getNextStatus(string $action): ?string
     {
@@ -92,6 +95,8 @@ class Task
      */
     public function getAvailableActions(int $userId, string $userRole): array
     {
+        $this->checkUserRole($userRole);
+
         $statusActions = $this->findActionsAllowedStatus($this->status);
         $roleActions = $this->findActionsAllowedRole($userRole);
 
@@ -119,15 +124,32 @@ class Task
             self::STATUS_FAILED
         ];
 
-        if (in_array($status, $acceptableStatuses)) {
-            $this->status = $status;
+        in_array($status, $acceptableStatuses)
+            ? $this->status = $status
+            : throw new ValidStatusException("Статус $status не существует");
+    }
+
+    /**
+     * Проверяет наличие переданной роли среди доступных.
+     * @param string $role - роль пользователя
+     * @return void
+     */
+    public function checkUserRole($role): void
+    {
+        $acceptableRole = [
+            self::ROLE_CLIENT,
+            self::ROLE_PERFORMER
+        ];
+
+        if (!in_array($role, $acceptableRole)) {
+            throw new ValidRoleException("Заданной Вами роли $role не существует");
         }
     }
 
     /**
      * Поиск доступных действий по переданному статусу
      * @param string $status - статус задачи
-     * @return array|null - $массив доступных действий или null
+     * @return ?array - $массив доступных действий или null
      */
     private function findActionsAllowedStatus($status): ?array
     {
@@ -142,7 +164,7 @@ class Task
     /**
      * Поиск доступных действий по переданному статусу
      * @param string $role - роль пользователя
-     * @return array|null - $массив доступных действий или null
+     * @return ?array - $массив доступных действий или null
      */
     private function findActionsAllowedRole($role): ?array
     {
