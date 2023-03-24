@@ -6,18 +6,19 @@ abstract class AbstractAction
 
 {
     /**
-     * Устанавливает дату окончания задачи
+     * Возвращает имя действия
      * @return string - наименование действия на кириллице
      */
     abstract public static function getName(): string;
 
     /**
-     * Устанавливает дату окончания задачи
+     * Возвращает код действия
      * @return string - код действия
      */
     abstract public static function getInnerName(): string;
 
     /**
+     * Проверяет права пользователя на возможность выполнить действие
      * @param int $userId - статус задачи
      * @param int $clientId - идентификатор заказчика  
      * @param int $performerId - идентификатор исполнителя 

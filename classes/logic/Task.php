@@ -7,9 +7,9 @@ use taskforce\logic\actions\CancelAction;
 use taskforce\logic\actions\CompleteAction;
 use taskforce\logic\actions\RefusalAction;
 use taskforce\logic\actions\RespondAction;
-use taskforce\utils\exception\ValidRoleException;
-use taskforce\utils\exception\ValidStatusException;
-use taskforce\utils\exception\ValidDateExeption;
+use taskforce\utils\exception\RoleValidException;
+use taskforce\utils\exception\StatusValidException;
+use taskforce\utils\exception\DateValidExeption;
 
 class Task
 {
@@ -52,7 +52,7 @@ class Task
 
         $date > $curDate
             ? $this->finishDate = $date
-            : throw new ValidDateExeption('Дата выполнения задания не может быть меньше текущей даты');
+            : throw new DateValidExeption("Дата выполнения задания не может быть меньше текущей даты");
     }
 
     /**
@@ -126,7 +126,7 @@ class Task
 
         in_array($status, $acceptableStatuses)
             ? $this->status = $status
-            : throw new ValidStatusException("Статус $status не существует");
+            : throw new StatusValidException("Статус $status не существует");
     }
 
     /**
@@ -142,7 +142,7 @@ class Task
         ];
 
         if (!in_array($role, $acceptableRole)) {
-            throw new ValidRoleException("Заданной Вами роли $role не существует");
+            throw new RoleValidException("Заданной Вами роли $role не существует");
         }
     }
 
