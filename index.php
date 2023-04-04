@@ -1,34 +1,44 @@
 <?php
 
-require_once 'vendor/autoload.php';
-require_once 'init.php';
+// require_once 'vendor/autoload.php';
+// require_once 'init.php';
 
-use taskforce\utils\CSVtoSQLConverter;
-use taskforce\utils\exception\FileFormatException;
-use taskforce\utils\exception\SourceFileException;
-use taskforce\utils\ExtensionFileSearcher;
+// use taskforce\utils\CSVtoSQLConverter;
+// use taskforce\utils\exception\FileFormatException;
+// use taskforce\utils\exception\SourceFileException;
+// use taskforce\utils\ExtensionFileSearcher;
 
-$searcher = new ExtensionFileSearcher(DIRECTORY_CSV_FILES, 'csv');
-$files = [];
+// $searcher = new ExtensionFileSearcher(DIRECTORY_CSV_FILES, 'csv');
+// $files = [];
 
-try {
-    $searcher->findFiles();
-    $files = $searcher->getFiles();
-} catch (SourceFileException $e) {
-    error_log("Не удалось обработать директорию: ", $e->getMessage());
+// try {
+//     $searcher->findFiles();
+//     $files = $searcher->getFiles();
+// } catch (SourceFileException $e) {
+//     error_log("Не удалось обработать директорию: ", $e->getMessage());
+// }
+
+// foreach ($files as $file) {
+//     $loader = new CSVtoSQLConverter($file);
+
+//     try {
+//         $loader->importCSVToSQL(DIRECTORY_SQL_FILES);
+//     } catch (SourceFileException $e) {
+//         error_log("Не удалось обработать csv файл: " . $e->getMessage());
+//     } catch (FileFormatException $e) {
+//         error_log("Неверная форма файла импорта: " . $e->getMessage());
+//     }
+// }
+
+function isSquare($n)
+{
+    // if ($n < 0) {
+    //     return false;
+    // }
+    return fmod(sqrt($n), 1) === 0 ? true : false;
 }
 
-foreach ($files as $file) {
-    $loader = new CSVtoSQLConverter($file);
-
-    try {
-        $loader->importCSVToSQL(DIRECTORY_SQL_FILES);
-    } catch (SourceFileException $e) {
-        error_log("Не удалось обработать csv файл: " . $e->getMessage());
-    } catch (FileFormatException $e) {
-        error_log("Неверная форма файла импорта: " . $e->getMessage());
-    }
-}
+var_dump(fmod(sqrt(0), 1) == 0);
 
 // use taskforce\logic\actions\CancelAction;
 // use taskforce\logic\actions\CompleteAction;
