@@ -72,7 +72,7 @@
 
     "autoload": {
         "psr-4": {
-            "taskforce\\": "src/"
+            "taskforce\\": "src/classes"
         }
     }
 }

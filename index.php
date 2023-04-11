@@ -1,7 +1,7 @@
 <?php
 
-// require_once 'vendor/autoload.php';
-// require_once 'init.php';
+require_once 'vendor/autoload.php';
+require_once 'init.php';
 
 // use taskforce\utils\CSVtoSQLConverter;
 // use taskforce\utils\exception\FileFormatException;
@@ -29,16 +29,6 @@
 //         error_log("Неверная форма файла импорта: " . $e->getMessage());
 //     }
 // }
-
-function isSquare($n)
-{
-    // if ($n < 0) {
-    //     return false;
-    // }
-    return fmod(sqrt($n), 1) === 0 ? true : false;
-}
-
-var_dump(fmod(sqrt(0), 1) == 0);
 
 // use taskforce\logic\actions\CancelAction;
 // use taskforce\logic\actions\CompleteAction;
