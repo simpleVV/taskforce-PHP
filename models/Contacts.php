@@ -51,7 +51,7 @@ class Contacts extends \yii\db\ActiveRecord
             'email' => 'Электронная почта',
             'phone' => 'Телефон',
             'telegram' => 'Telegram',
-            'user_id' => 'User ID',
+            'user_id' => 'Пользователь',
         ];
     }
 

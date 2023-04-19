@@ -39,6 +39,7 @@ DROP TABLE IF EXISTS `statuses`;
 CREATE TABLE `statuses` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(60) NOT NULL UNIQUE,
+  `code` VARCHAR(60) UNIQUE NOT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -109,7 +110,7 @@ CREATE TABLE `tasks` (
   `description` TEXT NOT NULL,
   `location` VARCHAR(128),
   `price` INT,
-  `dt_expire` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `dt_expire` datetime DEFAULT NULL,
   `category_id` INT(11) UNSIGNED NOT NULL,
   `client_id` INT(11) UNSIGNED NOT NULL,
   `performer_id` INT(11) UNSIGNED NOT NULL,
@@ -118,7 +119,7 @@ CREATE TABLE `tasks` (
   CONSTRAINT `tasks_1bfk_2` FOREIGN KEY (`client_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tasks_1bfk_3` FOREIGN KEY (`performer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tasks_1bfk_4` FOREIGN KEY (`status_id`) REFERENCES `statuses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
 );
 
 DROP TABLE IF EXISTS `files`;

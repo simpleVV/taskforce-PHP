@@ -54,8 +54,8 @@ class Responses extends \yii\db\ActiveRecord
             'comment' => 'Комментарий',
             'price' => 'Цена',
             'is_approved' => 'Одобрен',
-            // 'task_id' => 'Task ID',
-            // 'user_id' => 'User ID',
+            'task_id' => 'Задание',
+            'user_id' => 'Пользователь',
         ];
     }
 

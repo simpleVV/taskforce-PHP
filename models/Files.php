@@ -54,8 +54,8 @@ class Files extends \yii\db\ActiveRecord
             'dt_creation' => 'Дата создания',
             'name' => 'Имя',
             'path' => 'Путь',
-            // 'task_id' => 'Task ID',
-            // 'user_id' => 'User ID',
+            'task_id' => 'Задание',
+            'user_id' => 'Пользователь',
         ];
     }
 

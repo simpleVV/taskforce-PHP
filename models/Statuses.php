@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property string $name
+ * @property string $code
  *
  * @property Tasks[] $tasks
  */
@@ -28,9 +29,10 @@ class Statuses extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['name'], 'string', 'max' => 60],
+            [['name', 'code'], 'required'],
+            [['name', 'code'], 'string', 'max' => 60],
             [['name'], 'unique'],
+            [['code'], 'unique'],
         ];
     }
 
@@ -40,8 +42,9 @@ class Statuses extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            // 'id' => 'ID',
+            'id' => 'ID',
             'name' => 'Имя',
+            'code' => 'Код',
         ];
     }
 

@@ -52,8 +52,8 @@ class Reviews extends \yii\db\ActiveRecord
             'dt_creation' => 'Дата создания',
             'description' => 'Описание',
             'rate' => 'Ставка',
-            // 'user_id' => 'User ID',
-            // 'client_id' => 'Client ID',
+            'user_id' => 'Пользователь',
+            'client_id' => 'Заказчик',
         ];
     }
 

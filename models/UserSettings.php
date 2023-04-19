@@ -57,9 +57,9 @@ class UserSettings extends \yii\db\ActiveRecord
             'date_birth' => 'Дата рождения',
             'avatar' => 'Аватар',
             'about' => 'О себе',
-            // 'category_id' => 'Category ID',
-            // 'contacts_id' => 'Contacts ID',
-            // 'user_id' => 'User ID',
+            'category_id' => 'Категория',
+            'contacts_id' => 'Контакты',
+            'user_id' => 'Пользователь',
             'hide_contacts' => 'Скрыть контакты',
         ];
     }

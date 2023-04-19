@@ -65,8 +65,8 @@ class Users extends \yii\db\ActiveRecord
             'email' => 'Электронная почта',
             'name' => 'Имя',
             'password' => 'Пароль',
-            // 'city_id' => 'City ID',
-            // 'role_id' => 'Role ID',
+            'city_id' => 'Город',
+            'role_id' => 'Роль',
         ];
     }
 

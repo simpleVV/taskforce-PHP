@@ -67,10 +67,10 @@ class Tasks extends \yii\db\ActiveRecord
             'location' => 'Местоположение',
             'price' => 'Цена',
             'dt_expire' => 'Дата окончания',
-            // 'category_id' => 'Category ID',
-            // 'client_id' => 'Client ID',
-            // 'performer_id' => 'Performer ID',
-            // 'status_id' => 'Status ID',
+            'category_id' => 'Категория',
+            'client_id' => 'Заказчик',
+            'performer_id' => 'Исполнитель',
+            'status_id' => 'Статус',
         ];
     }
 
@@ -132,6 +132,11 @@ class Tasks extends \yii\db\ActiveRecord
     public function getStatus()
     {
         return $this->hasOne(Statuses::class, ['id' => 'status_id']);
+    }
+
+    public function getStatusCode()
+    {
+        return $this->status->code;
     }
 
     /**

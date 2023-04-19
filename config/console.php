@@ -28,6 +28,14 @@ $config = [
         'db' => $db,
     ],
     'params' => $params,
+    'controllerMap' => [
+        'fixture' => [
+            'class' => 'yii\faker\FixtureController',
+            'templatePath' => '@app/fixtures/templates',
+            'fixtureDataPath' => '@app/fixtures/data',
+            'namespace' => 'app\fixtures',
+        ],
+    ],
     /*
     'controllerMap' => [
         'fixture' => [ // Fixture generation command line.
