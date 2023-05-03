@@ -3,11 +3,11 @@
 namespace app\models;
 
 /**
- * This is the ActiveQuery class for [[Responses]].
+ * This is the ActiveQuery class for [[Role]].
  *
- * @see Responses
+ * @see Role
  */
-class ResponsesQuery extends \yii\db\ActiveQuery
+class RoleQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class ResponsesQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Responses[]|array
+     * @return Role[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class ResponsesQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Responses|array|null
+     * @return Role|array|null
      */
     public function one($db = null)
     {

@@ -4,6 +4,8 @@
 
 use yii\helpers\BaseStringHelper;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+use yii\widgets\ActiveForm;
 
 // use app\assets\AppAsset;
 
@@ -13,27 +15,27 @@ $this->title = 'Просмотр новых заданий'
 <div class="left-column">
     <h3 class="head-main head-task">Новые задания</h3>
 
-    <?php foreach ($tasks as $task) : ?>
+    <?php foreach ($models as $model) : ?>
         <div class="task-card">
             <div class="header-task">
                 <a href="#" class="link link--block link--big">
-                    <?= Html::encode($task->title); ?></a>
+                    <?= Html::encode($model->title); ?></a>
                 <p class="price price--task">
-                    <?= Html::encode($task->price); ?> ₽
+                    <?= Html::encode($model->price); ?> ₽
                 </p>
             </div>
             <p class="info-text">
-                <span class="current-time"><?= Yii::$app->formatter->asRelativeTime($task->dt_creation) ?></span> назад
+                <span class="current-time"><?= Yii::$app->formatter->asRelativeTime($model->dt_creation) ?></span> назад
             </p>
             <p class="task-text">
-                <?= Html::encode(BaseStringHelper::truncate($task->description, 200)); ?>
+                <?= Html::encode(BaseStringHelper::truncate($model->description, 200)); ?>
             </p>
             <div class="footer-task">
                 <p class="info-text town-text">
-                    <?= $task->location; ?>
+                    <?= $model->location; ?>
                 </p>
                 <p class="info-text category-text">
-                    <?= $task->category->name; ?>
+                    <?= $model->category->name; ?>
                 </p>
                 <a href="#" class="button button--black">Смотреть Задание</a>
             </div>
@@ -63,38 +65,23 @@ $this->title = 'Просмотр новых заданий'
 <div class="right-column">
     <div class="right-card black">
         <div class="search-form">
-            <form>
-                <h4 class="head-card">Категории</h4>
-                <div class="form-group">
-                    <div class="checkbox-wrapper">
-                        <label class="control-label" for="сourier-services">
-                            <input type="checkbox" id="сourier-services" checked />
-                            Курьерские услуги</label>
-                        <label class="control-label" for="cargo-transportation">
-                            <input id="cargo-transportation" type="checkbox" />
-                            Грузоперевозки</label>
-                        <label class="control-label" for="translations">
-                            <input id="translations" type="checkbox" />
-                            Переводы</label>
-                    </div>
+            <?php $form = ActiveForm::begin(); ?>
+            <h4 class="head-card">Категории</h4>
+            <div class="form-group">
+                <div class="checkbox-wrapper">
+                    <?= HTML::activeCheckboxList($task, 'category_id', ArrayHelper::map($categories, 'id', 'name'), ['tag' => null, 'itemOptions' => ['labelOptions' => ['class' => 'control-label']]]); ?>
                 </div>
-                <h4 class="head-card">Дополнительно</h4>
-                <div class="form-group">
-                    <label class="control-label" for="without-performer">
-                        <input id="without-performer" type="checkbox" checked />
-                        Без исполнителя</label>
-                </div>
-                <h4 class="head-card">Период</h4>
-                <div class="form-group">
-                    <label for="period-value"></label>
-                    <select id="period-value">
-                        <option>1 час</option>
-                        <option>12 часов</option>
-                        <option>24 часа</option>
-                    </select>
-                </div>
-                <input type="submit" class="button button--blue" value="Искать" />
-            </form>
+            </div>
+            <h4 class="head-card">Дополнительно</h4>
+            <div class="checkbox-wrapper">
+                <?= $form->field($task, 'noPerformer')->checkbox(['labelOptions' => ['class' => 'control-label']]); ?>
+            </div>
+            <h4 class="head-card">Период</h4>
+            <div class="form-group">
+                <?= $form->field($task, 'periodOption', ['template' => '{input}'])->dropDownList(['3600' => '1 час', '43200' => '12 часов', '86400' => '24 часа'], ['prompt' => 'Выбрать']); ?>
+            </div>
+            <input type="submit" class="button button--blue" value="Искать" />
+            <?php ActiveForm::end(); ?>
         </div>
     </div>
 </div>

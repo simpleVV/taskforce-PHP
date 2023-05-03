@@ -60,10 +60,10 @@ class Statuses extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return StatusesQuery the active query used by this AR class.
+     * @return StatusQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new StatusesQuery(get_called_class());
+        return new StatusQuery(get_called_class());
     }
 }

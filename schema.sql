@@ -113,7 +113,7 @@ CREATE TABLE `tasks` (
   `dt_expire` datetime DEFAULT NULL,
   `category_id` INT(11) UNSIGNED NOT NULL,
   `client_id` INT(11) UNSIGNED NOT NULL,
-  `performer_id` INT(11) UNSIGNED NOT NULL,
+  `performer_id` INT(11) UNSIGNED,
   `status_id` INT(11) UNSIGNED NOT NULL,
   CONSTRAINT `tasks_1bfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tasks_1bfk_2` FOREIGN KEY (`client_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,

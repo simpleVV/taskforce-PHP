@@ -5,22 +5,23 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "roles".
+ * This is the model class for table "cities".
  *
  * @property int $id
  * @property string $name
- * @property string $code
+ * @property float|null $lat
+ * @property float|null $lon
  *
  * @property Users[] $users
  */
-class Roles extends \yii\db\ActiveRecord
+class Cities extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'roles';
+        return 'cities';
     }
 
     /**
@@ -29,9 +30,10 @@ class Roles extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'code'], 'required'],
-            [['name', 'code'], 'string', 'max' => 60],
-            [['code'], 'unique'],
+            [['name'], 'required'],
+            [['lat', 'lon'], 'number'],
+            [['name'], 'string', 'max' => 255],
+            [['name'], 'unique'],
         ];
     }
 
@@ -43,7 +45,8 @@ class Roles extends \yii\db\ActiveRecord
         return [
             // 'id' => 'ID',
             'name' => 'Имя',
-            'code' => 'Код',
+            'lat' => 'Широта',
+            'lon' => 'Долгота',
         ];
     }
 
@@ -54,15 +57,15 @@ class Roles extends \yii\db\ActiveRecord
      */
     public function getUsers()
     {
-        return $this->hasMany(Users::class, ['role_id' => 'id']);
+        return $this->hasMany(Users::class, ['city_id' => 'id']);
     }
 
     /**
      * {@inheritdoc}
-     * @return RolesQuery the active query used by this AR class.
+     * @return CityQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new RolesQuery(get_called_class());
+        return new CityQuery(get_called_class());
     }
 }

@@ -3,11 +3,11 @@
 namespace app\models;
 
 /**
- * This is the ActiveQuery class for [[Tasks]].
+ * This is the ActiveQuery class for [[Status]].
  *
- * @see Tasks
+ * @see Status
  */
-class TasksQuery extends \yii\db\ActiveQuery
+class StatusQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class TasksQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Tasks[]|array
+     * @return Status[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class TasksQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Tasks|array|null
+     * @return Status|array|null
      */
     public function one($db = null)
     {

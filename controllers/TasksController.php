@@ -2,49 +2,69 @@
 
 namespace app\controllers;
 
-use app\models\Tasks;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use app\models\Task;
+use app\models\Category;
+use yii\data\Pagination;
 
 class TasksController extends Controller
 {
+    /**
+     * Отображает страницу с задачами.
+     *
+     * @return string
+     */
     public function actionIndex()
     {
-        $tasks = Tasks::find()
-            ->where(['status_id' => 1])
-            ->orderBy('dt_creation')
-            ->all();
+        $task = new Task();
+
+        $task->load(Yii::$app->request->post());
+
+        $tasksQuery = $task->getSearchQuery();
+        $countQuery = clone $tasksQuery;
+
+
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 5]);
+
+        $categories = Category::find()->all();
+        $models = $tasksQuery->offset($pages->offset)->limit($pages->limit)->all();
+        // var_dump($models);
 
         return $this->render('index', [
-            'tasks' => $tasks,
-        ]);
-    }
-
-    public function actionView($id)
-    {
-        $task = Tasks::findOne($id);
-
-        if ($task === null) {
-            throw new NotFoundHttpException;
-        }
-
-        return $this->render('task', [
+            'models' => $models,
             'task' => $task,
+            'pages' => $pages,
+            'categories' => $categories
         ]);
     }
 
-    public function actionCreate()
-    {
-        $data = [];
+    // public function actionView($id)
+    // {
+    //     $task = Task::findOne($id);
 
-        $newTask = new Tasks;
-        $newTask->load($data);
+    //     if ($task === null) {
+    //         throw new NotFoundHttpException;
+    //     }
 
-        $newTask->setScenario('insert');
-        $isValid = $newTask->validate();
+    //     return $this->render('task', [
+    //         'task' => $task,
+    //     ]);
+    // }
 
-        if ($isValid) {
-            $newTask->save();
-        }
-    }
+    // public function actionCreate()
+    // {
+    //     $data = [];
+
+    //     $newTask = new Task;
+    //     $newTask->load($data);
+
+    //     $newTask->setScenario('insert');
+    //     $isValid = $newTask->validate();
+
+    //     if ($isValid) {
+    //         $newTask->save();
+    //     }
+    // }
 }

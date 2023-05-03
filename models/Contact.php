@@ -77,10 +77,10 @@ class Contacts extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return ContactsQuery the active query used by this AR class.
+     * @return ContactQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new ContactsQuery(get_called_class());
+        return new ContactQuery(get_called_class());
     }
 }

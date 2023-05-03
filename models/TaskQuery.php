@@ -3,11 +3,11 @@
 namespace app\models;
 
 /**
- * This is the ActiveQuery class for [[Contacts]].
+ * This is the ActiveQuery class for [[Task]].
  *
- * @see Contacts
+ * @see Task
  */
-class ContactsQuery extends \yii\db\ActiveQuery
+class TaskQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class ContactsQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Contacts[]|array
+     * @return Task[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class ContactsQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Contacts|array|null
+     * @return Task|array|null
      */
     public function one($db = null)
     {

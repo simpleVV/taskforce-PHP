@@ -3,11 +3,11 @@
 namespace app\models;
 
 /**
- * This is the ActiveQuery class for [[Reviews]].
+ * This is the ActiveQuery class for [[Review]].
  *
- * @see Reviews
+ * @see Review
  */
-class ReviewsQuery extends \yii\db\ActiveQuery
+class ReviewQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class ReviewsQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Reviews[]|array
+     * @return Review[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class ReviewsQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Reviews|array|null
+     * @return Review|array|null
      */
     public function one($db = null)
     {

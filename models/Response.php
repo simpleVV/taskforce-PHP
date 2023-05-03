@@ -81,10 +81,10 @@ class Responses extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return ResponsesQuery the active query used by this AR class.
+     * @return ResponseQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new ResponsesQuery(get_called_class());
+        return new ResponseQuery(get_called_class());
     }
 }
