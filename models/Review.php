@@ -17,7 +17,7 @@ use Yii;
  * @property Users $client
  * @property Users $user
  */
-class Reviews extends \yii\db\ActiveRecord
+class Review extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -60,21 +60,21 @@ class Reviews extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Client]].
      *
-     * @return \yii\db\ActiveQuery|UsersQuery
+     * @return \yii\db\ActiveQuery|UserQuery
      */
     public function getClient()
     {
-        return $this->hasOne(Users::class, ['id' => 'client_id']);
+        return $this->hasOne(User::class, ['id' => 'client_id']);
     }
 
     /**
      * Gets query for [[User]].
      *
-     * @return \yii\db\ActiveQuery|UsersQuery
+     * @return \yii\db\ActiveQuery|UserQuery
      */
     public function getUser()
     {
-        return $this->hasOne(Users::class, ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**

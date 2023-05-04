@@ -25,12 +25,10 @@ class TasksController extends Controller
         $tasksQuery = $task->getSearchQuery();
         $countQuery = clone $tasksQuery;
 
-
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 5]);
 
         $categories = Category::find()->all();
         $models = $tasksQuery->offset($pages->offset)->limit($pages->limit)->all();
-        // var_dump($models);
 
         return $this->render('index', [
             'models' => $models,

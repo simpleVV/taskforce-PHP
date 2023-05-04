@@ -11,7 +11,7 @@ use taskforce\utils\exception\RoleValidException;
 use taskforce\utils\exception\StatusValidException;
 use taskforce\utils\exception\DateValidExeption;
 
-class Task
+class TaskAvailableActions
 {
     const STATUS_NEW = "new";
     const STATUS_CANCEL = "cancel";

@@ -73,21 +73,21 @@ class Users extends \yii\db\ActiveRecord
     /**
      * Gets query for [[City]].
      *
-     * @return \yii\db\ActiveQuery|CitiesQuery
+     * @return \yii\db\ActiveQuery|CityQuery
      */
     public function getCity()
     {
-        return $this->hasOne(Cities::class, ['id' => 'city_id']);
+        return $this->hasOne(City::class, ['id' => 'city_id']);
     }
 
     /**
      * Gets query for [[Contacts]].
      *
-     * @return \yii\db\ActiveQuery|ContactsQuery
+     * @return \yii\db\ActiveQuery|ContactQuery
      */
     public function getContacts()
     {
-        return $this->hasMany(Contacts::class, ['user_id' => 'id']);
+        return $this->hasMany(Contact::class, ['user_id' => 'id']);
     }
 
     /**
@@ -103,61 +103,61 @@ class Users extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Responses]].
      *
-     * @return \yii\db\ActiveQuery|ResponsesQuery
+     * @return \yii\db\ActiveQuery|ResponseQuery
      */
     public function getResponses()
     {
-        return $this->hasMany(Responses::class, ['user_id' => 'id']);
+        return $this->hasMany(Response::class, ['user_id' => 'id']);
     }
 
     /**
      * Gets query for [[Reviews]].
      *
-     * @return \yii\db\ActiveQuery|ReviewsQuery
+     * @return \yii\db\ActiveQuery|ReviewQuery
      */
     public function getReviews()
     {
-        return $this->hasMany(Reviews::class, ['user_id' => 'id']);
+        return $this->hasMany(Review::class, ['user_id' => 'id']);
     }
 
     /**
      * Gets query for [[Reviews0]].
      *
-     * @return \yii\db\ActiveQuery|ReviewsQuery
+     * @return \yii\db\ActiveQuery|ReviewQuery
      */
     public function getReviews0()
     {
-        return $this->hasMany(Reviews::class, ['client_id' => 'id']);
+        return $this->hasMany(Review::class, ['client_id' => 'id']);
     }
 
     /**
      * Gets query for [[Role]].
      *
-     * @return \yii\db\ActiveQuery|RolesQuery
+     * @return \yii\db\ActiveQuery|RoleQuery
      */
     public function getRole()
     {
-        return $this->hasOne(Roles::class, ['id' => 'role_id']);
+        return $this->hasOne(Role::class, ['id' => 'role_id']);
     }
 
     /**
      * Gets query for [[Tasks]].
      *
-     * @return \yii\db\ActiveQuery|TasksQuery
+     * @return \yii\db\ActiveQuery|TaskQuery
      */
     public function getTasks()
     {
-        return $this->hasMany(Tasks::class, ['client_id' => 'id']);
+        return $this->hasMany(Task::class, ['client_id' => 'id']);
     }
 
     /**
      * Gets query for [[Tasks0]].
      *
-     * @return \yii\db\ActiveQuery|TasksQuery
+     * @return \yii\db\ActiveQuery|TaskQuery
      */
     public function getTasks0()
     {
-        return $this->hasMany(Tasks::class, ['performer_id' => 'id']);
+        return $this->hasMany(Task::class, ['performer_id' => 'id']);
     }
 
     /**

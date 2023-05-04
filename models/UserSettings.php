@@ -77,21 +77,21 @@ class UserSettings extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Contacts]].
      *
-     * @return \yii\db\ActiveQuery|ContactsQuery
+     * @return \yii\db\ActiveQuery|ContactQuery
      */
     public function getContacts()
     {
-        return $this->hasOne(Contacts::class, ['id' => 'contacts_id']);
+        return $this->hasOne(Contact::class, ['id' => 'contacts_id']);
     }
 
     /**
      * Gets query for [[User]].
      *
-     * @return \yii\db\ActiveQuery|UsersQuery
+     * @return \yii\db\ActiveQuery|UserQuery
      */
     public function getUser()
     {
-        return $this->hasOne(Users::class, ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**

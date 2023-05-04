@@ -33,7 +33,7 @@
 // use taskforce\logic\actions\CancelAction;
 // use taskforce\logic\actions\CompleteAction;
 // use taskforce\logic\actions\RefusalAction;
-// use taskforce\logic\Task;
+// use taskforce\logic\TaskAvailableActions;
 
 // ini_set('assert.exception', 1);
 // // ini_set('zend.assertions', 1);
@@ -47,27 +47,27 @@
 // $completeAction = new CompleteAction();
 // $refusalAction = new RefusalAction();
 
-// $task = new Task($status, $clientId, $performerId);
+// $task = new TaskAvailableActions($status, $clientId, $performerId);
 
-// //Test Task class getNextStatus method
-// var_dump("cancel action", $task->getNextStatus(CancelAction::getInnerName()) == Task::STATUS_CANCEL);
-// var_dump("complete action", $task->getNextStatus(CompleteAction::getInnerName()) == Task::STATUS_COMPLETE);
-// var_dump("act_refusal", $task->getNextStatus(RefusalAction::getInnerName()) == Task::STATUS_CANCEL);
+// //Test TaskAvailableActions class getNextStatus method
+// var_dump("cancel action", $task->getNextStatus(CancelAction::getInnerName()) == TaskAvailableActions::STATUS_CANCEL);
+// var_dump("complete action", $task->getNextStatus(CompleteAction::getInnerName()) == TaskAvailableActions::STATUS_COMPLETE);
+// var_dump("act_refusal", $task->getNextStatus(RefusalAction::getInnerName()) == TaskAvailableActions::STATUS_CANCEL);
 // // var_dump("no status", $task->getNextStatus(null) == null);
 
-// //Test Task class getStatusMap method
+// //Test TaskAvailableActions class getStatusMap method
 // $status_map = $task->getStatusesMap();
-// var_dump("status new", $status_map[Task::STATUS_NEW] == "Новое");
-// var_dump("status cancel", $status_map[Task::STATUS_CANCEL] == "Отменено");
-// var_dump("in_progress", $status_map[Task::STATUS_IN_PROGRESS] == "В работе");
-// var_dump("complete", $status_map[Task::STATUS_COMPLETE] == "Выполнено");
-// var_dump("fail", $status_map[Task::STATUS_FAILED] == "Провалено");
+// var_dump("status new", $status_map[TaskAvailableActions::STATUS_NEW] == "Новое");
+// var_dump("status cancel", $status_map[TaskAvailableActions::STATUS_CANCEL] == "Отменено");
+// var_dump("in_progress", $status_map[TaskAvailableActions::STATUS_IN_PROGRESS] == "В работе");
+// var_dump("complete", $status_map[TaskAvailableActions::STATUS_COMPLETE] == "Выполнено");
+// var_dump("fail", $status_map[TaskAvailableActions::STATUS_FAILED] == "Провалено");
 
-// //Test Task class getAvailableActions method
-// var_dump('new task-> client -> cancel task', $task->getAvailableActions(234, Task::ROLE_CLIENT));
-// var_dump('new task-> performer -> respond task', $task->getAvailableActions(81, Task::ROLE_PERFORMER));
+// //Test TaskAvailableActions class getAvailableActions method
+// var_dump('new TaskAvailableActions-> client -> cancel task', $task->getAvailableActions(234, TaskAvailableActions::ROLE_CLIENT));
+// var_dump('new task-> performer -> respond task', $task->getAvailableActions(81, TaskAvailableActions::ROLE_PERFORMER));
 
-// $task->setStatus(Task::STATUS_IN_PROGRESS);
+// $task->setStatus(TaskAvailableActions::STATUS_IN_PROGRESS);
 
-// var_dump('in progress task-> client -> complete task', $task->getAvailableActions(234, Task::ROLE_CLIENT));
-// var_dump('it progress task -> performer -> refusal task', $task->getAvailableActions(81, Task::ROLE_PERFORMER));
+// var_dump('in progress task-> client -> complete task', $task->getAvailableActions(234, TaskAvailableActions::ROLE_CLIENT));
+// var_dump('it progress task -> performer -> refusal task', $task->getAvailableActions(81, TaskAvailableActions::ROLE_PERFORMER));

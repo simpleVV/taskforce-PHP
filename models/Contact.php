@@ -16,7 +16,7 @@ use Yii;
  * @property Users $user
  * @property UserSettings[] $userSettings
  */
-class Contacts extends \yii\db\ActiveRecord
+class Contact extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -62,7 +62,7 @@ class Contacts extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::class, ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-use yii\behaviors\BlameableBehavior;
+// use yii\behaviors\BlameableBehavior;
 
 /**
  * This is the model class for table "tasks".
@@ -29,8 +29,8 @@ use yii\behaviors\BlameableBehavior;
  */
 class Task extends \yii\db\ActiveRecord
 {
-    public bool $noPerformer;
-    public int $periodOption;
+    public $noPerformer;
+    public $periodOption;
 
     /**
      * {@inheritdoc}
@@ -94,11 +94,11 @@ class Task extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Client]].
      *
-     * @return \yii\db\ActiveQuery|UsersQuery
+     * @return \yii\db\ActiveQuery|UserQuery
      */
     public function getClient()
     {
-        return $this->hasOne(Users::class, ['id' => 'client_id']);
+        return $this->hasOne(User::class, ['id' => 'client_id']);
     }
 
     /**
@@ -114,31 +114,31 @@ class Task extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Performer]].
      *
-     * @return \yii\db\ActiveQuery|UsersQuery
+     * @return \yii\db\ActiveQuery|UserQuery
      */
     public function getPerformer()
     {
-        return $this->hasOne(Users::class, ['id' => 'performer_id']);
+        return $this->hasOne(User::class, ['id' => 'performer_id']);
     }
 
     /**
      * Gets query for [[Responses]].
      *
-     * @return \yii\db\ActiveQuery|ResponsesQuery
+     * @return \yii\db\ActiveQuery|ResponseQuery
      */
     public function getResponses()
     {
-        return $this->hasMany(Responses::class, ['task_id' => 'id']);
+        return $this->hasMany(Response::class, ['task_id' => 'id']);
     }
 
     /**
      * Gets query for [[Status]].
      *
-     * @return \yii\db\ActiveQuery|StatusesQuery
+     * @return \yii\db\ActiveQuery|StatuseQuery
      */
     public function getStatus()
     {
-        return $this->hasOne(Statuses::class, ['id' => 'status_id']);
+        return $this->hasOne(Statuse::class, ['id' => 'status_id']);
     }
 
     public function getStatusCode()
@@ -156,13 +156,15 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * 
-     * @return TaskQuery the active query used by this AR class.
+     * Поиск задач у которых статус равен новая. Дополнительно можно 
+     * отсоритровать задачи по времени размещения и без назначенного
+     * исполнителя  
+     * @return TaskQuery - Возвращает запрос(задачи отфильтрованные по статусу, категории, исполнителю и периоду) 
      */
     public function getSearchQuery()
     {
         $query = self::find();
-        $query->where(['status_id' => 1]); //1???
+        $query->where(['status_id' => Status::STATUS_NEW]); //1???
 
         $query->andFilterWhere(['category_id' => $this->category_id]);
 
@@ -170,7 +172,6 @@ class Task extends \yii\db\ActiveRecord
             $query->andWhere('performer_id IS NULL');
             var_dump($this->noPerformer);
         }
-
 
         if ($this->periodOption) {
             $query->andWhere('UNIX_TIMESTAMP(tasks.dt_creation) > UNIX_TIMESTAMP() - :period', ['period' => $this->periodOption]);
