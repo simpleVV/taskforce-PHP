@@ -1,15 +1,17 @@
 <?php
 
-/** @var yii\web\View $this */
+/** 
+ * @var yii\web\View $this
+ * @var Category $categories 
+ */
 
+use yii\helpers\Url;
 use yii\helpers\BaseStringHelper;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
-// use app\assets\AppAsset;
-
-$this->title = 'Просмотр новых заданий'
+$this->title = 'Просмотр новых заданий';
 ?>
 
 <div class="left-column">
@@ -18,14 +20,16 @@ $this->title = 'Просмотр новых заданий'
     <?php foreach ($models as $model) : ?>
         <div class="task-card">
             <div class="header-task">
-                <a href="#" class="link link--block link--big">
+                <a href="<?= Url::to(["/tasks/view", "id" => $model->id]); ?>" class="link link--block link--big">
                     <?= Html::encode($model->title); ?></a>
                 <p class="price price--task">
                     <?= Html::encode($model->price); ?> ₽
                 </p>
             </div>
             <p class="info-text">
-                <span class="current-time"><?= Yii::$app->formatter->asRelativeTime($model->dt_creation) ?></span> назад
+                <span class="current-time">
+                    <?= Yii::$app->formatter->asRelativeTime($model->dt_creation) ?>
+                </span> назад
             </p>
             <p class="task-text">
                 <?= Html::encode(BaseStringHelper::truncate($model->description, 200)); ?>
@@ -41,7 +45,7 @@ $this->title = 'Просмотр новых заданий'
             </div>
         </div>
     <?php endforeach; ?>
-
+    <!-- ///////////////////////////////////////////// -->
     <div class="pagination-wrapper">
         <ul class="pagination-list">
             <li class="pagination-item mark">
@@ -75,6 +79,7 @@ $this->title = 'Просмотр новых заданий'
             <h4 class="head-card">Дополнительно</h4>
             <div class="checkbox-wrapper">
                 <?= $form->field($task, 'noPerformer')->checkbox(['labelOptions' => ['class' => 'control-label']]); ?>
+                <?= $form->field($task, 'remoteWork')->checkbox(['labelOptions' => ['class' => 'control-label']]); ?>
             </div>
             <h4 class="head-card">Период</h4>
             <div class="form-group">

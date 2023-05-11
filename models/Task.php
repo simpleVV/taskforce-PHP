@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\web\IdentityInterface;
+
 // use yii\behaviors\BlameableBehavior;
 
 /**
@@ -29,6 +31,7 @@ use Yii;
  */
 class Task extends \yii\db\ActiveRecord
 {
+    public $remoteWork;
     public $noPerformer;
     public $periodOption;
 
@@ -49,7 +52,7 @@ class Task extends \yii\db\ActiveRecord
             [['dt_creation', 'dt_expire'], 'safe'],
             [['title', 'description', 'category_id', 'client_id', 'performer_id', 'status_id'], 'required'],
             [['description'], 'string'],
-            [['noPerformer'], 'boolean'],
+            [['noPerformer', 'remoteWork'], 'boolean'],
             [['periodOption'], 'number'],
             [['price', 'category_id', 'client_id', 'performer_id', 'status_id'], 'integer'],
             [['title', 'location'], 'string', 'max' => 128],
@@ -77,7 +80,8 @@ class Task extends \yii\db\ActiveRecord
             'client_id' => 'Заказчик',
             'performer_id' => 'Исполнитель',
             'status_id' => 'Статус',
-            'noPerformer' => 'Без исполнителя',
+            'remoteWork' => 'Удалённая работа',
+            'noPerformer' => 'Без откликов'
         ];
     }
 
@@ -126,7 +130,7 @@ class Task extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|ResponseQuery
      */
-    public function getResponses()
+    public function getResponses(IdentityInterface $user = null)
     {
         return $this->hasMany(Response::class, ['task_id' => 'id']);
     }
@@ -134,11 +138,11 @@ class Task extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Status]].
      *
-     * @return \yii\db\ActiveQuery|StatuseQuery
+     * @return \yii\db\ActiveQuery|StatusQuery
      */
     public function getStatus()
     {
-        return $this->hasOne(Statuse::class, ['id' => 'status_id']);
+        return $this->hasOne(Status::class, ['id' => 'status_id']);
     }
 
     public function getStatusCode()
@@ -164,13 +168,16 @@ class Task extends \yii\db\ActiveRecord
     public function getSearchQuery()
     {
         $query = self::find();
-        $query->where(['status_id' => Status::STATUS_NEW]); //1???
+        $query->where(['status_id' => Status::STATUS_NEW]);
 
         $query->andFilterWhere(['category_id' => $this->category_id]);
 
         if ($this->noPerformer) {
             $query->andWhere('performer_id IS NULL');
-            var_dump($this->noPerformer);
+        }
+
+        if ($this->remoteWork) {
+            $query->andWhere('location IS NULL');
         }
 
         if ($this->periodOption) {

@@ -26,7 +26,7 @@ use Yii;
  * @property Tasks[] $tasks0
  * @property UserSettings[] $userSettings
  */
-class Users extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}

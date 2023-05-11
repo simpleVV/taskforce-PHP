@@ -7,6 +7,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use app\models\Task;
 use app\models\Category;
+use app\models\Response;
 use yii\data\Pagination;
 
 class TasksController extends Controller
@@ -14,7 +15,7 @@ class TasksController extends Controller
     /**
      * Отображает страницу с задачами.
      *
-     * @return string
+     * @return string - странница с задачами
      */
     public function actionIndex()
     {
@@ -38,18 +39,27 @@ class TasksController extends Controller
         ]);
     }
 
-    // public function actionView($id)
-    // {
-    //     $task = Task::findOne($id);
+    /**
+     * Отображает страницу с выбранной задачей.
+     * @param $id - идентификатор выбранной задачи
+     * @return string странница с выбранной задачей
+     */
+    public function actionView($id)
+    {
+        $task = Task::findOne($id);
+        $responseQuery = Response::find();
+        $responseQuery->where(['task_id' => $id]);
+        $responses = $responseQuery->all();
 
-    //     if ($task === null) {
-    //         throw new NotFoundHttpException;
-    //     }
+        if (!$task) {
+            throw new NotFoundHttpException('Задача с таким ID не найдено');
+        }
 
-    //     return $this->render('task', [
-    //         'task' => $task,
-    //     ]);
-    // }
+        return $this->render('view', [
+            'model' => $task,
+            'responses' => $responses
+        ]);
+    }
 
     // public function actionCreate()
     // {
