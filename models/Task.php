@@ -23,11 +23,11 @@ use yii\web\IdentityInterface;
  * @property int $status_id
  *
  * @property Category $category
- * @property Users $client
- * @property Files[] $files
- * @property Users $performer
- * @property Responses[] $responses
- * @property Statuses $status
+ * @property User $client
+ * @property File[] $files
+ * @property User $performer
+ * @property Response[] $responses
+ * @property Status $status
  */
 class Task extends \yii\db\ActiveRecord
 {
@@ -57,9 +57,9 @@ class Task extends \yii\db\ActiveRecord
             [['price', 'category_id', 'client_id', 'performer_id', 'status_id'], 'integer'],
             [['title', 'location'], 'string', 'max' => 128],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
-            [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['client_id' => 'id']],
-            [['performer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['performer_id' => 'id']],
-            [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Statuses::class, 'targetAttribute' => ['status_id' => 'id']],
+            [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['client_id' => 'id']],
+            [['performer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['performer_id' => 'id']],
+            [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status_id' => 'id']],
         ];
     }
 

@@ -6,9 +6,12 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use app\models\User;
 use app\models\Category;
+use app\models\City;
 use app\models\Contact;
 use app\models\Task;
 use app\models\Review;
+use app\models\UserSettings;
+use Yii;
 
 class UserController extends Controller
 {
@@ -46,6 +49,35 @@ class UserController extends Controller
             'reviews' => $reviews,
             'contacts' => $contacts,
             'status' => $status
+        ]);
+    }
+
+    /**
+     * Отображает страницу регистрации пользователя.
+     * @return string странница регистрации пользователя.
+     */
+    public function actionSignup()
+    {
+        $user = new User();
+        $cities = City::find()->all();
+
+
+        if (Yii::$app->request->getIsPost()) {
+            $user->load(Yii::$app->request->post());
+        }
+
+        if ($user->validate()) {
+            $user->password = Yii::$app->security->generatePasswordHash($user->password);
+
+            // $user->save(false);
+            // $userSettings->save(false);
+
+            $this->goHome();
+        };
+
+        return $this->render('signup', [
+            'model' => $user,
+            'cities' => $cities
         ]);
     }
 }

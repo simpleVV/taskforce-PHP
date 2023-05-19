@@ -13,7 +13,7 @@ use Yii;
  * @property string|null $telegram
  * @property int $user_id
  *
- * @property Users $user
+ * @property User $user
  * @property UserSettings[] $userSettings
  */
 class Contact extends \yii\db\ActiveRecord
@@ -37,7 +37,7 @@ class Contact extends \yii\db\ActiveRecord
             [['email'], 'string', 'max' => 68],
             [['phone'], 'string', 'max' => 11],
             [['telegram'], 'string', 'max' => 64],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -58,7 +58,7 @@ class Contact extends \yii\db\ActiveRecord
     /**
      * Gets query for [[User]].
      *
-     * @return \yii\db\ActiveQuery|UsersQuery
+     * @return \yii\db\ActiveQuery|UserQuery
      */
     public function getUser()
     {

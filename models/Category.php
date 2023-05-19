@@ -11,7 +11,7 @@ use Yii;
  * @property string $name
  * @property string $code
  *
- * @property Tasks[] $tasks
+ * @property Task[] $tasks
  * @property UserSettings[] $userSettings
  */
 class Category extends \yii\db\ActiveRecord

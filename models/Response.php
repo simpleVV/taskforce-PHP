@@ -15,8 +15,8 @@ use Yii;
  * @property int $task_id
  * @property int $user_id
  *
- * @property Tasks $task
- * @property Users $user
+ * @property Task $task
+ * @property User $user
  */
 class Response extends \yii\db\ActiveRecord
 {
@@ -38,8 +38,8 @@ class Response extends \yii\db\ActiveRecord
             [['comment', 'price', 'task_id', 'user_id'], 'required'],
             [['comment'], 'string'],
             [['price', 'is_approved', 'task_id', 'user_id'], 'integer'],
-            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::class, 'targetAttribute' => ['task_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 

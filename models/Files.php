@@ -12,10 +12,8 @@ use Yii;
  * @property string $name
  * @property string $path
  * @property int $task_id
- * @property int $user_id
  *
- * @property Tasks $task
- * @property Users $user
+ * @property Task $task
  */
 class Files extends \yii\db\ActiveRecord
 {
@@ -39,8 +37,7 @@ class Files extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 60],
             [['path'], 'string', 'max' => 255],
             [['path'], 'unique'],
-            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::class, 'targetAttribute' => ['task_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
         ];
     }
 
@@ -55,7 +52,6 @@ class Files extends \yii\db\ActiveRecord
             'name' => 'Имя',
             'path' => 'Путь',
             'task_id' => 'Задание',
-            'user_id' => 'Пользователь',
         ];
     }
 
@@ -67,16 +63,6 @@ class Files extends \yii\db\ActiveRecord
     public function getTask()
     {
         return $this->hasOne(Task::class, ['id' => 'task_id']);
-    }
-
-    /**
-     * Gets query for [[User]].
-     *
-     * @return \yii\db\ActiveQuery|UsersQuery
-     */
-    public function getUser()
-    {
-        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**

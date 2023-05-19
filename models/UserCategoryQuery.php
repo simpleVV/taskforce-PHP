@@ -3,11 +3,11 @@
 namespace app\models;
 
 /**
- * This is the ActiveQuery class for [[Role]].
+ * This is the ActiveQuery class for [[UserCategory]].
  *
- * @see Role
+ * @see UserCategory
  */
-class RoleQuery extends \yii\db\ActiveQuery
+class UserCategoryQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class RoleQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Role[]|array
+     * @return UserCategory[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class RoleQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Role|array|null
+     * @return UserCategory|array|null
      */
     public function one($db = null)
     {

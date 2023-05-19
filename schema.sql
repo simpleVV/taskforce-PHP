@@ -75,17 +75,28 @@ DROP TABLE IF EXISTS `user_settings`;
 CREATE TABLE `user_settings` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `date_birth` DATETIME,
-  `avatar` VARCHAR(255),
+  `avatar_path` VARCHAR(255) DEFAULT NULL,
   `about` TEXT,
-  `category_id` INT(11) UNSIGNED NOT NULL,
-  `contacts_id` INT(11) UNSIGNED NOT NULL,
-  `user_id`INT(11) UNSIGNED NOT NULL,
+  `is_performer` tinyint(1) unsigned DEFAULT '0',
+  `hide_profile` tinyint(1) unsigned DEFAULT '0',
   `hide_contacts` tinyint(1) unsigned DEFAULT '0',
-  CONSTRAINT `user_settings_1bfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  `contacts_id` INT(11) UNSIGNED NULL,
+  `user_id`INT(11) UNSIGNED NOT NULL,
   CONSTRAINT `user_settings_1bfk_2` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_settings_1bfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   PRIMARY KEY (`id`) 
 );
+
+DROP TABLE IF EXISTS `user_categories`;
+
+CREATE TABLE `user_categories` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT(11) UNSIGNED NOT NULL,
+  `category_id` INT(11) UNSIGNED NOT NULL,
+  CONSTRAINT `user_categories_1bfr_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_categories_1bfr_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY(`id`)
+)
 
 DROP TABLE IF EXISTS `reviews`;
 

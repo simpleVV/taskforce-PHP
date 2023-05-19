@@ -13,21 +13,20 @@ use Yii;
  * @property string $name
  * @property string $password
  * @property int $city_id
- * @property int $role_id
+ * @property boolean $is_performer
  *
- * @property Cities $city
- * @property Contacts[] $contacts
- * @property Files[] $files
- * @property Responses[] $responses
- * @property Reviews[] $reviews
- * @property Reviews[] $reviews0
- * @property Roles $role
- * @property Tasks[] $tasks
- * @property Tasks[] $tasks0
- * @property UserSettings[] $userSettings
+ * @property City $city
+ * @property Contact[] $contacts
+ * @property Response[] $responses
+ * @property Review[] $reviews0
+ * @property Task[] $tasks
+ * @property UserSetting[] $userSettings
  */
 class User extends \yii\db\ActiveRecord
 {
+    public $password_repeat;
+    public $is_performer;
+
     /**
      * {@inheritdoc}
      */
@@ -42,15 +41,15 @@ class User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['email', 'name', 'password', 'password_repeat', 'city_id'], 'required', 'on' => self::SCENARIO_DEFAULT],
             [['dt_registration'], 'safe'],
-            [['email', 'name', 'password', 'city_id', 'role_id'], 'required'],
-            [['city_id', 'role_id'], 'integer'],
-            [['email'], 'string', 'max' => 68],
-            [['name'], 'string', 'max' => 128],
-            [['password'], 'string', 'max' => 255],
-            [['email'], 'unique'],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::class, 'targetAttribute' => ['city_id' => 'id']],
-            [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Roles::class, 'targetAttribute' => ['role_id' => 'id']],
+            [['city_id'], 'integer'],
+            [['email'], 'email'],
+            [['email'], 'unique', 'on' => self::SCENARIO_DEFAULT],
+            [['name'], 'string', 'min' => 3],
+            [['password'], 'string', 'min' => 8],
+            [['password'], 'compare', 'on' => self::SCENARIO_DEFAULT],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
         ];
     }
 
@@ -62,11 +61,12 @@ class User extends \yii\db\ActiveRecord
         return [
             // 'id' => 'ID',
             'dt_registration' => 'Дата регистрации',
-            'email' => 'Электронная почта',
-            'name' => 'Имя',
+            'email' => 'Email',
+            'name' => 'Ваше имя',
             'password' => 'Пароль',
+            'password_repeat' => 'Повтор пароля',
             'city_id' => 'Город',
-            'role_id' => 'Роль',
+            'is_performer' => 'я собираюсь откликаться на заказы'
         ];
     }
 
@@ -91,16 +91,6 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Files]].
-     *
-     * @return \yii\db\ActiveQuery|FilesQuery
-     */
-    public function getFiles()
-    {
-        return $this->hasMany(Files::class, ['user_id' => 'id']);
-    }
-
-    /**
      * Gets query for [[Responses]].
      *
      * @return \yii\db\ActiveQuery|ResponseQuery
@@ -121,26 +111,6 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Reviews0]].
-     *
-     * @return \yii\db\ActiveQuery|ReviewQuery
-     */
-    public function getReviews0()
-    {
-        return $this->hasMany(Review::class, ['client_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[Role]].
-     *
-     * @return \yii\db\ActiveQuery|RoleQuery
-     */
-    public function getRole()
-    {
-        return $this->hasOne(Role::class, ['id' => 'role_id']);
-    }
-
-    /**
      * Gets query for [[Tasks]].
      *
      * @return \yii\db\ActiveQuery|TaskQuery
@@ -148,16 +118,6 @@ class User extends \yii\db\ActiveRecord
     public function getTasks()
     {
         return $this->hasMany(Task::class, ['client_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[Tasks0]].
-     *
-     * @return \yii\db\ActiveQuery|TaskQuery
-     */
-    public function getTasks0()
-    {
-        return $this->hasMany(Task::class, ['performer_id' => 'id']);
     }
 
     /**

@@ -12,7 +12,7 @@ use Yii;
  * @property float|null $lat
  * @property float|null $lon
  *
- * @property Users[] $users
+ * @property User[] $users
  */
 class City extends \yii\db\ActiveRecord
 {

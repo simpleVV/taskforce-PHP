@@ -14,8 +14,8 @@ use Yii;
  * @property int $user_id
  * @property int $client_id
  *
- * @property Users $client
- * @property Users $user
+ * @property User $client
+ * @property User $user
  */
 class Review extends \yii\db\ActiveRecord
 {
@@ -37,8 +37,8 @@ class Review extends \yii\db\ActiveRecord
             [['description', 'rate', 'user_id', 'client_id'], 'required'],
             [['description'], 'string'],
             [['rate', 'user_id', 'client_id'], 'integer'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
-            [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['client_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['client_id' => 'id']],
         ];
     }
 

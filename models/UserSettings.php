@@ -9,16 +9,16 @@ use Yii;
  *
  * @property int $id
  * @property string|null $date_birth
- * @property string|null $avatar
+ * @property string|null $avatar_path
  * @property string|null $about
- * @property int $category_id
- * @property int $contacts_id
- * @property int $user_id
+ * @property int|null $is_performer
+ * @property int|null $hide_profile
  * @property int|null $hide_contacts
+ * @property int|null $contacts_id
+ * @property int $user_id
  *
- * @property Category $category
- * @property Contacts $contacts
- * @property Users $user
+ * @property Contact $contacts
+ * @property User $user
  */
 class UserSettings extends \yii\db\ActiveRecord
 {
@@ -38,12 +38,11 @@ class UserSettings extends \yii\db\ActiveRecord
         return [
             [['date_birth'], 'safe'],
             [['about'], 'string'],
-            [['category_id', 'contacts_id', 'user_id'], 'required'],
-            [['category_id', 'contacts_id', 'user_id', 'hide_contacts'], 'integer'],
-            [['avatar'], 'string', 'max' => 255],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
-            [['contacts_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contacts::class, 'targetAttribute' => ['contacts_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['is_performer', 'hide_profile', 'hide_contacts', 'contacts_id', 'user_id'], 'integer'],
+            [['user_id'], 'required'],
+            [['avatar_path'], 'string', 'max' => 255],
+            [['contacts_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::class, 'targetAttribute' => ['contacts_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -53,31 +52,22 @@ class UserSettings extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            // 'id' => 'ID',
-            'date_birth' => 'Дата рождения',
-            'avatar' => 'Аватар',
+            'id' => 'ID',
+            'date_birth' => 'День рождения',
+            'avatar_path' => '',
             'about' => 'О себе',
-            'category_id' => 'Категория',
-            'contacts_id' => 'Контакты',
-            'user_id' => 'Пользователь',
-            'hide_contacts' => 'Скрыть контакты',
+            'is_performer' => 'я собираюсь откликаться на заказы',
+            'hide_profile' => 'Hide Profile',
+            'hide_contacts' => 'Hide Contacts',
+            'contacts_id' => 'Contacts ID',
+            'user_id' => 'User ID',
         ];
     }
 
     /**
-     * Gets query for [[Category]].
+     * Gets query for [[Contact]].
      *
-     * @return \yii\db\ActiveQuery|CategoryQuery
-     */
-    public function getCategory()
-    {
-        return $this->hasOne(Category::class, ['id' => 'category_id']);
-    }
-
-    /**
-     * Gets query for [[Contacts]].
-     *
-     * @return \yii\db\ActiveQuery|ContactQuery
+     * @return \yii\db\ActiveQuery|ContactsQuery
      */
     public function getContacts()
     {
