@@ -63,18 +63,19 @@ class User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['email', 'name'], 'required'],
-            [['password', 'city_id'], 'required', 'on' => 'insert'],
+            [['email', 'name', 'city_id'], 'required'],
+            [['password'], 'required', 'on' => 'register'],
             [['dt_registration', 'bd_date', 'password_repeat', 'categories', 'old_password', 'new_password', 'new_password_repeat'], 'safe'],
             // [['avatarFile'], 'file', 'mimeTypes' => ['image/jpeg', 'image/png'], 'extensions' => ['png', 'jpg', 'jpeg']],
-            [['password'], 'compare', 'on' => 'insert'],
+            [['password'], 'compare', 'on' => 'register'],
             [['new_password'], 'compare', 'on' => 'update'],
             [['bd_date'], 'date', 'format' => 'php:Y-m-d',],
             [['is_performer', 'hide_contacts', 'hide_profile'], 'boolean'],
             [['phone'], 'match', 'pattern' => '/^[+-]?\d{11}$/', 'message' => 'Номер телефона должен состоять из 11 символов'],
             [['email'], 'string', 'max' => 68],
             [['name'], 'string', 'max' => 128],
-            [['password', 'avatar_path'], 'string', 'max' => 255],
+            [['password'], 'string', 'min' => 8],
+            [['avatar_path'], 'string', 'max' => 255],
             [['telegram'], 'string', 'max' => 64],
             [['about'], 'string'],
             [['phone'], 'number'],

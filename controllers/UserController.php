@@ -40,7 +40,7 @@ class UserController extends Controller
      */
     public function actionSignup(): string
     {
-        $user = new User();
+        $user = new User(['scenario' => 'register']);
         $cities = City::find()->all();
 
 
@@ -56,7 +56,7 @@ class UserController extends Controller
             if ($user->validate()) {
                 $user->password = Yii::$app->security->generatePasswordHash($user->password);
 
-                $user->save(false);
+                // $user->save(false);
 
                 $this->goHome();
             };
