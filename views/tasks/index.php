@@ -2,14 +2,18 @@
 
 /** 
  * @var yii\web\View $this
- * @var Category $categories 
+ * @var Task[] $models
+ * @var Task $task
+ * @var Category[] $categories 
+ * @var Pagination $pages
+ * 
  */
 
-use yii\helpers\Url;
-use yii\helpers\BaseStringHelper;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use yii\widgets\LinkPager;
+
 
 $this->title = 'Просмотр новых заданий';
 ?>
@@ -18,52 +22,23 @@ $this->title = 'Просмотр новых заданий';
     <h3 class="head-main head-task">Новые задания</h3>
 
     <?php foreach ($models as $model) : ?>
-        <div class="task-card">
-            <div class="header-task">
-                <a href="<?= Url::to(["/tasks/view", "id" => $model->id]); ?>" class="link link--block link--big">
-                    <?= Html::encode($model->title); ?></a>
-                <p class="price price--task">
-                    <?= Html::encode($model->price); ?> ₽
-                </p>
-            </div>
-            <p class="info-text">
-                <span class="current-time">
-                    <?= Yii::$app->formatter->asRelativeTime($model->dt_creation) ?>
-                </span> назад
-            </p>
-            <p class="task-text">
-                <?= Html::encode(BaseStringHelper::truncate($model->description, 200)); ?>
-            </p>
-            <div class="footer-task">
-                <p class="info-text town-text">
-                    <?= $model->location; ?>
-                </p>
-                <p class="info-text category-text">
-                    <?= $model->category->name; ?>
-                </p>
-                <a href="#" class="button button--black">Смотреть Задание</a>
-            </div>
-        </div>
+        <?= $this->render('//blocks/_task-card', ['model' => $model]); ?>
     <?php endforeach; ?>
-    <!-- ///////////////////////////////////////////// -->
     <div class="pagination-wrapper">
-        <ul class="pagination-list">
-            <li class="pagination-item mark">
-                <a href="#" class="link link--page"></a>
-            </li>
-            <li class="pagination-item">
-                <a href="#" class="link link--page">1</a>
-            </li>
-            <li class="pagination-item pagination-item--active">
-                <a href="#" class="link link--page">2</a>
-            </li>
-            <li class="pagination-item">
-                <a href="#" class="link link--page">3</a>
-            </li>
-            <li class="pagination-item mark">
-                <a href="#" class="link link--page"></a>
-            </li>
-        </ul>
+        <?= LinkPager::widget([
+            'pagination' => $pages,
+            'options' => [
+                'class' => 'pagination-list'
+            ],
+            'prevPageCssClass' => 'pagination-item mark',
+            'nextPageCssClass' => 'pagination-item mark',
+            'pageCssClass' => 'pagination-item',
+            'activePageCssClass' => 'pagination-item--active',
+            'linkOptions' => ['class' => 'link link--page'],
+            'nextPageLabel' => '',
+            'prevPageLabel' => '',
+            'maxButtonCount' => 5
+        ]); ?>
     </div>
 </div>
 <div class="right-column">

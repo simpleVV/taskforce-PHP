@@ -49,7 +49,7 @@ class Response extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            // 'id' => 'ID',
+            'id' => 'ID',
             'dt_creation' => 'Дата создания',
             'comment' => 'Комментарий',
             'price' => 'Цена',

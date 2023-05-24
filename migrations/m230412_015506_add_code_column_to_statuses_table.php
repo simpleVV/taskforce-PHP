@@ -26,6 +26,8 @@ class m230412_015506_add_code_column_to_statuses_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropColumn('code', 'statuses');
+        echo "m230412_015506_add_code_column_to_statuses_table cannot be reverted.\n";
+
+        return false;
     }
 }

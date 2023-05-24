@@ -48,7 +48,7 @@ class Review extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            // 'id' => 'ID',
+            'id' => 'ID',
             'dt_creation' => 'Дата создания',
             'description' => 'Описание',
             'rate' => 'Ставка',

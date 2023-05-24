@@ -12,7 +12,6 @@ use Yii;
  * @property string $code
  *
  * @property Task[] $tasks
- * @property UserSettings[] $userSettings
  */
 class Category extends \yii\db\ActiveRecord
 {
@@ -42,7 +41,7 @@ class Category extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            // 'id' => 'ID',
+            'id' => 'ID',
             'name' => 'Имя',
             'code' => 'Код',
         ];
@@ -56,16 +55,6 @@ class Category extends \yii\db\ActiveRecord
     public function getTasks()
     {
         return $this->hasMany(Task::class, ['category_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[UserSettings]].
-     *
-     * @return \yii\db\ActiveQuery|UserSettingsQuery
-     */
-    public function getUserSettings()
-    {
-        return $this->hasMany(UserSettings::class, ['category_id' => 'id']);
     }
 
     /**

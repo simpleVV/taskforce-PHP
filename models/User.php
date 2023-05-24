@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 
 /**
  * This is the model class for table "users".
@@ -13,20 +14,29 @@ use Yii;
  * @property string $name
  * @property string $password
  * @property int $city_id
- * @property boolean $is_performer
+ * @property string|null $bd_date
+ * @property string|null $avatar_path
+ * @property string|null $about
+ * @property int|null $is_performer
+ * @property int|null $hide_contacts
+ * @property int|null $hide_profile
+ * @property string|null $phone
+ * @property string|null $telegram
  *
  * @property City $city
- * @property Contact[] $contacts
  * @property Response[] $responses
- * @property Review[] $reviews0
+ * @property Review[] $reviews
  * @property Task[] $tasks
- * @property UserSetting[] $userSettings
+ * @property Task[] $clientTasks
+ * @property UserCategory[] $userCategories
  */
 class User extends \yii\db\ActiveRecord
 {
     public $password_repeat;
-    public $is_performer;
 
+    public $old_password;
+    public $new_password;
+    public $new_password_repeat;
     /**
      * {@inheritdoc}
      */
@@ -35,20 +45,41 @@ class User extends \yii\db\ActiveRecord
         return 'users';
     }
 
+    public function behaviors()
+    {
+        return [
+            'saveRelations' => [
+                'class'     => SaveRelationsBehavior::class,
+                'relations' => [
+                    'categories'
+                ],
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['email', 'name', 'password', 'password_repeat', 'city_id'], 'required', 'on' => self::SCENARIO_DEFAULT],
-            [['dt_registration'], 'safe'],
-            [['city_id'], 'integer'],
+            [['email', 'name'], 'required'],
+            [['password', 'city_id'], 'required', 'on' => 'insert'],
+            [['dt_registration', 'bd_date', 'password_repeat', 'categories', 'old_password', 'new_password', 'new_password_repeat'], 'safe'],
+            // [['avatarFile'], 'file', 'mimeTypes' => ['image/jpeg', 'image/png'], 'extensions' => ['png', 'jpg', 'jpeg']],
+            [['password'], 'compare', 'on' => 'insert'],
+            [['new_password'], 'compare', 'on' => 'update'],
+            [['bd_date'], 'date', 'format' => 'php:Y-m-d',],
+            [['is_performer', 'hide_contacts', 'hide_profile'], 'boolean'],
+            [['phone'], 'match', 'pattern' => '/^[+-]?\d{11}$/', 'message' => 'Номер телефона должен состоять из 11 символов'],
+            [['email'], 'string', 'max' => 68],
+            [['name'], 'string', 'max' => 128],
+            [['password', 'avatar_path'], 'string', 'max' => 255],
+            [['telegram'], 'string', 'max' => 64],
+            [['about'], 'string'],
+            [['phone'], 'number'],
+            [['email'], 'unique'],
             [['email'], 'email'],
-            [['email'], 'unique', 'on' => self::SCENARIO_DEFAULT],
-            [['name'], 'string', 'min' => 3],
-            [['password'], 'string', 'min' => 8],
-            [['password'], 'compare', 'on' => self::SCENARIO_DEFAULT],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
         ];
     }
@@ -59,15 +90,43 @@ class User extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            // 'id' => 'ID',
+            'id' => 'ID',
             'dt_registration' => 'Дата регистрации',
             'email' => 'Email',
-            'name' => 'Ваше имя',
+            'name' => 'Имя',
             'password' => 'Пароль',
+            'old_password' => 'Старый пароль',
+            'new_password' => 'Новый пароль',
             'password_repeat' => 'Повтор пароля',
             'city_id' => 'Город',
-            'is_performer' => 'я собираюсь откликаться на заказы'
+            'bd_date' => 'Дата рождения',
+            'avatar_path' => 'Avatar Path',
+            'categories' => 'Выбранные категории',
+            'about' => 'Информация о себе',
+            'is_performer' => 'я собираюсь откликаться на заказы',
+            'hide_contacts' => 'Показывать контакты только заказчику',
+            'hide_profile' => 'Hide Profile',
+            'phone' => 'Номер телефона',
+            'telegram' => 'Telegram',
         ];
+    }
+
+    /**
+     * @return bool - возвращает true - если у пользователя есть задачи в работе и false если задач в работе нет
+     */
+    public function haveActiveTask(): bool
+    {
+        return $this->getTasks()
+            ->joinWith('status', true, 'INNER JOIN')
+            ->where(['statuses.id' => Status::STATUS_AT_WORK])->exists();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategories()
+    {
+        return $this->hasMany(Category::class, ['id' => 'category_id'])->viaTable('user_categories', ['user_id' => 'id']);
     }
 
     /**
@@ -78,16 +137,6 @@ class User extends \yii\db\ActiveRecord
     public function getCity()
     {
         return $this->hasOne(City::class, ['id' => 'city_id']);
-    }
-
-    /**
-     * Gets query for [[Contacts]].
-     *
-     * @return \yii\db\ActiveQuery|ContactQuery
-     */
-    public function getContacts()
-    {
-        return $this->hasMany(Contact::class, ['user_id' => 'id']);
     }
 
     /**
@@ -117,17 +166,27 @@ class User extends \yii\db\ActiveRecord
      */
     public function getTasks()
     {
-        return $this->hasMany(Task::class, ['client_id' => 'id']);
+        return $this->hasMany(Task::class, ['performer_id' => 'id']);
     }
 
     /**
-     * Gets query for [[UserSettings]].
+     * Gets query for [[Tasks]].
      *
-     * @return \yii\db\ActiveQuery|UserSettingsQuery
+     * @return \yii\db\ActiveQuery|TaskQuery
      */
-    public function getUserSettings()
+    public function getClientTasks()
     {
-        return $this->hasMany(UserSettings::class, ['user_id' => 'id']);
+        return $this->hasMany(Task::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[UserCategories]].
+     *
+     * @return \yii\db\ActiveQuery|UserCategoryQuery
+     */
+    public function getUserCategories()
+    {
+        return $this->hasMany(UserCategory::class, ['user_id' => 'id']);
     }
 
     /**

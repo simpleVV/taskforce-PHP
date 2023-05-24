@@ -15,15 +15,6 @@ CREATE TABLE `category` (
   PRIMARY KEY (`id`)
 );
 
-DROP TABLE IF EXISTS `roles`;
-
-CREATE TABLE `roles` (
-  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(60) NOT NULL,
-  `code` VARCHAR(60) UNIQUE NOT NULL,
-  PRIMARY KEY (`id`)
-);
-
 DROP TABLE IF EXISTS `cities`;
 
 CREATE TABLE `cities` (
@@ -51,41 +42,21 @@ CREATE TABLE `users` (
   `email` VARCHAR(68) NOT NULL UNIQUE,
   `name` VARCHAR(128) NOT NULL,
   `password` CHAR(255) NOT NULL,
-  `city_id` INT(11) UNSIGNED NOT NULL,
-  `role_id` INT(11) UNSIGNED NOT NULL,
-  CONSTRAINT `users_1bfk_1`FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `users_1bfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  PRIMARY KEY (`id`)
-);
-
-DROP TABLE IF EXISTS `contacts`;
-
-CREATE TABLE `contacts` (
-  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `email` VARCHAR(68),
-  `phone` VARCHAR(11),
-  `telegram` VARCHAR(64), 
-  `user_id` INT(11) UNSIGNED NOT NULL,
-  CONSTRAINT `contacts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  PRIMARY KEY (`id`)
-);
-
-DROP TABLE IF EXISTS `user_settings`;
-
-CREATE TABLE `user_settings` (
-  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `date_birth` DATETIME,
+  `dt_birth` DATETIME,
   `avatar_path` VARCHAR(255) DEFAULT NULL,
   `about` TEXT,
+  `phone` VARCHAR(11),
+  `telegram` VARCHAR(64), 
   `is_performer` tinyint(1) unsigned DEFAULT '0',
   `hide_profile` tinyint(1) unsigned DEFAULT '0',
   `hide_contacts` tinyint(1) unsigned DEFAULT '0',
+  `city_id` INT(11) UNSIGNED NOT NULL,
   `contacts_id` INT(11) UNSIGNED NULL,
-  `user_id`INT(11) UNSIGNED NOT NULL,
-  CONSTRAINT `user_settings_1bfk_2` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_settings_1bfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  PRIMARY KEY (`id`) 
+  CONSTRAINT `users_1bfk_1`FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `users_1bfk_2` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY (`id`)
 );
+
 
 DROP TABLE IF EXISTS `user_categories`;
 

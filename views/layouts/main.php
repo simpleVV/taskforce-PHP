@@ -5,19 +5,20 @@
 
 use yii\helpers\Html;
 use app\assets\AppAsset;
+use yii\widgets\Menu;
 
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="<?= Yii::$app->language; ?>">
 
 <head>
-    <meta charset="<?= Yii::$app->charset ?>">
+    <meta charset="<?= Yii::$app->charset; ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?= Html::encode($this->title); ?></title>
     <?php $this->head() ?>
 </head>
 
@@ -29,29 +30,25 @@ AppAsset::register($this);
             <a href="#" class="header-logo">
                 <img class="logo-image" src="../../img/logotype.png" width="227" height="60" alt="taskforce" />
             </a>
-            <?php var_dump(Yii::$app->controller->id) ?>
-            <?php if (false) : ?>
+            <?php if (Yii::$app->controller->action->id !== 'signup') : ?>
                 <div class="nav-wrapper">
-                    <ul class="nav-list">
-                        <li class="list-item list-item--active">
-                            <a class="link link--nav">Новое</a>
-                        </li>
-                        <li class="list-item">
-                            <a href="#" class="link link--nav">Мои задания</a>
-                        </li>
-                        <li class="list-item">
-                            <a href="#" class="link link--nav">Создать задание</a>
-                        </li>
-                        <li class="list-item">
-                            <a href="#" class="link link--nav">Настройки</a>
-                        </li>
-                    </ul>
+                    <?= Menu::widget([
+                        'options' => ['class' => 'nav-list'], 'activeCssClass' => 'list-item--active',
+                        'itemOptions' => ['class' => 'list-item'],
+                        'linkTemplate' => '<a href="{url}" class="link link--nav">{label}</a>',
+                        'items' => [
+                            ['label' => 'Новое', 'url' => ['tasks/index']],
+                            ['label' => 'Мои задания', 'url' => ['tasks/my']],
+                            ['label' => 'Создать задание', 'url' => ['tasks/create']],
+                            ['label' => 'Настройки', 'url' => ['user/settings']]
+                        ]
+                    ]); ?>
                 </div>
             <?php endif; ?>
 
         </nav>
 
-        <?php if (false) : ?>
+        <?php if (Yii::$app->controller->action->id !== 'signup') : ?>
             <div class="user-block">
                 <a href="#">
                     <img class="user-photo" src="../../img/man-glasses.png" width="55" height="55" alt="Аватар" />

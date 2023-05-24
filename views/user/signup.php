@@ -2,7 +2,8 @@
 
 /** 
  * @var yii\web\View $this
- * @var yii\web\View $this
+ * @var User $model
+ * @var City $cities
  */
 
 use yii\helpers\ArrayHelper;

@@ -69,6 +69,8 @@ class m230518_003004_create_user_categories_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('user_categories');
+        echo "m230518_003004_create_user_categories_table cannot be reverted.\n";
+
+        return false;
     }
 }

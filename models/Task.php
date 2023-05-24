@@ -86,6 +86,34 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
+     * Поиск задач у которых статус равен новая. Дополнительно можно 
+     * отсоритровать задачи по времени размещения и без назначенного
+     * исполнителя  
+     * @return TaskQuery - Возвращает запрос(задачи отфильтрованные по статусу, категории, исполнителю и периоду) 
+     */
+    public function getSearchQuery(): TaskQuery
+    {
+        $query = self::find();
+        $query->where(['status_id' => Status::STATUS_NEW]);
+
+        $query->andFilterWhere(['category_id' => $this->category_id]);
+
+        if ($this->noPerformer) {
+            $query->andWhere('performer_id IS NULL');
+        }
+
+        if ($this->remoteWork) {
+            $query->andWhere('location IS NULL');
+        }
+
+        if ($this->periodOption) {
+            $query->andWhere('UNIX_TIMESTAMP(tasks.dt_creation) > UNIX_TIMESTAMP() - :period', ['period' => $this->periodOption]);
+        }
+
+        return $query->orderBy('dt_creation');
+    }
+
+    /**
      * Gets query for [[Category]].
      *
      * @return \yii\db\ActiveQuery|CategoryQuery
@@ -157,33 +185,5 @@ class Task extends \yii\db\ActiveRecord
     public static function find()
     {
         return new TaskQuery(get_called_class());
-    }
-
-    /**
-     * Поиск задач у которых статус равен новая. Дополнительно можно 
-     * отсоритровать задачи по времени размещения и без назначенного
-     * исполнителя  
-     * @return TaskQuery - Возвращает запрос(задачи отфильтрованные по статусу, категории, исполнителю и периоду) 
-     */
-    public function getSearchQuery()
-    {
-        $query = self::find();
-        $query->where(['status_id' => Status::STATUS_NEW]);
-
-        $query->andFilterWhere(['category_id' => $this->category_id]);
-
-        if ($this->noPerformer) {
-            $query->andWhere('performer_id IS NULL');
-        }
-
-        if ($this->remoteWork) {
-            $query->andWhere('location IS NULL');
-        }
-
-        if ($this->periodOption) {
-            $query->andWhere('UNIX_TIMESTAMP(tasks.dt_creation) > UNIX_TIMESTAMP() - :period', ['period' => $this->periodOption]);
-        }
-
-        return $query->orderBy('dt_creation');
     }
 }

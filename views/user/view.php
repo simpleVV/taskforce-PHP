@@ -4,7 +4,6 @@
  * @var yii\web\View $this
  * @var Task $task
  * @var Review $reviews
- * @var Contact $contacts
  * @var Category $categories
  */
 
@@ -15,7 +14,7 @@ $this->title = 'Профиль пользователя';
 ?>
 
 <div class="left-column">
-    <h3 class="head-main"><?= Html::encode($model->name) ?></h3>
+    <h3 class="head-main"><?= Html::encode($user->name); ?></h3>
     <div class="user-card">
         <div class="photo-rate">
             <img class="card-photo" src="/../img/man-hat.png" width="191" height="190" alt="Фото пользователя" />
@@ -27,26 +26,20 @@ $this->title = 'Профиль пользователя';
             </div>
         </div>
         <p class="user-description">
-            Внезапно, ключевые особенности структуры проекта неоднозначны и
-            будут подвергнуты целой серии независимых исследований. Следует
-            отметить, что высококачественный прототип будущего проекта, в своём
-            классическом представлении, допускает внедрение своевременного
-            выполнения сверхзадачи.
+            <?= Html::encode($user->about); ?>
         </p>
     </div>
     <div class="specialization-bio">
         <div class="specialization">
             <p class="head-info">Специализации</p>
             <ul class="special-list">
-                <li class="special-item">
-                    <a href="#" class="link link--regular">Ремонт бытовой техники</a>
-                </li>
-                <li class="special-item">
-                    <a href="#" class="link link--regular">Курьер</a>
-                </li>
-                <li class="special-item">
-                    <a href="#" class="link link--regular">Оператор ПК</a>
-                </li>
+                <?php foreach ($user->categories as $category) : ?>
+                    <li class="special-item">
+                        <a href="#" class="link link--regular">
+                            <?= $category->name; ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
             </ul>
         </div>
         <div class="bio">
@@ -54,15 +47,19 @@ $this->title = 'Профиль пользователя';
             <p class="bio-info">
                 <span class="country-info">Россия</span>,
                 <span class="town-info">
-                    <?= $model->city->name ?>
-                </span>,
-                <span class="age-info">30</span> лет
+                    <?= $user->city->name; ?>
+                </span>
+                <?php if ($user->bd_date) : ?>
+                    , <span class="age-info">
+                        <?= $user->bd_date; ?>
+                    </span> лет
+                <?php endif; ?>
             </p>
         </div>
     </div>
-    <?php if ($reviews) : ?>
+    <?php if ($user->reviews) : ?>
         <h4 class="head-regular">Отзывы заказчиков</h4>
-        <?php foreach ($reviews as $review) : ?>
+        <?php foreach ($user->reviews as $review) : ?>
             <div class="response-card">
                 <img class="customer-photo" src="/../img/man-coat.png" width="120" height="127" alt="Фото заказчиков" />
                 <div class="feedback-wrapper">
@@ -79,7 +76,7 @@ $this->title = 'Профиль пользователя';
                     </div>
                     <p class="info-text">
                         <span class="current-time">
-                            <?= Yii::$app->formatter->asRelativeTime($review->dt_creation) ?>
+                            <?= Yii::$app->formatter->asRelativeTime($review->dt_creation); ?>
                         </span>
                     </p>
                 </div>
@@ -97,12 +94,14 @@ $this->title = 'Профиль пользователя';
             <dd>25 место</dd>
             <dt>Дата регистрации</dt>
             <dd>
-                <?= Yii::$app->formatter->asDate($model->dt_registration) ?>
+                <?= Yii::$app->formatter->asDate($user->dt_registration); ?>
             </dd>
             <dt>Статус</dt>
-            <dd>
-                <?= $status ?>
-            </dd>
+            <?php if ($user->haveActiveTask()) : ?>
+                <dd>Занят</dd>
+            <?php else : ?>
+                <dd>Открыт для новых заказов</dd>
+            <?php endif; ?>
         </dl>
     </div>
     <div class="right-card white">
@@ -110,17 +109,17 @@ $this->title = 'Профиль пользователя';
         <ul class="enumeration-list">
             <li class="enumeration-item">
                 <a href="#" class="link link--block link--phone">
-                    <?= Html::encode($contacts ? $contacts->phone : "") ?>
+                    <?= Html::encode($user->phone); ?>
                 </a>
             </li>
             <li class="enumeration-item">
                 <a href="#" class="link link--block link--email">
-                    <?= Html::encode($contacts ? $contacts->email : "") ?>
+                    <?= Html::encode($user->email); ?>
                 </a>
             </li>
             <li class="enumeration-item">
                 <a href="#" class="link link--block link--tg">
-                    <?= Html::encode($contacts ? $contacts->telegram : "") ?>
+                    <?= Html::encode($user->telegram); ?>
                 </a>
             </li>
         </ul>

@@ -17,7 +17,7 @@ class TasksController extends Controller
      *
      * @return string - странница с задачами
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $task = new Task();
 
@@ -44,7 +44,7 @@ class TasksController extends Controller
      * @param $id - идентификатор выбранной задачи
      * @return string странница с выбранной задачей
      */
-    public function actionView($id)
+    public function actionView($id): string
     {
         $task = Task::findOne($id);
         $responseQuery = Response::find();
@@ -60,19 +60,4 @@ class TasksController extends Controller
             'responses' => $responses
         ]);
     }
-
-    // public function actionCreate()
-    // {
-    //     $data = [];
-
-    //     $newTask = new Task;
-    //     $newTask->load($data);
-
-    //     $newTask->setScenario('insert');
-    //     $isValid = $newTask->validate();
-
-    //     if ($isValid) {
-    //         $newTask->save();
-    //     }
-    // }
 }
