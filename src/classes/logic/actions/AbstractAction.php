@@ -6,23 +6,26 @@ abstract class AbstractAction
 
 {
     /**
-     * Возвращает имя действия
-     * @return string - наименование действия на кириллице
+     * Returns the name of the action
+     * 
+     * @return string - the name of the action in Cyrillic
      */
     abstract public static function getName(): string;
 
     /**
-     * Возвращает код действия
-     * @return string - код действия
+     * Returns the action code
+     * 
+     * @return string - action code
      */
     abstract public static function getInnerName(): string;
 
     /**
-     * Проверяет права пользователя на возможность выполнить действие
-     * @param int $userId - статус задачи
-     * @param int $clientId - идентификатор заказчика  
-     * @param int $performerId - идентификатор исполнителя 
-     * @return bool - true - если идентификатор текущего пользователя совпадает с идентификатором роли, иначе false
+     * Checks the user's rights to be able to perform the action
+     * 
+     * @param int $userId - task status
+     * @param int $clientId - client ID  
+     * @param int $performerId - performer ID 
+     * @return bool - true - if the ID of the current user matches the ID of the role, otherwise false
      */
     abstract public static function checkRights(int $userId, int $performerId, int $clientId): bool;
 }

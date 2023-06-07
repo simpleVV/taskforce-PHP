@@ -2,12 +2,14 @@
 
 namespace app\models;
 
+use yii\db\ActiveQuery;
+
 /**
  * This is the ActiveQuery class for [[Review]].
  *
  * @see Review
  */
-class ReviewQuery extends \yii\db\ActiveQuery
+class ReviewQuery extends ActiveQuery
 {
     /*public function active()
     {

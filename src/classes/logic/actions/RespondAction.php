@@ -8,12 +8,12 @@ class RespondAction extends AbstractAction
 {
     public static function getName(): string
     {
-        return "Откликнуться";
+        return 'Откликнуться';
     }
 
     public static function getInnerName(): string
     {
-        return "act_respond";
+        return 'act_respond';
     }
 
     public static function

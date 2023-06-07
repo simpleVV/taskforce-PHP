@@ -2,12 +2,14 @@
 
 namespace app\models;
 
+use yii\db\ActiveQuery;
+
 /**
  * This is the ActiveQuery class for [[Status]].
  *
  * @see Status
  */
-class StatusQuery extends \yii\db\ActiveQuery
+class StatusQuery extends ActiveQuery
 {
     /*public function active()
     {

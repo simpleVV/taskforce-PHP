@@ -7,8 +7,9 @@ abstract class AbstractFileSearcher
     public array $files = [];
 
     /**
-     * Возвращает массив с именами найденных файлов (полный путь до файла) 
-     * @return ?array - массив с именами найденных файлов или null если не чего не найдено
+     * Returns an array with the names of the found files (the full path to the file)
+     *  
+     * @return ?array - array with the names of the found files or null
      */
     public function getFiles(): ?array
     {
@@ -16,7 +17,8 @@ abstract class AbstractFileSearcher
     }
 
     /**
-     * Метод по поиску файлов 
+     * File Search method
+     *  
      * @return void 
      */
     abstract public function findFiles(): void;

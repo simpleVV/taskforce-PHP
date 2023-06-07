@@ -13,14 +13,14 @@ use taskforce\utils\exception\DateValidExeption;
 
 class TaskAvailableActions
 {
-    const STATUS_NEW = "new";
-    const STATUS_CANCEL = "cancel";
-    const STATUS_IN_PROGRESS = "in_progress";
-    const STATUS_COMPLETE = "complete";
-    const STATUS_FAILED = "fail";
+    const STATUS_NEW = 'new';
+    const STATUS_CANCEL = 'cancel';
+    const STATUS_IN_PROGRESS = 'in_progress';
+    const STATUS_COMPLETE = 'complete';
+    const STATUS_FAILED = 'fail';
 
-    const ROLE_PERFORMER = "performer";
-    const ROLE_CLIENT = "client";
+    const ROLE_PERFORMER = 'performer';
+    const ROLE_CLIENT = 'client';
 
     private ?int $performerId;
     private int $clientId;
@@ -28,9 +28,9 @@ class TaskAvailableActions
     private DateTime $finishDate;
 
     /**
-     * @param string $status - статус задачи
-     * @param int $clientId - идентификатор заказчика  
-     * @param int|null $performerId - идентификатор исполнителя 
+     * @param string $status - task status
+     * @param int $clientId - client Id  
+     * @param int|null $performerId - performer Id 
      * @return void
      */
     public function __construct(string $status, int $clientId, ?int $performerId)
@@ -42,8 +42,9 @@ class TaskAvailableActions
     }
 
     /**
-     * Устанавливает дату окончания задачи
-     * @param DateTime $date - дата окончания задачи
+     * Sets the end date of the task
+     * 
+     * @param DateTime $date - task end date
      * @return void
      */
     public function setFinishDate(DateTime $date): void
@@ -52,29 +53,31 @@ class TaskAvailableActions
 
         $date > $curDate
             ? $this->finishDate = $date
-            : throw new DateValidExeption("Дата выполнения задания не может быть меньше текущей даты");
+            : throw new DateValidExeption('Дата выполнения задания не может быть меньше текущей даты');
     }
 
     /**
-     * Возвращает массив статусов задачи, где ключ — внутреннее имя, а значение 
-     * названия статуса на русском
-     * @return array - массив статусов
+     * Returns an array of task statuses, where the key is the 
+     * internal name and the value is status names in Russian
+     * 
+     * @return array - array of statuses
      */
     public function getStatusesMap(): array
     {
         return [
-            self::STATUS_NEW => "Новое",
-            self::STATUS_CANCEL => "Отменено",
-            self::STATUS_IN_PROGRESS => "В работе",
-            self::STATUS_COMPLETE => "Выполнено",
-            self::STATUS_FAILED => "Провалено"
+            self::STATUS_NEW => 'Новое',
+            self::STATUS_CANCEL => 'Отменено',
+            self::STATUS_IN_PROGRESS => 'В работе',
+            self::STATUS_COMPLETE => 'Выполнено',
+            self::STATUS_FAILED => 'Провалено'
         ];
     }
 
     /**
-     * Возвращает следующий статус задачи после выполненного действия  
-     * @param string $action - выполненное действие 
-     * @return ?string - статус задания или null если нет статуса для выполненного действия
+     * Returns the next status of the task after the completed action
+     *   
+     * @param string $action - completed action 
+     * @return ?string - task status or null if there is no status for the completed action
      */
     public function getNextStatus(string $action): ?string
     {
@@ -88,10 +91,11 @@ class TaskAvailableActions
     }
 
     /**
-     * Возвращает доступные действия для указанного статуса и роли
-     * @param int $userId - id текущего пользователя
-     * @param string $userRole - роль пользователя
-     * @return array - массив доступных действия
+     * Returns available actions for the specified status and role
+     * 
+     * @param int $userId - current user id
+     * @param string $userRole - user role
+     * @return array - array available actions
      */
     public function getAvailableActions(int $userId, string $userRole): array
     {
@@ -109,9 +113,10 @@ class TaskAvailableActions
     }
 
     /**
-     * Установка статуса задачи, если переданный статус есть среди допустимых
-     * статусов
-     * @param string $status - статус задачи
+     * Setting the task status if the transferred status is 
+     * among the acceptable statuses
+     * 
+     * @param string $status - task status
      * @return void
      */
     public function setStatus(string $status): void
@@ -126,12 +131,13 @@ class TaskAvailableActions
 
         in_array($status, $acceptableStatuses)
             ? $this->status = $status
-            : throw new StatusValidException("Статус $status не существует");
+            : throw new StatusValidException('Статус $status не существует');
     }
 
     /**
-     * Проверяет наличие переданной роли среди доступных.
-     * @param string $role - роль пользователя
+     * Checks for the presence of the transferred role among the available.
+     * 
+     * @param string $role - user role
      * @return void
      */
     public function checkUserRole($role): void
@@ -142,14 +148,15 @@ class TaskAvailableActions
         ];
 
         if (!in_array($role, $acceptableRole)) {
-            throw new RoleValidException("Заданной Вами роли $role не существует");
+            throw new RoleValidException('Заданной Вами роли $role не существует');
         }
     }
 
     /**
-     * Поиск доступных действий по переданному статусу
-     * @param string $status - статус задачи
-     * @return ?array - $массив доступных действий или null
+     * Search for available actions based on the transferred status
+     * 
+     * @param string $status - task status
+     * @return ?array - array of available actions or null
      */
     private function findActionsAllowedStatus($status): ?array
     {
@@ -162,9 +169,10 @@ class TaskAvailableActions
     }
 
     /**
-     * Поиск доступных действий по переданному статусу
-     * @param string $role - роль пользователя
-     * @return ?array - $массив доступных действий или null
+     * Search for available actions based on the transferred role
+     * 
+     * @param string $role - user role
+     * @return ?array - array of available actions or null
      */
     private function findActionsAllowedRole($role): ?array
     {

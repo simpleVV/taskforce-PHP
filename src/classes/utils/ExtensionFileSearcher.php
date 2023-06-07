@@ -12,14 +12,14 @@ class ExtensionFileSearcher extends AbstractFileSearcher
     private string $dir;
 
     /**
-     * @param string $dir - директория для поиска файлов
-     * @param string $fileExtension - расширение искомых файлов 
+     * @param string $dir - directory for file search
+     * @param string $fileExtension - extension of the files you are looking for 
      * @return void
      */
     public function __construct(string $dir, string $fileExtension)
     {
         if (!is_dir($dir)) {
-            throw new SourceFileException("Директория не найден");
+            throw new SourceFileException('Директория не найден');
         }
 
         $this->dir = $dir;
@@ -27,7 +27,8 @@ class ExtensionFileSearcher extends AbstractFileSearcher
     }
 
     /**
-     * Метод выполняет поиск файлов по расширению и сохраняет их в массив
+     * The method searches for files by extension and saves them to an array
+     * 
      * @return void 
      */
     public function findFiles(): void

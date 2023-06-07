@@ -3,19 +3,19 @@
 namespace app\controllers;
 
 use Yii;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use app\models\Task;
 use app\models\Category;
 use app\models\Response;
 use yii\data\Pagination;
 
-class TasksController extends Controller
+class TasksController extends SecuredController
 {
+    const TASKS_PAGE_SIZE = 5;
     /**
-     * Отображает страницу с задачами.
+     * Display tasks page.
      *
-     * @return string - странница с задачами
+     * @return string - tasks page
      */
     public function actionIndex(): string
     {
@@ -26,23 +26,33 @@ class TasksController extends Controller
         $tasksQuery = $task->getSearchQuery();
         $countQuery = clone $tasksQuery;
 
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 5]);
+        $pagination = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'pageSize' => Self::TASKS_PAGE_SIZE,
+            'forcePageParam' => false,
+            'pageSizeParam' => false
+        ]);
 
         $categories = Category::find()->all();
-        $models = $tasksQuery->offset($pages->offset)->limit($pages->limit)->all();
+        $models = $tasksQuery
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
 
         return $this->render('index', [
             'models' => $models,
             'task' => $task,
-            'pages' => $pages,
-            'categories' => $categories
+            'categories' => $categories,
+            'pagination' => $pagination,
+            'pageSize' => Self::TASKS_PAGE_SIZE
         ]);
     }
 
     /**
-     * Отображает страницу с выбранной задачей.
-     * @param $id - идентификатор выбранной задачи
-     * @return string странница с выбранной задачей
+     * Display selected task.
+     * 
+     * @param $id - id of the selected task
+     * @return string taks page
      */
     public function actionView($id): string
     {

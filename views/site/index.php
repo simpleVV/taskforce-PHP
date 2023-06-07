@@ -1,7 +1,9 @@
 <?php
 
-/** @var yii\web\View $this */
+/** 
+ * @var yii\web\View $this 
+ * @var LoginForm $form
+ * */
 
-$this->title = 'My Yii Application';
-?>
-<h1>Hello world!</h1>
+use yii\widgets\ActiveForm;
+use app\models\LoginForm;

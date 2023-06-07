@@ -2,12 +2,14 @@
 
 namespace app\models;
 
+use yii\db\ActiveQuery;
+
 /**
  * This is the ActiveQuery class for [[Task]].
  *
  * @see Task
  */
-class TaskQuery extends \yii\db\ActiveQuery
+class TaskQuery extends ActiveQuery
 {
     /*public function active()
     {

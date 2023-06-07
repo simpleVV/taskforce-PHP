@@ -7,7 +7,7 @@ body {
   background-color: #f1f2f6;
   color: #333438; }
   body.landing {
-    background-image: url("../img/polygon.png");
+    background-image: url("../img/Polygon.png");
     background-repeat: no-repeat;
     background-position-x: center;
     background-position-y: -413px; }
@@ -416,7 +416,7 @@ footer {
   border-radius: 10px;
   margin-top: 33px; }
 
-.new-task__icon--courier {
+.new-task__icon--translation {
   background-image: url("../img/man-running.png");
   background-repeat: no-repeat;
   background-position: center;

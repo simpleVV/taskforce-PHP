@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\web\IdentityInterface;
+use yii\db\ActiveRecord;
 
 // use yii\behaviors\BlameableBehavior;
 
@@ -29,7 +30,7 @@ use yii\web\IdentityInterface;
  * @property Response[] $responses
  * @property Status $status
  */
-class Task extends \yii\db\ActiveRecord
+class Task extends ActiveRecord
 {
     public $remoteWork;
     public $noPerformer;
@@ -69,7 +70,7 @@ class Task extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            // 'id' => 'ID',
+            'id' => 'ID',
             'dt_creation' => 'Дата создания',
             'title' => 'Заголовок',
             'description' => 'Описание',
@@ -86,10 +87,12 @@ class Task extends \yii\db\ActiveRecord
     }
 
     /**
-     * Поиск задач у которых статус равен новая. Дополнительно можно 
-     * отсоритровать задачи по времени размещения и без назначенного
-     * исполнителя  
-     * @return TaskQuery - Возвращает запрос(задачи отфильтрованные по статусу, категории, исполнителю и периоду) 
+     * Search tasks with the status equal to new. Additionally, 
+     * you can sort out tasks by placement time and without 
+     * an assigned one the performer
+     *   
+     * @return TaskQuery - Returns a request(tasks filtered by status, 
+     * category, performer, and period) 
      */
     public function getSearchQuery(): TaskQuery
     {

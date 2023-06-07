@@ -2,12 +2,14 @@
 
 namespace app\models;
 
+use yii\db\ActiveQuery;
+
 /**
  * This is the ActiveQuery class for [[City]].
  *
  * @see City
  */
-class CityQuery extends \yii\db\ActiveQuery
+class CityQuery extends ActiveQuery
 {
     /*public function active()
     {

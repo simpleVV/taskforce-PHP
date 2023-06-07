@@ -14,7 +14,7 @@ class CSVtoSQLConverter
     protected SplFileObject $fileObject;
 
     /**
-     * @param SplFileInfo $file - bнформация о файле
+     * @param SplFileInfo $file - file info
      * @return void
      */
     public function __construct(SplFileInfo $file)
@@ -27,9 +27,11 @@ class CSVtoSQLConverter
     }
 
     /**
-     * Создает файл sql с именем переданного файла, в той же директории где
-     * лежит исходный файл. Преобразует данные в csv файле в sql запрос.
-     * @param string $outputDirectory - директория для сохранения файла 
+     * Creates an sql file with the name of the transferred file, 
+     * in the same directory where the source file is located. 
+     * Converts data in a csv file into an sql query.
+     * 
+     * @param string $outputDirectory - the directory for saving the file 
      * @return void
      */
     public function importCSVToSQL($outputDirectory): void
@@ -37,14 +39,14 @@ class CSVtoSQLConverter
         try {
             $this->fileObject = new SplFileObject($this->file);
         } catch (RuntimeException) {
-            throw new SourceFileException(("Файл не доступен для чтения"));
+            throw new SourceFileException(('Файл не доступен для чтения'));
         }
 
         $this->fileObject->setFlags(SplFileObject::READ_CSV);
         $columns = $this->getColumnsNames();
 
         if (!$this->validateColumns($columns)) {
-            throw new FileFormatException("Заголовки столбцов должны быть указаны как строчные значения");
+            throw new FileFormatException('Заголовки столбцов должны быть указаны как строчные значения');
         }
 
         $filesToConvert = [];
@@ -53,17 +55,18 @@ class CSVtoSQLConverter
             $filesToConvert[] = $this->fileObject->fgetcsv();
         }
 
-        $tableName = $this->fileObject->getBasename(".csv");
+        $tableName = $this->fileObject->getBasename('.csv');
         $query = $this->createSQLQuery($tableName, $columns, $filesToConvert);
 
         $this->createSQLFile($outputDirectory, $tableName, $query);
     }
 
     /**
-     * Создает insert - msql запрос из переданных данных (имя таблицы, параметры, значения).
-     * @param string $tableName - имя таблицы msql
-     * @param array $columns - имя колонок таблицы msql 
-     * @param array $values - значения таблицы msql  
+     * Creates an insert - msql query from the transmitted data (table name, parameters, values)
+     * 
+     * @param string $tableName - table name msql
+     * @param array $columns - columns names msql 
+     * @param array $values - table values msql  
      * @return string
      */
     protected function createSQLQuery(string $tableName, array $columns, array $values): string
@@ -88,16 +91,18 @@ class CSVtoSQLConverter
     }
 
     /**
-     * Создает и заполняет msql файл с заданным именем, в указанной директории
-     * @param string $dir - каталог куда будет помещен файл
-     * @param string $fileName - имя файла msql 
-     * @param string $content - содержимое msql файла  
+     * Creates and fills in an msql file with the specified name, 
+     * in the specified directory
+     * 
+     * @param string $dir - the directory where the file will be placed
+     * @param string $fileName - file name msql 
+     * @param string $content - content msql file  
      * @return void
      */
     protected function createSQLFile(string $dir, string $fileName, string $content): void
     {
         if (!is_dir($dir)) {
-            throw new SourceFileException("Не найдена директория для сохранения файлов");
+            throw new SourceFileException('Не найдена директория для сохранения файлов');
         }
 
         $newFileName = $dir . DIRECTORY_SEPARATOR . $fileName . '.sql';
@@ -105,9 +110,10 @@ class CSVtoSQLConverter
     }
 
     /**
-     * Сохраняет название колонок csv файла в массив
-     * @return ?array - массив названий колонок csv файла или null если данные
-     * в файле отсутствуют
+     * Saves the column names of the csv file to an array
+     * 
+     * @return ?array - array of column names of the csv file or null if the data
+     * the file is missing
      */
     protected function getColumnsNames(): ?array
     {
@@ -118,10 +124,11 @@ class CSVtoSQLConverter
     }
 
     /**
-     * Проверяет заголовки столбцов на соответствие строковому формату.
-     * @param array $columns - массив заголовков
-     * @return bool - true - если заголовки есть в файле и соответствуют
-     * формату, иначе false
+     * Checks column headers for compliance with string format.
+     * 
+     * @param array $columns - array of title
+     * @return bool - true - if the headers are in the file and correspond to
+     * format, otherwise false
      */
     protected function validateColumns($columns): bool
     {

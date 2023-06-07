@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "statuses".
@@ -13,7 +14,7 @@ use Yii;
  *
  * @property Task[] $tasks
  */
-class Status extends \yii\db\ActiveRecord
+class Status extends ActiveRecord
 {
 
     const STATUS_NEW = 1;

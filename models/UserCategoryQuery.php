@@ -2,12 +2,14 @@
 
 namespace app\models;
 
+use yii\db\ActiveQuery;
+
 /**
  * This is the ActiveQuery class for [[UserCategory]].
  *
  * @see UserCategory
  */
-class UserCategoryQuery extends \yii\db\ActiveQuery
+class UserCategoryQuery extends ActiveQuery
 {
     /*public function active()
     {

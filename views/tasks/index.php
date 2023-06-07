@@ -22,11 +22,11 @@ $this->title = 'Просмотр новых заданий';
     <h3 class="head-main head-task">Новые задания</h3>
 
     <?php foreach ($models as $model) : ?>
-        <?= $this->render('//blocks/_task-card', ['model' => $model]); ?>
+        <?= $this->render('//partials/_task-card', ['model' => $model]); ?>
     <?php endforeach; ?>
     <div class="pagination-wrapper">
         <?= LinkPager::widget([
-            'pagination' => $pages,
+            'pagination' => $pagination,
             'options' => [
                 'class' => 'pagination-list'
             ],
@@ -37,7 +37,7 @@ $this->title = 'Просмотр новых заданий';
             'linkOptions' => ['class' => 'link link--page'],
             'nextPageLabel' => '',
             'prevPageLabel' => '',
-            'maxButtonCount' => 5
+            'maxButtonCount' => $pageSize
         ]); ?>
     </div>
 </div>

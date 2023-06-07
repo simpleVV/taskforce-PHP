@@ -2,12 +2,14 @@
 
 namespace app\models;
 
+use yii\db\ActiveQuery;
+
 /**
  * This is the ActiveQuery class for [[Files]].
  *
  * @see Files
  */
-class FilesQuery extends \yii\db\ActiveQuery
+class FilesQuery extends ActiveQuery
 {
     /*public function active()
     {
