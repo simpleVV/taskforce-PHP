@@ -33,12 +33,11 @@ class Files extends ActiveRecord
     {
         return [
             [['dt_creation'], 'safe'],
-            [['name', 'path', 'task_id', 'user_id'], 'required'],
-            [['task_id', 'user_id'], 'integer'],
+            [['name', 'path', 'task_uid'], 'required'],
+            [['task_id'], 'integer'],
             [['name'], 'string', 'max' => 60],
             [['path'], 'string', 'max' => 255],
             [['path'], 'unique'],
-            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
         ];
     }
 
@@ -52,8 +51,18 @@ class Files extends ActiveRecord
             'dt_creation' => 'Дата создания',
             'name' => 'Имя',
             'path' => 'Путь',
-            'task_id' => 'Задание',
+            'task_uid' => 'Задание',
         ];
+    }
+
+    /**
+     * Save file info in DB
+     * 
+     * @return bool - true if the file info is successfully saved in the DB
+     */
+    public function create()
+    {
+        return $this->save(false);
     }
 
     /**
@@ -63,11 +72,12 @@ class Files extends ActiveRecord
      */
     public function getTask()
     {
-        return $this->hasOne(Task::class, ['id' => 'task_id']);
+        return $this->hasOne(Task::class, ['uid' => 'task_uid']);
     }
 
     /**
      * {@inheritdoc}
+     * 
      * @return FilesQuery the active query used by this AR class.
      */
     public static function find()

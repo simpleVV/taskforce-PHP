@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use PhpParser\Node\Scalar;
 use Yii;
 use yii\web\IdentityInterface;
 use yii\db\ActiveRecord;
@@ -50,13 +51,14 @@ class Task extends ActiveRecord
     public function rules()
     {
         return [
+            [['status_id'], 'default', 'value' => Status::STATUS_NEW],
             [['dt_creation', 'dt_expire'], 'safe'],
-            [['title', 'description', 'category_id', 'client_id', 'performer_id', 'status_id'], 'required'],
+            [['title', 'description', 'category_id', 'client_id', 'status_id'], 'required'],
             [['description'], 'string'],
             [['noPerformer', 'remoteWork'], 'boolean'],
             [['periodOption'], 'number'],
             [['price', 'category_id', 'client_id', 'performer_id', 'status_id'], 'integer'],
-            [['title', 'location'], 'string', 'max' => 128],
+            [['title', 'location'], 'string'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['client_id' => 'id']],
             [['performer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['performer_id' => 'id']],
@@ -117,6 +119,16 @@ class Task extends ActiveRecord
     }
 
     /**
+     * Create task in DB
+     * 
+     * @return bool - true if the task is successfully saved in the DB
+     */
+    public function create()
+    {
+        return $this->save(false);
+    }
+
+    /**
      * Gets query for [[Category]].
      *
      * @return \yii\db\ActiveQuery|CategoryQuery
@@ -143,7 +155,7 @@ class Task extends ActiveRecord
      */
     public function getFiles()
     {
-        return $this->hasMany(Files::class, ['task_id' => 'id']);
+        return $this->hasMany(File::class, ['task_uid' => 'uid']);
     }
 
     /**

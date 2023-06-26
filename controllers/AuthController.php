@@ -56,9 +56,11 @@ class AuthController extends Controller
     }
 
     /**
-     * Display the user registration page|home page.
+     * Display the user registration page|home page if user successfully
+     * registered
      * 
-     * @return string|Response user registration page|the current response object.
+     * @return string|Response user registration page|the current response
+     *  object.
      */
     public function actionSignup(): string|Response
     {

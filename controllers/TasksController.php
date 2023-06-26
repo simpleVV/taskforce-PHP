@@ -4,10 +4,13 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\NotFoundHttpException;
-use app\models\Task;
-use app\models\Category;
-use app\models\Response;
+use yii\web\UploadedFile;
 use yii\data\Pagination;
+use app\models\Task;
+use app\models\TaskCreateForm;
+use app\models\Category;
+use Yii\web\Response;
+use app\models\UploadForm;
 
 class TasksController extends SecuredController
 {
@@ -57,7 +60,7 @@ class TasksController extends SecuredController
     public function actionView($id): string
     {
         $task = Task::findOne($id);
-        $responseQuery = Response::find();
+        $responseQuery = \app\models\Response::find();
         $responseQuery->where(['task_id' => $id]);
         $responses = $responseQuery->all();
 
@@ -69,5 +72,60 @@ class TasksController extends SecuredController
             'model' => $task,
             'responses' => $responses
         ]);
+    }
+
+    /**
+     * Display the task registration form|home page if task successfully
+     * registered.
+     * 
+     * @return string|Response taks registration page||the current response
+     * object.
+     */
+    public function actionCreate(): string|Response
+    {
+        $taskCreateForm = new TaskCreateForm();
+        $categories = Category::find()->all();
+
+        if (!Yii::$app->session->has('task_uid')) {
+            Yii::$app->session->set('task_uid', uniqid('upload'));
+        }
+
+        if (Yii::$app->request->getIsPost()) {
+            $taskCreateForm->load(Yii::$app->request->post());
+            $taskCreateForm->task_uid = Yii::$app->session->get('task_uid');
+            $taskId = $taskCreateForm->registerTask();
+
+            if ($taskId) {
+                Yii::$app->session->remove('task_uid');
+
+                return $this->redirect(['tasks/view', 'id' => $taskId]);
+            }
+        }
+
+        return $this->render('create', [
+            'model' => $taskCreateForm,
+            'categories' => $categories,
+        ]);
+    }
+
+    /**
+     * Upload and save files.
+     * 
+     * @return Response — a response that is configured to send $data formatted
+     * as JSON.
+     */
+    public function actionUpload(): Response
+    {
+        if (Yii::$app->request->isPost) {
+            $uploadFiles = new UploadForm;
+            $uploadFiles->files = UploadedFile::getInstancesByName('file');
+
+            if ($uploadFiles->files) {
+                $uploadFiles->task_uid = Yii::$app->session->get('task_uid');
+                $uploadFiles->uploadFiles();
+
+                return $this->asJson($uploadFiles->getAttributes());
+            }
+        }
     }
 }

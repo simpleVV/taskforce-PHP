@@ -54,6 +54,7 @@ $config = [
         ],
 
     ],
+    'timeZone' => 'Asia/Vladivostok',
     'params' => $params,
 ];
 

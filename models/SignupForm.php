@@ -15,6 +15,9 @@ class SignupForm extends Model
     public $password;
     public $password_repeat;
 
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
@@ -31,6 +34,9 @@ class SignupForm extends Model
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function attributeLabels()
     {
         return [

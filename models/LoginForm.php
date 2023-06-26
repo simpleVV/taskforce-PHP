@@ -13,6 +13,9 @@ class LoginForm extends Model
 
     private $_user;
 
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
@@ -22,6 +25,9 @@ class LoginForm extends Model
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function attributeLabels()
     {
         return [
