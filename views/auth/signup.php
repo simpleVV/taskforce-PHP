@@ -10,6 +10,8 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Регистрация пользователя';
+$this->params['main_class'] = 'container--registration';
+
 ?>
 
 <div class="center-block">
