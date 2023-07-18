@@ -52,12 +52,12 @@ class BaseUser extends ActiveRecord implements IdentityInterface
      * Checking the entered user password for a match 
      * with the password from the database.
      * 
-     * @param string - $password
+     * @param string $password
      * @return bool - return true - if the user has tasks in work 
      * and false if there are no tasks in work, there is a match with the 
      * password from the database.
      */
-    public function validatePassword($password): bool
+    public function validatePassword(string $password): bool
     {
         return Yii::$app->security->validatePassword($password, $this->password);
     }

@@ -2,11 +2,8 @@
 
 namespace app\controllers;
 
-use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
-use Yii\web\Response;
 use app\models\LoginForm;
 
 class SiteController extends Controller
@@ -39,13 +36,13 @@ class SiteController extends Controller
     /**
      * Display homepage.
      *
-     * @return string|Response - if user is guest display homepage.
+     * @return string- if user is guest display homepage.
      * If user is login display tasks page
      */
-    public function actionIndex(): string|Response
+    public function actionIndex(): string
     {
         $this->layout = '//landing';
 
-        return $this->render('//modals/_login_form', ['model' => new LoginForm()]);
+        return $this->render('//modals/_login-form', ['model' => new LoginForm()]);
     }
 }

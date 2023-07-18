@@ -5,10 +5,11 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 
-class TaskCreateForm extends Model
+class TaskForm extends Model
 {
     const MIN_TITLE_LENGTH = 10;
     const MIN_DESCRIPTION_LENGTH = 30;
+
     public $title;
     public $description;
     public $category_id;
@@ -17,6 +18,9 @@ class TaskCreateForm extends Model
     public $dt_expire;
     public $task_uid;
 
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
@@ -32,6 +36,9 @@ class TaskCreateForm extends Model
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function attributeLabels()
     {
         return [
@@ -58,7 +65,7 @@ class TaskCreateForm extends Model
             $task->attributes = $this->attributes;
             $task->uid = $this->task_uid;
 
-            return $task->create() ? $task->id : null;
+            return $task->save(false) ? $task->id : null;
         }
     }
 }

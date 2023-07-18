@@ -5,9 +5,8 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use Yii\web\Response;
-use yii\bootstrap5\ActiveForm;
+use yii\widgets\ActiveForm;
 use app\models\LoginForm;
-use app\models\User;
 use app\models\City;
 use app\models\SignupForm;
 

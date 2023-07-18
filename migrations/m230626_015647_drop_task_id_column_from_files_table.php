@@ -3,7 +3,7 @@
 use yii\db\Migration;
 
 /**
- * Handles dropping columns from table `{{%files}}`.
+ * Handles dropping columns from table `files`.
  */
 class m230626_015647_drop_task_id_column_from_files_table extends Migration
 {

@@ -17,9 +17,17 @@ use yii\db\ActiveRecord;
  *
  * @property User $client
  * @property User $user
+ * @property Task $task
+ * 
  */
 class Review extends ActiveRecord
 {
+    const HIGHEST_RATING = 5;
+    const GOOD_RATING = 4;
+    const AVERAGE_RATING = 3;
+    const POOR_RATING = 2;
+    const LOWEST_RATING = 1;
+
     /**
      * {@inheritdoc}
      */
@@ -40,6 +48,7 @@ class Review extends ActiveRecord
             [['rate', 'user_id', 'client_id'], 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['client_id' => 'id']],
+            [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
         ];
     }
 
@@ -76,6 +85,16 @@ class Review extends ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    /**
+     * Gets query for [[Task]].
+     *
+     * @return \yii\db\ActiveQuery|TaskQuery
+     */
+    public function getTask()
+    {
+        return $this->hasOne(Task::class, ['id' => 'task_id']);
     }
 
     /**

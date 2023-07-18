@@ -2,10 +2,13 @@
 
 namespace app\models;
 
-use PhpParser\Node\Scalar;
 use Yii;
-use yii\web\IdentityInterface;
 use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
+use taskforce\logic\TaskManager;
+use taskforce\logic\actions\AbstractAction;
+
+// use app\
 
 // use yii\behaviors\BlameableBehavior;
 
@@ -26,7 +29,7 @@ use yii\db\ActiveRecord;
  *
  * @property Category $category
  * @property User $client
- * @property File[] $files
+ * @property Files[] $files
  * @property User $performer
  * @property Response[] $responses
  * @property Status $status
@@ -93,14 +96,13 @@ class Task extends ActiveRecord
      * you can sort out tasks by placement time and without 
      * an assigned one the performer
      *   
-     * @return TaskQuery - Returns a request(tasks filtered by status, 
+     * @return TaskQuery Returns a request(tasks filtered by status, 
      * category, performer, and period) 
      */
     public function getSearchQuery(): TaskQuery
     {
         $query = self::find();
         $query->where(['status_id' => Status::STATUS_NEW]);
-
         $query->andFilterWhere(['category_id' => $this->category_id]);
 
         if ($this->noPerformer) {
@@ -119,13 +121,36 @@ class Task extends ActiveRecord
     }
 
     /**
-     * Create task in DB
-     * 
-     * @return bool - true if the task is successfully saved in the DB
+     * Assigns the task the following status after performing the action
+     *   
+     * @param AbstractAction $action completed action 
+     * @return void 
      */
-    public function create()
+    public function setNextStatus(AbstractAction $action): void
     {
-        return $this->save(false);
+        $taskManager = new TaskManager($this->status->code, $this->client_id, $this->performer_id);
+        $newStatus = $taskManager->getNextStatus($action);
+        $status = Status::findOne(['code' => $newStatus]);
+
+        $this->link('status', $status);
+    }
+
+    /**
+     * Returns the actions available for current task and current user
+     *   
+     * @param IdentityInterface $user_current user 
+     * @return array available actions  
+     */
+    public function getTaskActions(IdentityInterface $user): array
+    {
+        $userRole = $user->is_performer
+            ? TaskManager::ROLE_PERFORMER
+            : TaskManager::ROLE_CLIENT;
+
+        $taskManager = new TaskManager($this->status->code, $this->client_id, $this->performer_id);
+        $availableActions = $taskManager->getAvailableActions($user->id, $userRole);
+
+        return $availableActions;
     }
 
     /**
@@ -155,7 +180,7 @@ class Task extends ActiveRecord
      */
     public function getFiles()
     {
-        return $this->hasMany(File::class, ['task_uid' => 'uid']);
+        return $this->hasMany(Files::class, ['task_uid' => 'uid']);
     }
 
     /**
@@ -170,12 +195,19 @@ class Task extends ActiveRecord
 
     /**
      * Gets query for [[Responses]].
-     *
+     * 
+     * @param  ?IdentityInterface $user_current user
      * @return \yii\db\ActiveQuery|ResponseQuery
      */
-    public function getResponses(IdentityInterface $user = null)
+    public function getResponses(IdentityInterface $user = null): ResponseQuery
     {
-        return $this->hasMany(Response::class, ['task_id' => 'id']);
+        $query = $this->hasMany(Response::class, ['task_id' => 'id']);
+
+        if ($user && !$user->id === $this->client_id) {
+            return $query->where(['user_id' => $user->id]);
+        }
+
+        return $query;
     }
 
     /**
@@ -186,11 +218,6 @@ class Task extends ActiveRecord
     public function getStatus()
     {
         return $this->hasOne(Status::class, ['id' => 'status_id']);
-    }
-
-    public function getStatusCode()
-    {
-        return $this->status->code;
     }
 
     /**

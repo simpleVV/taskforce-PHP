@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Handles adding columns to table `files`.
+ * Handles adding columns to table `{{%users}}`.
  */
-class m230619_021215_add_size_column_to_files_table extends Migration
+class m230713_015750_add_fail_task_column_to_users_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -13,8 +13,8 @@ class m230619_021215_add_size_column_to_files_table extends Migration
     public function safeUp()
     {
         $this->addColumn(
-            'files',
-            'size',
+            'users',
+            'fail_tasks',
             $this->integer()
         );
     }
@@ -24,7 +24,7 @@ class m230619_021215_add_size_column_to_files_table extends Migration
      */
     public function safeDown()
     {
-        echo "m210430_081757_file_size cannot be reverted.\n";
+        echo "m230713_015750_add_fail_task_column_to_users_table cannot be reverted.\n";
 
         return false;
     }

@@ -6,12 +6,12 @@ class RefusalAction extends AbstractAction
 {
     public static function getName(): string
     {
-        return 'Отказаться';
+        return 'Отказаться от задания';
     }
 
     public static function getInnerName(): string
     {
-        return 'act_refusal';
+        return 'refusal';
     }
 
     public static function

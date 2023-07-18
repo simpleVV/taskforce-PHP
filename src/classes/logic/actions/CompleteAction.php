@@ -7,12 +7,12 @@ class CompleteAction extends AbstractAction
 {
     public static function getName(): string
     {
-        return 'Выполнено';
+        return 'Завершить задание';
     }
 
     public static function getInnerName(): string
     {
-        return 'act_complete';
+        return 'completion';
     }
 
     public static function

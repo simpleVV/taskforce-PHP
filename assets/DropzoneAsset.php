@@ -2,7 +2,6 @@
 
 namespace app\assets;
 
-
 use yii\web\AssetBundle;
 
 class DropzoneAsset extends AssetBundle

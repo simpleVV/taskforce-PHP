@@ -7,12 +7,12 @@ class CancelAction extends AbstractAction
 
     public static function getName(): string
     {
-        return 'Отменить';
+        return 'Отменить задание';
     }
 
     public static function getInnerName(): string
     {
-        return 'act_cancel';
+        return 'cancel';
     }
 
     public static function

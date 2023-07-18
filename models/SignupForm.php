@@ -63,7 +63,7 @@ class SignupForm extends Model
             $user = new User;
             $user->attributes = $this->attributes;
 
-            if ($user->create()) {
+            if ($user->save(false)) {
                 return Yii::$app->user->login($user);
             };
         }

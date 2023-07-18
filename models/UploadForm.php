@@ -56,7 +56,7 @@ class UploadForm extends Model
             $fileInfo->task_uid = $this->task_uid;
         }
 
-        return $fileInfo->create();
+        return $fileInfo->save(false);
     }
 
     /**
@@ -82,7 +82,7 @@ class UploadForm extends Model
      *
      * @return bool if file successfully saved
      */
-    public function saveFileInFolder(): bool
+    private function saveFileInFolder(): bool
     {
         return $this->file->saveAs($this->getFolder() . $this->fileName);
     }
@@ -92,9 +92,9 @@ class UploadForm extends Model
      *
      * @return string saved file path
      */
-    public function getNewFilePath(): string
+    private function getNewFilePath(): string
     {
-        return $this->getFolder() . $this->fileName;
+        return '/' . $this->getFolder() . $this->fileName;
     }
 
     /**
@@ -102,7 +102,7 @@ class UploadForm extends Model
      *
      * @return bool truu - if file exist
      */
-    public function fileExists(): bool
+    private function fileExists(): bool
     {
         return file_exists($this->getFolder() . $this->file);
     }

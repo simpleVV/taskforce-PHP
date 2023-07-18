@@ -117,28 +117,80 @@ class User extends BaseUser implements IdentityInterface
     {
         return $this->getTasks()
             ->joinWith('status', true, 'INNER JOIN')
-            ->where(['statuses.id' => Status::STATUS_AT_WORK])->exists();
+            ->where(['statuses.id' => Status::STATUS_IN_PROGRESS])->exists();
     }
 
     /**
      * Finde user by email in DB
      * 
-     * @return User|array|null - array of data if the user is found
+     * @param string $email by which the database is searched
+     * @return ?User user data if the user is found
      * and null if not
      */
-    public static function findByEmail($email): User|array|null
+    public static function findByEmail(string $email): ?User
     {
-        return User::find()->where(['email' => $email])->one();
+        return User::find()
+            ->where(['email' => $email])
+            ->one();
     }
 
     /**
-     * Create user in DB
+     * increase user fail tasks count by 1
      * 
-     * @return bool - true if the user is successfully saved in the DB
+     * @return void
      */
-    public function create(): bool
+    public function increaseFailTasks(): void
     {
-        return $this->save(false);
+        $this->updateCounters(['fail_tasks' => 1]);
+    }
+    //сумма всех оценок из отзывов / (кол-во отзывов + счетчик проваленных заданий)
+    public function getRating()
+    {
+        $rating = null;
+        $reviewsCount = $this->getReviews()
+            ->count();
+
+        if ($reviewsCount) {
+            $rate = $this->getReviews()->sum('rate');
+            $rating = round($rate / ($reviewsCount + $this->fail_tasks), 2);
+        }
+        return $rating;
+    }
+
+    public function getCompleteTasks()
+    {
+        return $this->getTasks()
+            ->where(['status_id' => Status::STATUS_COMPLETE])
+            ->count();
+    }
+
+    public function getPosition()
+    {
+        $query = $this->getReviews();
+        $totalCount = $query->count();
+        $position = 0;
+
+        if ($query->exists()) {
+            $highestRating = $query
+                ->where(['rate' => Review::HIGHEST_RATING])
+                ->count() * Review::HIGHEST_RATING;
+            $goodRating = $query
+                ->where(['rate' => Review::GOOD_RATING])
+                ->count() * Review::GOOD_RATING;
+            $averageRating = $query
+                ->where(['rate' => Review::AVERAGE_RATING])
+                ->count() * Review::AVERAGE_RATING;
+            $poorRating = $query
+                ->where(['rate' => Review::POOR_RATING])
+                ->count() * Review::POOR_RATING;
+            $lowestRating = $query
+                ->where(['rate' => Review::LOWEST_RATING])
+                ->count() * Review::LOWEST_RATING;
+
+            $position = ($highestRating + $goodRating + $averageRating + $poorRating + $lowestRating) / $totalCount;
+        }
+
+        return $position;
     }
 
     /**

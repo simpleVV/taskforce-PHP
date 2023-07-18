@@ -19,7 +19,7 @@ class Status extends ActiveRecord
 
     const STATUS_NEW = 1;
     const STATUS_CANCEL = 2;
-    const STATUS_AT_WORK = 3;
+    const STATUS_IN_PROGRESS = 3;
     const STATUS_COMPLETE = 4;
     const STATUS_FAILED = 5;
 

@@ -40,7 +40,7 @@ class LoginForm extends Model
      * Checking the user's entered password for a 
      * match with the password from the database
      * 
-     * @param string $attribute
+     * @param string $attribute model attribute
      * @param $params
      * @return void
      */

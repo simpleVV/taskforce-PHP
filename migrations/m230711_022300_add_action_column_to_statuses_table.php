@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m230626_015139_task_uid_column_to_files_table
+ * Handles adding columns to table `statuses`.
  */
-class m230626_015139_task_uid_column_to_files_table extends Migration
+class m230711_022300_add_action_column_to_statuses_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -13,8 +13,8 @@ class m230626_015139_task_uid_column_to_files_table extends Migration
     public function safeUp()
     {
         $this->addColumn(
-            'files',
-            'task_uid',
+            'statuses',
+            'action',
             $this->char(64)
         );
     }
@@ -24,7 +24,7 @@ class m230626_015139_task_uid_column_to_files_table extends Migration
      */
     public function safeDown()
     {
-        echo "m230626_015139_task_uid_column_to_files_table cannot be reverted.\n";
+        echo "m230711_022300_add_action_column_to_statuses_table cannot be reverted.\n";
 
         return false;
     }

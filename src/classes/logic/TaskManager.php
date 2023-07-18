@@ -3,6 +3,7 @@
 namespace taskforce\logic;
 
 use DateTime;
+use taskforce\logic\actions\AbstractAction;
 use taskforce\logic\actions\CancelAction;
 use taskforce\logic\actions\CompleteAction;
 use taskforce\logic\actions\RefusalAction;
@@ -11,13 +12,13 @@ use taskforce\utils\exception\RoleValidException;
 use taskforce\utils\exception\StatusValidException;
 use taskforce\utils\exception\DateValidExeption;
 
-class TaskAvailableActions
+class TaskManager
 {
     const STATUS_NEW = 'new';
-    const STATUS_CANCEL = 'cancel';
+    const STATUS_CANCEL = 'cancelled';
     const STATUS_IN_PROGRESS = 'in_progress';
     const STATUS_COMPLETE = 'complete';
-    const STATUS_FAILED = 'fail';
+    const STATUS_FAILED = 'failed';
 
     const ROLE_PERFORMER = 'performer';
     const ROLE_CLIENT = 'client';
@@ -25,12 +26,11 @@ class TaskAvailableActions
     private ?int $performerId;
     private int $clientId;
     private string $status;
-    private DateTime $finishDate;
 
     /**
-     * @param string $status - task status
-     * @param int $clientId - client Id  
-     * @param int|null $performerId - performer Id 
+     * @param string $status task status
+     * @param int $clientId client Id  
+     * @param int|null $performerId performer Id 
      * @return void
      */
     public function __construct(string $status, int $clientId, ?int $performerId)
@@ -42,25 +42,10 @@ class TaskAvailableActions
     }
 
     /**
-     * Sets the end date of the task
-     * 
-     * @param DateTime $date - task end date
-     * @return void
-     */
-    public function setFinishDate(DateTime $date): void
-    {
-        $curDate = new DateTime();
-
-        $date > $curDate
-            ? $this->finishDate = $date
-            : throw new DateValidExeption('Дата выполнения задания не может быть меньше текущей даты');
-    }
-
-    /**
      * Returns an array of task statuses, where the key is the 
      * internal name and the value is status names in Russian
      * 
-     * @return array - array of statuses
+     * @return array array of statuses
      */
     public function getStatusesMap(): array
     {
@@ -76,26 +61,26 @@ class TaskAvailableActions
     /**
      * Returns the next status of the task after the completed action
      *   
-     * @param string $action - completed action 
-     * @return ?string - task status or null if there is no status for the completed action
+     * @param AbstractAction $action completed action 
+     * @return ?string task status or null if there is no status for the completed action
      */
-    public function getNextStatus(string $action): ?string
+    public function getNextStatus(AbstractAction $action): ?string
     {
         $map = [
             CompleteAction::class => self::STATUS_COMPLETE,
             CancelAction::class => self::STATUS_CANCEL,
-            RefusalAction::class => self::STATUS_CANCEL,
+            RefusalAction::class => self::STATUS_FAILED,
         ];
 
-        return $map[$action] ?? null;
+        return $map[get_class($action)] ?? null;
     }
 
     /**
      * Returns available actions for the specified status and role
      * 
-     * @param int $userId - current user id
-     * @param string $userRole - user role
-     * @return array - array available actions
+     * @param int $userId current user id
+     * @param string $userRole user role
+     * @return array array available actions
      */
     public function getAvailableActions(int $userId, string $userRole): array
     {
@@ -103,11 +88,14 @@ class TaskAvailableActions
 
         $statusActions = $this->findActionsAllowedStatus($this->status);
         $roleActions = $this->findActionsAllowedRole($userRole);
+        $allowedActions = [];
 
-        $allowedActions = array_intersect($statusActions, $roleActions);
-        $allowedActions = array_filter($allowedActions, function ($action) use ($userId) {
-            return $action::checkRights($userId, $this->performerId, $this->clientId);
-        });
+        if ($statusActions && $roleActions) {
+            $allowedActions = array_intersect($statusActions, $roleActions);
+            $allowedActions = array_filter($allowedActions, function ($action) use ($userId) {
+                return $action::checkRights($userId, $this->performerId, $this->clientId);
+            });
+        }
 
         return array_values($allowedActions);
     }
@@ -116,7 +104,7 @@ class TaskAvailableActions
      * Setting the task status if the transferred status is 
      * among the acceptable statuses
      * 
-     * @param string $status - task status
+     * @param string $status task status
      * @return void
      */
     public function setStatus(string $status): void
@@ -137,7 +125,7 @@ class TaskAvailableActions
     /**
      * Checks for the presence of the transferred role among the available.
      * 
-     * @param string $role - user role
+     * @param string $role user role
      * @return void
      */
     public function checkUserRole($role): void
@@ -155,8 +143,8 @@ class TaskAvailableActions
     /**
      * Search for available actions based on the transferred status
      * 
-     * @param string $status - task status
-     * @return ?array - array of available actions or null
+     * @param string $status task status
+     * @return ?array array of available actions or null
      */
     private function findActionsAllowedStatus($status): ?array
     {
@@ -171,8 +159,8 @@ class TaskAvailableActions
     /**
      * Search for available actions based on the transferred role
      * 
-     * @param string $role - user role
-     * @return ?array - array of available actions or null
+     * @param string $role user role
+     * @return ?array array of available actions or null
      */
     private function findActionsAllowedRole($role): ?array
     {

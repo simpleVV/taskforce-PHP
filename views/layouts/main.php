@@ -92,6 +92,7 @@ AppAsset::register($this);
         <?= $content; ?>
 
     </main>
+    <div class="overlay"></div>
 
     <?php $this->endBody() ?>
 

@@ -11,10 +11,10 @@ class UserController extends SecuredController
     /**
      * Display user profile page.
      * 
-     * @param $id - id of the selected user
+     * @param int $id id of the selected user
      * @return string user profile page.
      */
-    public function actionView($id): string
+    public function actionView(int $id): string
     {
         $user = User::findOne($id);
 
@@ -23,7 +23,7 @@ class UserController extends SecuredController
         }
 
         return $this->render('view', [
-            'user' => $user,
+            'model' => $user,
         ]);
     }
 }

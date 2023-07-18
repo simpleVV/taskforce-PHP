@@ -56,16 +56,6 @@ class Files extends ActiveRecord
     }
 
     /**
-     * Save file info in DB
-     * 
-     * @return bool - true if the file info is successfully saved in the DB
-     */
-    public function create()
-    {
-        return $this->save(false);
-    }
-
-    /**
      * Gets query for [[Task]].
      *
      * @return \yii\db\ActiveQuery|TaskQuery

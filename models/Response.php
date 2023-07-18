@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use app\models\ResponseQuery;
 
 /**
  * This is the model class for table "responses".
@@ -38,7 +39,7 @@ class Response extends ActiveRecord
             [['dt_creation'], 'safe'],
             [['comment', 'price', 'task_id', 'user_id'], 'required'],
             [['comment'], 'string'],
-            [['price', 'is_approved', 'task_id', 'user_id'], 'integer'],
+            [['price', 'is_approved', 'task_id', 'user_id', 'is_deny'], 'integer'],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -54,7 +55,8 @@ class Response extends ActiveRecord
             'dt_creation' => 'Дата создания',
             'comment' => 'Комментарий',
             'price' => 'Цена',
-            'is_approved' => 'Одобрен',
+            'is_approved' => 'Одобрено',
+            'is_deny' => 'Отказано ',
             'task_id' => 'Задание',
             'user_id' => 'Пользователь',
         ];
