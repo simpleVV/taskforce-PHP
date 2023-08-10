@@ -17,6 +17,10 @@ class TaskForm extends Model
     public $price;
     public $dt_expire;
     public $task_uid;
+    public $address;
+    public $city;
+    public $lat;
+    public $long;
 
     /**
      * {@inheritdoc}
@@ -33,6 +37,9 @@ class TaskForm extends Model
             [['price'], 'compare', 'compareValue' => 0, 'operator' => '>', 'type' => 'integer', 'message' => 'Значение «Бюджет» должно быть больше 0'],
             [['dt_expire'], 'date', 'format' => 'php:Y-m-d'],
             [['dt_expire'], 'compare', 'compareValue' => date('Y-m-d'), 'operator' => '>=', 'message' => 'Срок исполнения не может быть меньше текущей даты'],
+            [['lat', 'long', 'city', 'address'], 'safe'],
+            [['lat', 'long'], 'number'],
+            [['city', 'location'], 'string']
         ];
     }
 
@@ -48,6 +55,9 @@ class TaskForm extends Model
             'location' => 'Локация',
             'price' => 'Бюджет',
             'dt_expire' => 'Срок исполнения',
+            'city' => 'Город',
+            'lat' => 'Широта',
+            'long' => 'Долгота',
         ];
     }
 
@@ -60,10 +70,16 @@ class TaskForm extends Model
     {
         if ($this->validate()) {
             $task = new Task;
+            $city = City::findOne(['name' => $this->city]);
+            $client = USer::findOne(['id' => Yii::$app->user->id]);
+
+            $task->attributes = $this->attributes;
             $task->client_id = Yii::$app->user->id;
             $task->status_id = Status::STATUS_NEW;
-            $task->attributes = $this->attributes;
             $task->uid = $this->task_uid;
+            $task->city_id = $city ? $city->id : $client->city->id;
+            $task->lat = $this->lat ? $this->lat : $client->city->lat;
+            $task->long = $this->long ? $this->long : $client->city->lon;
 
             return $task->save(false) ? $task->id : null;
         }

@@ -7,12 +7,17 @@
  */
 
 use yii\helpers\Html;
+use yii\web\View;
 use app\helpers\HtmlHelper;
+use app\assets\MapAsset;
+
+MapAsset::register($this);
+$this->registerJsVar('coords', [$model->lat, $model->long], View::POS_END);
 
 $user = Yii::$app->user->identity;
 
 $this->title = 'Просмотр задания';
-$this->registerJsFile('/js/main.js');
+
 ?>
 
 <div class="left-column">
@@ -28,11 +33,13 @@ $this->registerJsFile('/js/main.js');
         <?= $button ?>
     <?php endforeach; ?>
 
-    <div class="task-map">
-        <img class="map" src="../../img/map.png" width="725" height="346" alt="Новый арбат, 23, к. 1" />
-        <p class="map-address town">Москва</p>
-        <p class="map-address">Новый арбат, 23, к. 1</p>
-    </div>
+    <?php if ($model->location) : ?>
+        <div class="task-map">
+            <div id="map" style="width: 725px; height: 346px"></div>
+            <p class="map-address town"><?= Html::encode($model->city->name ?? ''); ?></p>
+            <p class="map-address"><?= Html::encode($model->location ?? ''); ?></p>
+        </div>
+    <?php endif; ?>
 
     <?php if (!empty($model->getResponses($user)->all())) : ?>
         <h4 class="head-regular">Отклики на задание</h4>

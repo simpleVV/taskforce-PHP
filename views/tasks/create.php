@@ -12,11 +12,13 @@ use yii\widgets\ActiveForm;
 use yii\web\View;
 use yii\helpers\Url;
 use app\assets\DropzoneAsset;
+use app\assets\AutoCompleteAsset;
 
 $this->title = 'Публикация нового задания';
 $this->params['main_class'] = 'main-content--center';
 
 DropzoneAsset::register($this);
+AutoCompleteAsset::register($this);
 ?>
 
 <div class="add-task-form regular-form">
@@ -34,9 +36,16 @@ DropzoneAsset::register($this);
     <?= $form->field($model, 'category_id')->dropDownList(
         ArrayHelper::map($categories, 'id', 'name')
     ); ?>
+
     <?= $form->field($model, 'location')->textInput([
-        'class' => 'location-icon'
+        'class' => 'location-icon',
+        'id' => 'autocomplete',
+        'placeholder' => 'Город, улица, дом'
     ]) ?>
+
+    <?= $form->field($model, 'city', ['template' => '{input}'])->hiddenInput(); ?>
+    <?= $form->field($model, 'lat', ['template' => '{input}'])->hiddenInput(); ?>
+    <?= $form->field($model, 'long', ['template' => '{input}'])->hiddenInput(); ?>
     <div class="half-wrapper">
         <?= $form->field($model, 'price')->textInput([
             'class' => 'budget-icon'

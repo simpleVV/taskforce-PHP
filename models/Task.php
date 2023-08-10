@@ -33,6 +33,7 @@ use taskforce\logic\actions\AbstractAction;
  * @property User $performer
  * @property Response[] $responses
  * @property Status $status
+ * @property City $status
  */
 class Task extends ActiveRecord
 {
@@ -57,15 +58,16 @@ class Task extends ActiveRecord
             [['status_id'], 'default', 'value' => Status::STATUS_NEW],
             [['dt_creation', 'dt_expire'], 'safe'],
             [['title', 'description', 'category_id', 'client_id', 'status_id'], 'required'],
-            [['description'], 'string'],
+            [['title', 'description', 'location'], 'string'],
             [['noPerformer', 'remoteWork'], 'boolean'],
-            [['periodOption'], 'number'],
+            [['periodOption', 'lat', 'long'], 'number'],
             [['price', 'category_id', 'client_id', 'performer_id', 'status_id'], 'integer'],
-            [['title', 'location'], 'string'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['client_id' => 'id']],
             [['performer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['performer_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status_id' => 'id']],
+            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
+
         ];
     }
 
@@ -218,6 +220,16 @@ class Task extends ActiveRecord
     public function getStatus()
     {
         return $this->hasOne(Status::class, ['id' => 'status_id']);
+    }
+
+    /**
+     * Gets query for [[City]].
+     *
+     * @return \yii\db\ActiveQuery|CityQuery
+     */
+    public function getCity()
+    {
+        return $this->hasOne(City::class, ['id' => 'city_id']);
     }
 
     /**

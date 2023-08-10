@@ -14,7 +14,6 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\widgets\LinkPager;
 
-
 $this->title = 'Просмотр новых заданий';
 ?>
 

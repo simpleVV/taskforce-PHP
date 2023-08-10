@@ -14,6 +14,7 @@ use app\models\ReviewForm;
 use app\models\UploadForm;
 use taskforce\logic\actions\CancelAction;
 use taskforce\logic\actions\RefusalAction;
+use taskforce\Geocoder;
 
 class TasksController extends SecuredController
 {
@@ -21,7 +22,8 @@ class TasksController extends SecuredController
 
     /**
      * Display tasks page.
-     *
+     * 
+     * @param ?int $category - task category id
      * @return string tasks page
      */
     public function actionIndex($category = null): string
@@ -173,7 +175,6 @@ class TasksController extends SecuredController
     public function actionCancel(int $id): \Yii\web\Response
     {
         $task = Task::findOne($id);
-        // $performer = $task-;
 
         $task->setNextStatus(new CancelAction);
 
