@@ -44,8 +44,6 @@ const autoCompleteJS = new autoComplete({
               inputLat.value = selection.lat;
               inputLong.value = selection.long;
               inputCity.value = selection.city;
-
-              console.log(selection);
           }
       }
   }

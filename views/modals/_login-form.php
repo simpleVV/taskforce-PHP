@@ -30,6 +30,10 @@ use yii\widgets\ActiveForm;
     </p>
 
     <button class="button" type="submit">Войти</button>
-    <?php ActiveForm::end(); ?>
+    <p>Вход через VK</p>
+    <?= yii\authclient\widgets\AuthChoice::widget([
+        'baseAuthUrl' => ['auth/login-vk'],
+        'popupMode' => false,
+    ]); ?> <?php ActiveForm::end(); ?>
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>

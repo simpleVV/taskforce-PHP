@@ -36,6 +36,12 @@ class User extends BaseUser implements IdentityInterface
     public $old_password;
     public $new_password;
     public $new_password_repeat;
+
+    private const MIN_PASSWORD_LENGTH = 8;
+    private const MAX_NAME_LENGTH = 128;
+    private const MAX_AVATAR_PATH_LENGTH = 255;
+    private const MAX_TELEGRAM_LENGTH = 64;
+
     /**
      * {@inheritdoc}
      */
@@ -71,10 +77,10 @@ class User extends BaseUser implements IdentityInterface
             [['bd_date'], 'date', 'format' => 'php:Y-m-d',],
             [['hide_contacts', 'hide_profile'], 'boolean'],
             [['phone'], 'match', 'pattern' => '/^[+-]?\d{11}$/', 'message' => 'Номер телефона должен состоять из 11 символов'],
-            [['name'], 'string', 'max' => 128],
-            [['password'], 'string', 'min' => 8],
-            [['avatar_path'], 'string', 'max' => 255],
-            [['telegram'], 'string', 'max' => 64],
+            [['name'], 'string', 'max' => self::MAX_NAME_LENGTH],
+            [['password'], 'string', 'min' => self::MIN_PASSWORD_LENGTH],
+            [['avatar_path'], 'string', 'max' => self::MAX_AVATAR_PATH_LENGTH],
+            [['telegram'], 'string', 'max' => self::MAX_TELEGRAM_LENGTH],
             [['about'], 'string'],
             [['phone'], 'number'],
             [['email'], 'unique'],
@@ -111,7 +117,7 @@ class User extends BaseUser implements IdentityInterface
     /**
      * Checks the user for active tasks
      * 
-     * @return bool - true - if user has active tasks
+     * @return bool true - if user has active tasks
      */
     public function haveActiveTask(): bool
     {
@@ -143,8 +149,15 @@ class User extends BaseUser implements IdentityInterface
     {
         $this->updateCounters(['fail_tasks' => 1]);
     }
-    //сумма всех оценок из отзывов / (кол-во отзывов + счетчик проваленных заданий)
-    public function getRating()
+
+    /**
+     * Сalculation of user rating
+     * sum of all ratings from reviews / (number of reviews + counter of failed
+     * tasks)
+     * 
+     * @return ?float user rating or null if user has no rating
+     */
+    public function getRating(): ?float
     {
         $rating = null;
         $reviewsCount = $this->getReviews()
@@ -157,14 +170,25 @@ class User extends BaseUser implements IdentityInterface
         return $rating;
     }
 
-    public function getCompleteTasks()
+    /**
+     * Find number of completed user tasks
+     * 
+     * @return ?int number of completed user tasks or null if user has no
+     * complete tasks
+     */
+    public function getCompleteTasks(): ?int
     {
         return $this->getTasks()
             ->where(['status_id' => Status::STATUS_COMPLETE])
             ->count();
     }
 
-    public function getPosition()
+    /**
+     * Find the user's position in the rating 
+     * 
+     * @return ?int user's position in the rating
+     */
+    public function getPosition(): int|float
     {
         $query = $this->getReviews();
         $totalCount = $query->count();
@@ -191,6 +215,26 @@ class User extends BaseUser implements IdentityInterface
         }
 
         return $position;
+    }
+
+    /**
+     * Save user in DB
+     * 
+     * @param string $name user name from VK
+     * @param string $email user email from VK
+     * @param int $city user city title from VK
+     * @return bool true - if the user's data is successfully saved
+     */
+    public function saveUserFromVk(string $name, string $email, int $city_id): bool
+    {
+        $password = Yii::$app->security->generateRandomString(self::MIN_PASSWORD_LENGTH);
+
+        $this->name = $name;
+        $this->email = $email;
+        $this->city_id = $city_id;
+        $this->password = Yii::$app->security->generatePasswordHash($password);;
+
+        return $this->save();
     }
 
     /**

@@ -19,7 +19,7 @@
         "yiisoft/yii2-jui": "^2.0",
         "enyo/dropzone": "^5.9",
         "guzzlehttp/guzzle": "^7.0",
-        "npm-asset/tarekraafat": "*"
+        "yiisoft/yii2-authclient": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

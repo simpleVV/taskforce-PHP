@@ -1,5 +1,6 @@
 <?php
-
+//Of7xGWuXZikhS1c8IlmQ
+//163631e4163631e4163631e4ea152377ab11636163631e472e27ffe40ce841ff076913b
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -13,6 +14,17 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'vkontakte' => [
+                    'class' => 'yii\authclient\clients\VKontakte',
+                    'clientId' => '51725903',
+                    'clientSecret' => 'Of7xGWuXZikhS1c8IlmQ',
+                    'scope' => 'email'
+                ],
+            ],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'MyPopHNsR4k1oB8tajkPnZ12SpPbZ1E0',
