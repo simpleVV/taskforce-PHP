@@ -9,6 +9,8 @@ use yii\helpers\Url;
 use app\assets\AppAsset;
 
 AppAsset::register($this);
+
+$user = Yii::$app->user->identity;
 ?>
 
 <?php $this->beginPage() ?>
@@ -47,7 +49,11 @@ AppAsset::register($this);
                         'linkTemplate' => '<a href="{url}" class="link link--nav">{label}</a>',
                         'items' => [
                             ['label' => 'Новое', 'url' => ['tasks/index']],
-                            ['label' => 'Мои задания', 'url' => ['tasks/my']],
+                            ['label' => 'Мои задания', 'url' => [
+                                'tasks/view-my', 'status' => $user->is_performer
+                                    ? 'in_progress'
+                                    : 'new'
+                            ]],
                             ['label' => 'Создать задание', 'url' => ['tasks/create']],
                             ['label' => 'Настройки', 'url' => ['user/settings']]
                         ]
@@ -60,7 +66,6 @@ AppAsset::register($this);
         </nav>
 
         <?php if (Yii::$app->controller->action->id !== 'signup') : ?>
-            <?php $user = Yii::$app->user->identity; ?>
             <div class="user-block">
                 <a href="#">
                     <img class="user-photo" src="../../img/man-glasses.png" width="55" height="55" alt="Аватар" />

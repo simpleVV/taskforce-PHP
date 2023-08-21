@@ -62,6 +62,8 @@ $config = [
             'enableStrictParsing' => false,
             'rules' => [
                 'tasks/view/<id:\d+>' => 'tasks/view',
+                'tasks/view-my/<status:.*>' => 'tasks/view-my',
+                // 'tasks/view-my' => 'tasks/view-my',
                 'user/view/<id:\d+>' => 'user/view',
                 'ajax/autocomplete/<address:.*>' => 'ajax/autocomplete',
             ],

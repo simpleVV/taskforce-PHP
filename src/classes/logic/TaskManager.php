@@ -10,7 +10,6 @@ use taskforce\logic\actions\RefusalAction;
 use taskforce\logic\actions\RespondAction;
 use taskforce\utils\exception\RoleValidException;
 use taskforce\utils\exception\StatusValidException;
-use taskforce\utils\exception\DateValidExeption;
 
 class TaskManager
 {
@@ -19,6 +18,7 @@ class TaskManager
     const STATUS_IN_PROGRESS = 'in_progress';
     const STATUS_COMPLETE = 'complete';
     const STATUS_FAILED = 'failed';
+    const STATUS_OVERDUE = 'overdue';
 
     const ROLE_PERFORMER = 'performer';
     const ROLE_CLIENT = 'client';

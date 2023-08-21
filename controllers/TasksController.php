@@ -6,15 +6,17 @@ use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use app\models\Task;
 use app\models\TaskForm;
 use app\models\Category;
 use app\models\ResponseForm;
 use app\models\ReviewForm;
 use app\models\UploadForm;
+use app\models\Status;
+
 use taskforce\logic\actions\CancelAction;
 use taskforce\logic\actions\RefusalAction;
-use taskforce\Geocoder;
 
 class TasksController extends SecuredController
 {
@@ -57,6 +59,33 @@ class TasksController extends SecuredController
             'categories' => $categories,
             'pagination' => $pagination,
             'pageSize' => Self::TASKS_PAGE_SIZE
+        ]);
+    }
+
+    /**
+     * Display my tasks page.
+     * 
+     * @param string $status - task status
+     * @return string my tasks page
+     */
+    public function actionViewMy($status): string
+    {
+        $user = Yii::$app->user->identity;
+        $task = new Task();
+
+        $statusId = Status::findOne(['code' => $status])
+            ? Status::findOne(['code' => $status])->id
+            : null;
+
+        $tasksQuery = $user->is_performer
+            ? $task->getPerformerTasks($user->id, $statusId)
+            : $task->getClientTasks($user->id, $statusId);
+
+        $models = $tasksQuery->all();
+
+        return $this->render('view-my', [
+            'models' => $models,
+            'isPerformer' => $user->is_performer
         ]);
     }
 

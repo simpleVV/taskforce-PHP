@@ -22,6 +22,7 @@ class Status extends ActiveRecord
     const STATUS_IN_PROGRESS = 3;
     const STATUS_COMPLETE = 4;
     const STATUS_FAILED = 5;
+    const STATUS_OVERDUE = 6;
 
     /**
      * {@inheritdoc}

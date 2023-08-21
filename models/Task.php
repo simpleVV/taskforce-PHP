@@ -123,6 +123,68 @@ class Task extends ActiveRecord
     }
 
     /**
+     * Search for the client's tasks by status
+     * @param int $user_id client id
+     * @param int $status_id status id  
+     *   
+     * @return TaskQuery Returns a request(tasks filtered by status 
+     */
+    public function getClientTasks(int $user_id, int $status_id): TaskQuery
+    {
+        $query = self::find();
+        $query->where(['client_id' => $user_id]);
+
+        switch ($status_id) {
+            case Status::STATUS_NEW:
+                $query->andWhere(['status_id' => Status::STATUS_NEW]);
+                break;
+            case Status::STATUS_IN_PROGRESS:
+                $query->andWhere(['status_id' => Status::STATUS_IN_PROGRESS]);
+                break;
+            case Status::STATUS_CANCEL:
+                $query->andWhere(['NOT IN', 'status_id', [
+                    Status::STATUS_NEW,
+                    Status::STATUS_IN_PROGRESS
+                ]]);
+        };
+
+        return $query->orderBy('dt_creation');
+    }
+
+    /**
+     * Search for the performer's tasks by status
+     * @param int $user_id performer id
+     * @param int $status_id status id  
+     *   
+     * @return TaskQuery Returns a request(tasks filtered by status 
+     */
+    public function getPerformerTasks(int $user_id, int $status_id): TaskQuery
+    {
+        $query = self::find();
+        $query->where(['performer_id' => $user_id]);
+
+        switch ($status_id) {
+            case Status::STATUS_IN_PROGRESS:
+                $query->andWhere(['status_id' => Status::STATUS_IN_PROGRESS]);
+                break;
+            case Status::STATUS_OVERDUE:
+                $query->andWhere(['status_id' => Status::STATUS_IN_PROGRESS]);
+                $query->andWhere(['<', 'dt_expire', date('Y-m-d')]);
+                break;
+            case Status::STATUS_CANCEL:
+                $query->andWhere([
+                    'status_id' => [
+                        Status::STATUS_COMPLETE,
+                        Status::STATUS_FAILED,
+                    ]
+                ]);
+                break;
+        };
+
+        return $query->orderBy('dt_creation');
+    }
+
+    /**
      * Assigns the task the following status after performing the action
      *   
      * @param AbstractAction $action completed action 
