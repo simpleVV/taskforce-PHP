@@ -19,7 +19,7 @@ $this->title = 'Профиль пользователя';
     <h3 class="head-main"><?= Html::encode($model->name); ?></h3>
     <div class="user-card">
         <div class="photo-rate">
-            <img class="card-photo" src="/../img/man-hat.png" width="191" height="190" alt="Фото пользователя" />
+            <img class="card-photo" src=<?= $model->avatar_path ?> width="191" height="190" alt="Фото пользователя" />
             <div class="card-rate">
                 <?= HtmlHelper::getStarElements($model->rating, false, 'big') ?>
                 <span class="current-rate">
@@ -35,10 +35,10 @@ $this->title = 'Профиль пользователя';
         <div class="specialization">
             <p class="head-info">Специализации</p>
             <ul class="special-list">
-                <?php foreach ($model->tasks as $task) : ?>
+                <?php foreach ($model->categories as $category) : ?>
                     <li class="special-item">
-                        <a href="<?= Url::to(['tasks/index', 'category' => $task->category_id]) ?>" class="link link--regular">
-                            <?= $task->category->name; ?>
+                        <a href="<?= Url::to(['tasks/index', 'category' => $category->id]) ?>" class="link link--regular">
+                            <?= $category->name; ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
@@ -63,7 +63,7 @@ $this->title = 'Профиль пользователя';
         <h4 class="head-regular">Отзывы заказчиков</h4>
         <?php foreach ($model->reviews as $review) : ?>
             <div class="response-card">
-                <img class="customer-photo" src="/../img/man-coat.png" width="120" height="127" alt="Фото заказчиков" />
+                <img class="customer-photo" src=<?= $review->client->avatar_path ?> width="120" height="127" alt="Фото заказчиков" />
                 <div class="feedback-wrapper">
                     <p class="feedback">
                         <?= Html::encode(BaseStringHelper::truncate($review->description, 200)); ?>

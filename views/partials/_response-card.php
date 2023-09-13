@@ -7,13 +7,10 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-
-// $user = Yii::$app->user->identity;
-// $is_visible = !$model->task->performer_id && !$model->is_deny;
 ?>
 
 <div class="response-card">
-    <img class="customer-photo" src="../../img/man-hat.png" width="146" height="156" alt="Фото заказчиков" />
+    <img class="customer-photo" src=<?= $model->user->avatar_path ?> width="146" height="156" alt="Фото заказчиков" />
     <div class="feedback-wrapper">
         <a href="<?= Url::to(["user/view", "id" => $model->user_id]); ?>" class="link link--block link--big">
             <?= Html::encode($model->user->name); ?>

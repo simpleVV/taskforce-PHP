@@ -71,7 +71,7 @@ class TaskForm extends Model
         if ($this->validate()) {
             $task = new Task;
             $city = City::findOne(['name' => $this->city]);
-            $client = USer::findOne(['id' => Yii::$app->user->id]);
+            $client = User::findOne(['id' => Yii::$app->user->id]);
 
             $task->attributes = $this->attributes;
             $task->client_id = Yii::$app->user->id;

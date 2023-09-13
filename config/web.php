@@ -61,10 +61,12 @@ $config = [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
+
                 'tasks/view/<id:\d+>' => 'tasks/view',
                 'tasks/view-my/<status:.*>' => 'tasks/view-my',
-                // 'tasks/view-my' => 'tasks/view-my',
                 'user/view/<id:\d+>' => 'user/view',
+                'user/security-settings/<id:\d+>' => 'user/security-settings',
+                'user/settings/<id:\d+>' => 'user/settings',
                 'ajax/autocomplete/<address:.*>' => 'ajax/autocomplete',
             ],
         ],

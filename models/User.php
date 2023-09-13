@@ -33,10 +33,6 @@ use yii\web\IdentityInterface;
  */
 class User extends BaseUser implements IdentityInterface
 {
-    public $old_password;
-    public $new_password;
-    public $new_password_repeat;
-
     private const MIN_PASSWORD_LENGTH = 8;
     private const MAX_NAME_LENGTH = 128;
     private const MAX_AVATAR_PATH_LENGTH = 255;
@@ -71,7 +67,6 @@ class User extends BaseUser implements IdentityInterface
             [['email', 'name', 'city_id'], 'required'],
             [['password'], 'required', 'on' => 'register'],
             [['dt_registration', 'bd_date', 'categories', 'old_password', 'new_password', 'new_password_repeat'], 'safe'],
-            // [['avatarFile'], 'file', 'mimeTypes' => ['image/jpeg', 'image/png'], 'extensions' => ['png', 'jpg', 'jpeg']],
             [['password'], 'compare', 'on' => 'register'],
             [['new_password'], 'compare', 'on' => 'update'],
             [['bd_date'], 'date', 'format' => 'php:Y-m-d',],
@@ -95,7 +90,6 @@ class User extends BaseUser implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'dt_registration' => 'Дата регистрации',
             'email' => 'Email',
             'name' => 'Имя',
@@ -235,6 +229,10 @@ class User extends BaseUser implements IdentityInterface
         $this->password = Yii::$app->security->generatePasswordHash($password);;
 
         return $this->save();
+    }
+
+    public function getUserCategoriesId()
+    {
     }
 
     /**

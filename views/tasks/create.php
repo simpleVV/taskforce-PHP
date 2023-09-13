@@ -14,8 +14,8 @@ use yii\helpers\Url;
 use app\assets\DropzoneAsset;
 use app\assets\AutoCompleteAsset;
 
-$this->title = 'Публикация нового задания';
 $this->params['main_class'] = 'main-content--center';
+$this->title = 'Публикация нового задания';
 
 DropzoneAsset::register($this);
 AutoCompleteAsset::register($this);
@@ -31,8 +31,8 @@ AutoCompleteAsset::register($this);
     ]); ?>
 
     <h3 class="head-main head-main">Публикация нового задания</h3>
-    <?= $form->field($model, 'title')->textInput() ?>
-    <?= $form->field($model, 'description')->textarea() ?>
+    <?= $form->field($model, 'title')->textInput(); ?>
+    <?= $form->field($model, 'description')->textarea(); ?>
     <?= $form->field($model, 'category_id')->dropDownList(
         ArrayHelper::map($categories, 'id', 'name')
     ); ?>
@@ -49,7 +49,7 @@ AutoCompleteAsset::register($this);
     <div class="half-wrapper">
         <?= $form->field($model, 'price')->textInput([
             'class' => 'budget-icon'
-        ]) ?>
+        ]); ?>
         <?= $form->field($model, 'dt_expire')->input('date'); ?>
     </div>
     <p class="form-label">Файлы</p>

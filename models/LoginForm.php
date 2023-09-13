@@ -58,7 +58,7 @@ class LoginForm extends Model
     /**
      * Login user if the validate is passed 
      * 
-     * @return bool — whether the user is logged in
+     * @return bool whether the user is logged in
      */
     public function login(): bool
     {
@@ -70,7 +70,7 @@ class LoginForm extends Model
     /**
      * Get user record in the database by email
      * 
-     * @return ?User - user records if there is one in the database
+     * @return ?User user records if there is one in the database
      * or null
      */
     public function getUser(): ?User

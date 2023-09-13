@@ -6,7 +6,6 @@ use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use yii\data\Pagination;
-use yii\helpers\ArrayHelper;
 use app\models\Task;
 use app\models\TaskForm;
 use app\models\Category;
@@ -154,8 +153,9 @@ class TasksController extends SecuredController
      */
     public function actionUpload(): \Yii\web\Response
     {
+        $uploadFiles = new UploadForm;
+
         if (Yii::$app->request->isPost) {
-            $uploadFiles = new UploadForm;
             $uploadFiles->files = UploadedFile::getInstancesByName('file');
 
             if ($uploadFiles->files) {
