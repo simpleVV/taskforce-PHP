@@ -7,6 +7,10 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+
+use app\helpers\HtmlHelper;
+
+$user = Yii::$app->user->identity;
 ?>
 
 <div class="response-card">
@@ -16,10 +20,11 @@ use yii\helpers\Url;
             <?= Html::encode($model->user->name); ?>
         </a>
         <div class="response-wrapper">
-            <div class="stars-rating small">
-                <span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span>&nbsp;</span>
-            </div>
-            <p class="reviews">2 отзыва</p>
+            <?= HtmlHelper::getStarElements($model->user->rating, false) ?>
+            <p class="reviews">
+                <?= Html::encode(count($model->user->reviews)); ?>
+                отзыва
+            </p>
         </div>
         <p class="response-message">
             <?= Html::encode($model->comment); ?>
@@ -37,9 +42,10 @@ use yii\helpers\Url;
     </div>
 
     <?php
-    $user = Yii::$app->user->identity;
+
     $is_visible = !$model->task->performer_id && !$model->is_deny
     ?>
+
     <?php if ($model->user_id !== $user->id && $is_visible) : ?>
         <div class="button-popup">
             <a href="<?= Url::to(["responses/accept", "id" => $model->id]); ?>" class="button button--blue button--small">Принять</a>

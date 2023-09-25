@@ -2,8 +2,8 @@
 
 /** 
  * @var yii\web\View $this
+ * @var User $model
  */
-
 
 use yii\widgets\ActiveForm;
 use yii\widgets\Menu;
@@ -38,15 +38,19 @@ $this->title = 'Настройки';
     <h3 class="head-main head-regular">Безопасность</h3>
 
     <?= $form->field($model, 'oldPassword')
-        ->passwordInput(); ?>
+        ->passwordInput();
+    ?>
     <?= $form->field($model, 'newPassword')
-        ->passwordInput(); ?>
+        ->passwordInput();
+    ?>
     <?= $form->field($model, 'confirmNewPassword')
-        ->passwordInput(); ?>
+        ->passwordInput();
+    ?>
     <?= $form->field($model, 'hideContacts')
         ->checkbox([
             'checked' => !empty($user->hide_contacts)
-        ]); ?>
+        ]);
+    ?>
 
     <input type="submit" class="button button--blue" value="Сохранить" />
     <?php ActiveForm::end(); ?>

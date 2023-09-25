@@ -5,12 +5,9 @@ namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+
 use taskforce\logic\TaskManager;
 use taskforce\logic\actions\AbstractAction;
-
-// use app\
-
-// use yii\behaviors\BlameableBehavior;
 
 /**
  * This is the model class for table "tasks".
@@ -37,10 +34,6 @@ use taskforce\logic\actions\AbstractAction;
  */
 class Task extends ActiveRecord
 {
-    public $remoteWork;
-    public $noPerformer;
-    public $periodOption;
-
     /**
      * {@inheritdoc}
      */
@@ -56,18 +49,13 @@ class Task extends ActiveRecord
     {
         return [
             [['status_id'], 'default', 'value' => Status::STATUS_NEW],
-            [['dt_creation', 'dt_expire'], 'safe'],
-            [['title', 'description', 'category_id', 'client_id', 'status_id'], 'required'],
-            [['title', 'description', 'location'], 'string'],
-            [['noPerformer', 'remoteWork'], 'boolean'],
-            [['periodOption', 'lat', 'long'], 'number'],
-            [['price', 'category_id', 'client_id', 'performer_id', 'status_id'], 'integer'],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
+            [['dt_creation'], 'safe'],
+            [['client_id', 'status_id'], 'required'],
+            [['client_id', 'performer_id', 'status_id'], 'integer'],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['client_id' => 'id']],
             [['performer_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['performer_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status_id' => 'id']],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
-
         ];
     }
 
@@ -77,7 +65,6 @@ class Task extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'dt_creation' => 'Дата создания',
             'title' => 'Заголовок',
             'description' => 'Описание',
@@ -94,40 +81,11 @@ class Task extends ActiveRecord
     }
 
     /**
-     * Search tasks with the status equal to new. Additionally, 
-     * you can sort out tasks by placement time and without 
-     * an assigned one the performer
-     *   
-     * @return TaskQuery Returns a request(tasks filtered by status, 
-     * category, performer, and period) 
-     */
-    public function getSearchQuery(): TaskQuery
-    {
-        $query = self::find();
-        $query->where(['status_id' => Status::STATUS_NEW]);
-        $query->andFilterWhere(['category_id' => $this->category_id]);
-
-        if ($this->noPerformer) {
-            $query->andWhere('performer_id IS NULL');
-        }
-
-        if ($this->remoteWork) {
-            $query->andWhere('location IS NULL');
-        }
-
-        if ($this->periodOption) {
-            $query->andWhere('UNIX_TIMESTAMP(tasks.dt_creation) > UNIX_TIMESTAMP() - :period', ['period' => $this->periodOption]);
-        }
-
-        return $query->orderBy('dt_creation');
-    }
-
-    /**
      * Search for the client's tasks by status
      * @param int $user_id client id
      * @param int $status_id status id  
      *   
-     * @return TaskQuery Returns a request(tasks filtered by status 
+     * @return Task Returns a request(tasks filtered by status 
      */
     public function getClientTasks(int $user_id, int $status_id): TaskQuery
     {

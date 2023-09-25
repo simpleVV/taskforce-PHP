@@ -6,9 +6,9 @@ use Yii;
 use yii\web\Controller;
 use Yii\web\Response;
 use yii\widgets\ActiveForm;
-use app\models\LoginForm;
+use app\models\forms\LoginForm;
 use app\models\City;
-use app\models\SignupForm;
+use app\models\forms\SignupForm;
 use app\models\Auth;
 use app\models\User;
 

@@ -20,8 +20,8 @@ use yii\helpers\Url;
         <div class="addition-form pop-up--form regular-form">
             <?php $form = ActiveForm::begin([
                 'enableAjaxValidation' => true,
-                'validationUrl' => Url::to(['responses/validate', 'taskId' => $taskId]),
-                'action' => Url::to(['responses/create', 'taskId' => $taskId]),
+                'validationUrl' => Url::to(['responses/validate', 'taskId' => $taskId, 'userId' => $userId]),
+                'action' => Url::to(['responses/create', 'taskId' => $taskId, 'userId' => $userId]),
                 'fieldConfig' => [
                     'template' => "{label}\n{input}\n{error}",
                     'labelOptions' => ['class' => 'control-label'],
@@ -29,8 +29,12 @@ use yii\helpers\Url;
                 ]
             ]); ?>
 
-            <?= $form->field($model, 'comment')->textarea(); ?>
-            <?= $form->field($model, 'price'); ?>
+            <?= $form->field($model, 'comment')
+                ->textarea();
+            ?>
+            <?= $form->field($model, 'price')
+                ->textInput();
+            ?>
 
             <input type="submit" class="button button--pop-up button--blue" value="Завершить" />
             <?php ActiveForm::end() ?>

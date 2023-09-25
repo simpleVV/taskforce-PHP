@@ -34,9 +34,6 @@ use yii\web\IdentityInterface;
 class User extends BaseUser implements IdentityInterface
 {
     private const MIN_PASSWORD_LENGTH = 8;
-    private const MAX_NAME_LENGTH = 128;
-    private const MAX_AVATAR_PATH_LENGTH = 255;
-    private const MAX_TELEGRAM_LENGTH = 64;
 
     /**
      * {@inheritdoc}
@@ -46,43 +43,17 @@ class User extends BaseUser implements IdentityInterface
         return 'users';
     }
 
-    public function behaviors()
-    {
-        return [
-            'saveRelations' => [
-                'class'     => SaveRelationsBehavior::class,
-                'relations' => [
-                    'categories'
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['email', 'name', 'city_id'], 'required'],
-            [['password'], 'required', 'on' => 'register'],
-            [['dt_registration', 'bd_date', 'categories', 'old_password', 'new_password', 'new_password_repeat'], 'safe'],
-            [['password'], 'compare', 'on' => 'register'],
-            [['new_password'], 'compare', 'on' => 'update'],
-            [['bd_date'], 'date', 'format' => 'php:Y-m-d',],
-            [['hide_contacts', 'hide_profile'], 'boolean'],
-            [['phone'], 'match', 'pattern' => '/^[+-]?\d{11}$/', 'message' => 'Номер телефона должен состоять из 11 символов'],
-            [['name'], 'string', 'max' => self::MAX_NAME_LENGTH],
-            [['password'], 'string', 'min' => self::MIN_PASSWORD_LENGTH],
-            [['avatar_path'], 'string', 'max' => self::MAX_AVATAR_PATH_LENGTH],
-            [['telegram'], 'string', 'max' => self::MAX_TELEGRAM_LENGTH],
-            [['about'], 'string'],
-            [['phone'], 'number'],
-            [['email'], 'unique'],
-            [['email'], 'email'],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
-        ];
-    }
+    // public function behaviors()
+    // {
+    //     return [
+    //         'saveRelations' => [
+    //             'class'     => SaveRelationsBehavior::class,
+    //             'relations' => [
+    //                 'categories'
+    //             ],
+    //         ],
+    //     ];
+    // }
 
     /**
      * {@inheritdoc}

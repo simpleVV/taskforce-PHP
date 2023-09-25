@@ -17,6 +17,7 @@ use yii\db\ActiveRecord;
  */
 class City extends ActiveRecord
 {
+    const MAX_NAME_LENGTH = 255;
     /**
      * {@inheritdoc}
      */
@@ -33,7 +34,7 @@ class City extends ActiveRecord
         return [
             [['name'], 'required'],
             [['lat', 'lon'], 'number'],
-            [['name'], 'string', 'max' => 255],
+            [['name'], 'string', 'max' => self::MAX_NAME_LENGTH],
             [['name'], 'unique'],
         ];
     }
@@ -44,7 +45,6 @@ class City extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'name' => 'Имя',
             'lat' => 'Широта',
             'lon' => 'Долгота',

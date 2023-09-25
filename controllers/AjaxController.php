@@ -2,10 +2,10 @@
 
 namespace app\controllers;
 
-use Yii;
-use taskforce\Geocoder;
 use yii\web\Controller;
 use yii\web\Response;
+
+use taskforce\Geocoder;
 
 class AjaxController extends Controller
 {

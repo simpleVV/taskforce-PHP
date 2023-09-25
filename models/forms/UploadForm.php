@@ -1,12 +1,13 @@
 <?php
 
-namespace app\models;
+namespace app\models\forms;
 
 use yii\web\UploadedFile;
+use app\models\Files;
 
 class UploadForm extends BaseUpload
 {
-    public $task_uid;
+    public $taskUid;
 
     /**
      * {@inheritdoc}
@@ -46,7 +47,7 @@ class UploadForm extends BaseUpload
             $fileInfo->name = $this->fileName;
             $fileInfo->path = $this->filePath;
             $fileInfo->size = $this->size;
-            $fileInfo->task_uid = $this->task_uid;
+            $fileInfo->task_uid = $this->taskUid;
         }
 
         return $fileInfo->save(false);

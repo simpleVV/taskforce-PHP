@@ -44,7 +44,6 @@ class UserCategory extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            // 'id' => 'ID',
             'user_id' => 'User ID',
             'category_id' => 'Category ID',
         ];

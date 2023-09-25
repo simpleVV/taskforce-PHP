@@ -25,28 +25,40 @@ $this->params['main_class'] = 'container--registration';
         ]); ?>
         <h3 class="head-main head-task">Регистрация нового пользователя</h3>
 
-        <?= $form->field($model, 'name'); ?>
+        <?= $form->field($model, 'name')
+            ->textInput();
+        ?>
         <div class="half-wrapper">
-            <?= $form->field($model, 'email'); ?>
-            <?= $form->field($model, 'city_id')->dropDownList(
-                ArrayHelper::map($cities, 'id', 'name'),
-                [
-                    'prompt' => 'Выбрать'
-                ]
-            ); ?>
+            <?= $form->field($model, 'email')
+                ->input('email');
+            ?>
+            <?= $form->field($model, 'cityId')
+                ->dropDownList(
+                    ArrayHelper::map($cities, 'id', 'name'),
+                    [
+                        'prompt' => 'Выбрать'
+                    ]
+                );
+            ?>
         </div>
         <div class="half-wrapper">
-            <?= $form->field($model, 'password')->passwordInput(); ?>
+            <?= $form->field($model, 'password')
+                ->passwordInput();
+            ?>
         </div>
         <div class="half-wrapper">
-            <?= $form->field($model, 'password_repeat')->passwordInput(); ?>
+            <?= $form->field($model, 'passwordRepeat')
+                ->passwordInput();
+            ?>
         </div>
-        <?= $form->field($model, 'is_performer')->checkbox([
-            'labelOptions' => [
-                'class' => 'control-label checkbox-label'
-            ],
-            'template' => "{label}\n{input}"
-        ]); ?>
+        <?= $form->field($model, 'isPerformer')
+            ->checkbox([
+                'labelOptions' => [
+                    'class' => 'control-label checkbox-label'
+                ],
+                'template' => "{label}\n{input}"
+            ]);
+        ?>
         <input type="submit" class="button button--blue" value="Создать аккаунт" />
         <?php ActiveForm::end(); ?>
     </div>

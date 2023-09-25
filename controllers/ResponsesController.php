@@ -7,7 +7,7 @@ use yii\widgets\ActiveForm;
 use app\controllers\SecuredController;
 use app\models\Response;
 use app\models\Task;
-use app\models\ResponseForm;
+use app\models\forms\ResponseForm;
 use app\models\Status;
 
 class ResponsesController extends SecuredController
@@ -26,7 +26,7 @@ class ResponsesController extends SecuredController
         $transaction = Yii::$app->db->beginTransaction();
 
         try {
-            $response->is_approved = true;
+            $response->approvedResponse();
             $task->performer_id = $response->user_id;
             $task->status_id = Status::STATUS_IN_PROGRESS;
 
@@ -52,7 +52,7 @@ class ResponsesController extends SecuredController
     {
         $response = $this->findOrDie($id, Response::class);
 
-        $response->is_deny = true;
+        $response->denyResponse();
         $response->save(false);
 
         return $this->redirect(['tasks/view', 'id' => $response->task_id]);
@@ -62,9 +62,10 @@ class ResponsesController extends SecuredController
      * Create response on current task and redirect to current task page 
      * 
      * @param int $taskId id of the current task
+     * @param int $userId id of the current user
      * @return \Yii\web\Response the current response object
      */
-    public function actionCreate(int $taskId)
+    public function actionCreate(int $taskId, int $userId)
     {
         $task = $this->findOrDie($taskId, Task::class);
 
@@ -72,9 +73,10 @@ class ResponsesController extends SecuredController
 
             $responseForm = new ResponseForm();
 
-            $responseForm->task_id = $taskId;
-            $responseForm->user_id = $this->getUser()->getId();
             $responseForm->load(Yii::$app->request->post());
+
+            $responseForm->taskId = $taskId;
+            $responseForm->userId = $userId;
             $responseForm->createResponse($task);
 
             return $this->redirect(['tasks/view', 'id' => $task->id]);
@@ -84,16 +86,17 @@ class ResponsesController extends SecuredController
     /**
      * Validate the response creation form
      * 
-     * @param int $$taskId id of the current task
+     * @param int $taskId id of the current task
+     * @param int $userId id of the current user
      * @return array the error message array indexed by the attribute IDs
      */
-    public function actionValidate(int $taskId)
+    public function actionValidate(int $taskId, int $userId)
     {
         $request = Yii::$app->getRequest();
         $responseForm = new ResponseForm();
 
-        $responseForm->task_id = $taskId;
-        $responseForm->user_id = $this->getUser()->getId();
+        $responseForm->taskId = $taskId;
+        $responseForm->userId = $userId;
 
         if ($request->isAjax) {
             Yii::$app->response->format = yii\web\Response::FORMAT_JSON;

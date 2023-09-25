@@ -2,14 +2,10 @@
 
 /** 
  * @var yii\web\View $this
- * @var Task $task
- * @var Review $reviews
- * @var Category $categories
+ * @var User $model
  */
 
-use yii\helpers\BaseStringHelper;
 use yii\helpers\Html;
-use yii\helpers\Url;
 use app\helpers\HtmlHelper;
 
 $this->title = 'Профиль пользователя';
@@ -37,8 +33,7 @@ $this->title = 'Профиль пользователя';
             <ul class="special-list">
                 <?php foreach ($model->categories as $category) : ?>
                     <li class="special-item">
-                        <a href="<?= Url::to(['tasks/index', 'category' => $category->id]) ?>" class="link link--regular">
-                            <?= $category->name; ?>
+                        <a href="<?= Yii::$app->urlManager->createUrl(['tasks/', 'FilterTasks[categoryId][]' => $category->id]); ?>" class="link link--regular"><?= Html::encode($category->name); ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
@@ -62,31 +57,7 @@ $this->title = 'Профиль пользователя';
     <?php if ($model->reviews) : ?>
         <h4 class="head-regular">Отзывы заказчиков</h4>
         <?php foreach ($model->reviews as $review) : ?>
-            <div class="response-card">
-                <img class="customer-photo" src=<?= $review->client->avatar_path ?> width="120" height="127" alt="Фото заказчиков" />
-                <div class="feedback-wrapper">
-                    <p class="feedback">
-                        <?= Html::encode(BaseStringHelper::truncate($review->description, 200)); ?>
-                    </p>
-                    <p class="task">
-                        Задание
-                        «
-                        <a href="<?= Url::to(['tasks/view', 'id' => $review->task->id]); ?>" class="link link--small">
-                            <?= $review->task->title; ?>
-                        </a>
-                        »
-                        <?= $review->task->status->name; ?>
-                    </p>
-                </div>
-                <div class="feedback-wrapper">
-                    <?= HtmlHelper::getStarElements($review->rate, false) ?>
-                    <p class="info-text">
-                        <span class="current-time">
-                            <?= Yii::$app->formatter->asRelativeTime($review->dt_creation); ?>
-                        </span>
-                    </p>
-                </div>
-            </div>
+            <?= $this->render('//partials/_review-card', ['model' => $review]); ?>
         <?php endforeach; ?>
     <?php endif; ?>
 </div>

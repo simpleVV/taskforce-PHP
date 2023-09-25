@@ -19,7 +19,8 @@
         "yiisoft/yii2-jui": "^2.0",
         "enyo/dropzone": "^5.9",
         "guzzlehttp/guzzle": "^7.0",
-        "yiisoft/yii2-authclient": "*"
+        "yiisoft/yii2-authclient": "*",
+        "vlucas/phpdotenv": "^5.5"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

@@ -3,7 +3,7 @@
 use yii\db\Migration;
 
 /**
- * Handles adding columns to table `{{%users}}`.
+ * Handles adding columns to table `users`.
  */
 class m230713_015750_add_fail_task_column_to_users_table extends Migration
 {

@@ -4,16 +4,17 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\NotFoundHttpException;
+use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
-use yii\data\Pagination;
 use app\models\Task;
-use app\models\TaskForm;
 use app\models\Category;
-use app\models\ResponseForm;
-use app\models\ReviewForm;
-use app\models\UploadForm;
 use app\models\Status;
+use app\models\forms\FilterTasks;
+use app\models\forms\ResponseForm;
+use app\models\forms\ReviewForm;
+use app\models\forms\UploadForm;
 
+use app\models\forms\TaskForm;
 use taskforce\logic\actions\CancelAction;
 use taskforce\logic\actions\RefusalAction;
 
@@ -27,37 +28,28 @@ class TasksController extends SecuredController
      * @param ?int $category - task category id
      * @return string tasks page
      */
-    public function actionIndex($category = null): string
+
+    public function actionIndex(): string
     {
-        $task = new Task();
+        $model = new FilterTasks;
+        $categories = Category::find()->all();
 
-        if ($category) {
-            $task->category_id = $category;
+        if (Yii::$app->request->getIsGet()) {
+            $model->load(Yii::$app->request->get());
         }
-        $task->load(Yii::$app->request->post());
 
-        $tasksQuery = $task->getSearchQuery();
-        $countQuery = clone $tasksQuery;
-
-        $pagination = new Pagination([
-            'totalCount' => $countQuery->count(),
-            'pageSize' => Self::TASKS_PAGE_SIZE,
-            'forcePageParam' => false,
-            'pageSizeParam' => false
+        $dataProvider = new ActiveDataProvider([
+            'query' => $model->getSearchQuery(),
+            'pagination' => [
+                'pageSize' => self::TASKS_PAGE_SIZE
+            ]
         ]);
 
-        $categories = Category::find()->all();
-        $models = $tasksQuery
-            ->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-
         return $this->render('index', [
-            'models' => $models,
-            'task' => $task,
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+            'pageSize' => Self::TASKS_PAGE_SIZE,
             'categories' => $categories,
-            'pagination' => $pagination,
-            'pageSize' => Self::TASKS_PAGE_SIZE
         ]);
     }
 
@@ -80,11 +72,17 @@ class TasksController extends SecuredController
             ? $task->getPerformerTasks($user->id, $statusId)
             : $task->getClientTasks($user->id, $statusId);
 
-        $models = $tasksQuery->all();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $tasksQuery,
+            'pagination' => [
+                'pageSize' => self::TASKS_PAGE_SIZE
+            ]
+        ]);
 
         return $this->render('view-my', [
-            'models' => $models,
-            'isPerformer' => $user->is_performer
+            'dataProvider' => $dataProvider,
+            'isPerformer' => $user->is_performer,
+            'pageSize' => Self::TASKS_PAGE_SIZE,
         ]);
     }
 
@@ -120,7 +118,7 @@ class TasksController extends SecuredController
      */
     public function actionCreate(): string|\Yii\web\Response
     {
-        $taskCreateForm = new TaskForm();
+        $taskForm = new TaskForm();
         $categories = Category::find()->all();
 
         if (!Yii::$app->session->has('task_uid')) {
@@ -128,9 +126,9 @@ class TasksController extends SecuredController
         }
 
         if (Yii::$app->request->getIsPost()) {
-            $taskCreateForm->load(Yii::$app->request->post());
-            $taskCreateForm->task_uid = Yii::$app->session->get('task_uid');
-            $taskId = $taskCreateForm->registerTask();
+            $taskForm->load(Yii::$app->request->post());
+            $taskForm->taskUid = Yii::$app->session->get('task_uid');
+            $taskId = $taskForm->registerTask();
 
             if ($taskId) {
                 Yii::$app->session->remove('task_uid');
@@ -140,7 +138,7 @@ class TasksController extends SecuredController
         }
 
         return $this->render('create', [
-            'model' => $taskCreateForm,
+            'model' => $taskForm,
             'categories' => $categories,
         ]);
     }
@@ -159,7 +157,7 @@ class TasksController extends SecuredController
             $uploadFiles->files = UploadedFile::getInstancesByName('file');
 
             if ($uploadFiles->files) {
-                $uploadFiles->task_uid = Yii::$app->session->get('task_uid');
+                $uploadFiles->taskUid = Yii::$app->session->get('task_uid');
                 $uploadFiles->uploadFiles();
 
                 return $this->asJson($uploadFiles->getAttributes());

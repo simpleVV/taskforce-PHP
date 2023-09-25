@@ -4,6 +4,7 @@ namespace app\helpers;
 
 use yii\helpers\HTML;
 use yii\helpers\Url;
+
 use taskforce\logic\actions\CancelAction;
 use taskforce\logic\actions\CompleteAction;
 use taskforce\logic\actions\RefusalAction;
@@ -19,6 +20,8 @@ use taskforce\logic\actions\RespondAction;
  */
 class HtmlHelper
 {
+    const MIN_STARS_NUMBER = 0;
+
     public static function getActionButtons(array $availableActions, int $id): array
     {
         $buttons = [];

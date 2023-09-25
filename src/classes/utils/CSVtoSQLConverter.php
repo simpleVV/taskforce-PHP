@@ -69,7 +69,7 @@ class CSVtoSQLConverter
      * @param array $values - table values msql  
      * @return string
      */
-    protected function createSQLQuery(string $tableName, array $columns, array $values): string
+    private function createSQLQuery(string $tableName, array $columns, array $values): string
     {
         $formatColumns = array_map(function (string $column) {
             return trim($column, " ");
@@ -99,7 +99,7 @@ class CSVtoSQLConverter
      * @param string $content - content msql file  
      * @return void
      */
-    protected function createSQLFile(string $dir, string $fileName, string $content): void
+    private function createSQLFile(string $dir, string $fileName, string $content): void
     {
         if (!is_dir($dir)) {
             throw new SourceFileException('Не найдена директория для сохранения файлов');
@@ -115,7 +115,7 @@ class CSVtoSQLConverter
      * @return ?array - array of column names of the csv file or null if the data
      * the file is missing
      */
-    protected function getColumnsNames(): ?array
+    private function getColumnsNames(): ?array
     {
         $this->fileObject->rewind();
         $data = $this->fileObject->fgetcsv();
@@ -130,7 +130,7 @@ class CSVtoSQLConverter
      * @return bool - true - if the headers are in the file and correspond to
      * format, otherwise false
      */
-    protected function validateColumns($columns): bool
+    private function validateColumns($columns): bool
     {
         $isValid = true;
 

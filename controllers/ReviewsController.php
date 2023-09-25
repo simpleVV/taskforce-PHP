@@ -6,7 +6,8 @@ use Yii;
 use yii\widgets\ActiveForm;
 use app\controllers\SecuredController;
 use app\models\Task;
-use app\models\ReviewForm;
+use app\models\forms\ReviewForm;
+
 use taskforce\logic\actions\CompleteAction;
 
 class ReviewsController extends SecuredController

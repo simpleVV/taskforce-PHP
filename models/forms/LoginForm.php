@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\models\forms;
 
 use Yii;
 use yii\base\Model;
@@ -73,7 +73,7 @@ class LoginForm extends Model
      * @return ?User user records if there is one in the database
      * or null
      */
-    public function getUser(): ?User
+    private function getUser(): ?User
     {
         if ($this->_user === null) {
             $this->_user = User::findByEmail($this->email);

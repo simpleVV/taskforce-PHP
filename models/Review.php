@@ -42,10 +42,8 @@ class Review extends ActiveRecord
     public function rules()
     {
         return [
-            [['dt_creation'], 'safe'],
-            [['description', 'rate', 'user_id', 'client_id'], 'required'],
-            [['description'], 'string'],
-            [['rate', 'user_id', 'client_id'], 'integer'],
+            [['user_id', 'client_id'], 'required'],
+            [['user_id', 'client_id'], 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['client_id' => 'id']],
             [['client_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
@@ -58,8 +56,6 @@ class Review extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'dt_creation' => 'Дата создания',
             'description' => 'Описание',
             'rate' => 'Ставка',
             'user_id' => 'Пользователь',

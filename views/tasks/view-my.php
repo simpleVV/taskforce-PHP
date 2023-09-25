@@ -3,12 +3,15 @@
 /** 
  * @var yii\web\View $this
  * @var Task[] $models
- * @var Pagination $pages
+ * @var yii\data\ActiveDataProvider $dataProvider
+ * @var bool $isPerformer
+ * @var int $pageSize
  * 
  */
 
 use yii\widgets\Menu;
 use taskforce\logic\TaskManager;
+use yii\widgets\ListView;
 
 $this->title = 'Мои задания';
 ?>
@@ -34,7 +37,22 @@ $this->title = 'Мои задания';
 </div>
 <div class="left-column left-column--task">
     <h3 class="head-main head-regular">Новые задания</h3>
-    <?php foreach ($models as $model) : ?>
-        <?= $this->render('//partials/_task-card', ['model' => $model]); ?>
-    <?php endforeach; ?>
+
+    <?= ListView::widget([
+        'dataProvider' => $dataProvider,
+        'itemView' => '//partials/_task-card',
+        'summary' => '',
+        'pager' => [
+            'options' => ['class' => 'pagination-list'],
+            'linkOptions' => ['class' => 'link link--page'],
+            'nextPageCssClass' => 'pagination-item mark',
+            'prevPageCssClass' => 'pagination-item mark',
+            'nextPageLabel' => '',
+            'prevPageLabel' => '',
+            'pageCssClass' => 'pagination-item',
+            'activePageCssClass' => 'pagination-item--active',
+            'maxButtonCount' => $pageSize,
+        ]
+    ])
+    ?>
 </div>

@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use yii\filters\AccessControl;
 use yii\web\Controller;
-use app\models\LoginForm;
+use app\models\forms\LoginForm;
 
 class SiteController extends Controller
 {

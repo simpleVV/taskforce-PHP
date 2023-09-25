@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
  */
 class Category extends ActiveRecord
 {
+    const MAX_NAME_LENGTH = 60;
     /**
      * {@inheritdoc}
      */
@@ -31,7 +32,7 @@ class Category extends ActiveRecord
     {
         return [
             [['name', 'code'], 'required'],
-            [['name', 'code'], 'string', 'max' => 60],
+            [['name', 'code'], 'string', 'max' => self::MAX_NAME_LENGTH],
             [['code'], 'unique'],
         ];
     }
@@ -42,7 +43,6 @@ class Category extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'name' => 'Имя',
             'code' => 'Код',
         ];

@@ -1,9 +1,11 @@
 <?php
 
-namespace app\models;
+namespace app\models\forms;
 
 use Yii;
 use yii\web\UploadedFile;
+use app\models\forms\BaseUpload;
+use app\models\User;
 
 class AvatarUpload extends BaseUpload
 {
@@ -56,7 +58,7 @@ class AvatarUpload extends BaseUpload
      * @return ?User - user records if there is one in the database
      * or null
      */
-    public function getUser()
+    private function getUser(): ?User
     {
         $userId = Yii::$app->user->identity->id;
 

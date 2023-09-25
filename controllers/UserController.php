@@ -5,12 +5,12 @@ namespace app\controllers;
 use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
-use app\models\AvatarUpload;
-use app\models\SettingForm;
-use app\models\Category;
-use app\models\SecuritySettingForm;
-use app\models\User;
 use yii\helpers\ArrayHelper;
+use app\models\forms\AvatarUpload;
+use app\models\forms\SettingForm;
+use app\models\forms\SecuritySettingForm;
+use app\models\Category;
+use app\models\User;
 
 class UserController extends SecuredController
 {

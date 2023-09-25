@@ -2,7 +2,6 @@
 
 namespace taskforce\logic;
 
-use DateTime;
 use taskforce\logic\actions\AbstractAction;
 use taskforce\logic\actions\CancelAction;
 use taskforce\logic\actions\CompleteAction;

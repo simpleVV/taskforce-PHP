@@ -3,7 +3,7 @@
 use yii\db\Migration;
 
 /**
- * Handles adding columns to table `{{%tasks}}`.
+ * Handles adding columns to table `tasks`.
  */
 class m230807_022249_add_city_id_column_to_tasks_table extends Migration
 {

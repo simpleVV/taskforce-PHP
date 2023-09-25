@@ -19,8 +19,8 @@ $config = [
             'clients' => [
                 'vkontakte' => [
                     'class' => 'yii\authclient\clients\VKontakte',
-                    'clientId' => '51725903',
-                    'clientSecret' => 'Of7xGWuXZikhS1c8IlmQ',
+                    'clientId' => $_ENV['VK_CLIENT_ID'],
+                    'clientSecret' => $_ENV['VK_SECRET'],
                     'scope' => 'email'
                 ],
             ],

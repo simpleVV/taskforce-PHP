@@ -2,9 +2,14 @@
 
 /** 
  * @var yii\web\View $this
- * @var Task $task
- * @var Response $responses
+ * @var Task $model
+ * @var ResponseForm $responseForm
+ * @var ReviewForm reviewForm
  */
+
+use app\models\forms\ReviewForm;
+
+use app\models\forms\ResponseForm;
 
 use yii\helpers\Html;
 use yii\web\View;
@@ -89,7 +94,8 @@ $this->title = 'Просмотр задания';
 
 <?= $this->render('//modals/_add-response.php', [
     'model' => $responseForm,
-    'taskId' => $model->id
+    'taskId' => $model->id,
+    'userId' => $user->getId()
 ]); ?>
 
 <?= $this->render('//modals/_task-completion.php', [

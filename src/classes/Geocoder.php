@@ -11,7 +11,7 @@ use GuzzleHttp\Psr7\Request;
 
 class Geocoder
 {
-    public const API_KEY = '26dbc710-0877-4d4d-bcf6-f2e43dae3ee9';
+    // public const API_KEY = '26dbc710-0877-4d4d-bcf6-f2e43dae3ee9';
 
     /**
      * Finds a list of suitable addresses.
@@ -33,7 +33,7 @@ class Geocoder
         ];
 
         $query =   [
-            'apikey' => self::API_KEY,
+            'apikey' => $_ENV['YA_API_KEY'],
             'geocode' => $address,
             'kind' => 'house',
             'format' => 'json',

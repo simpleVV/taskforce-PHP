@@ -3,9 +3,11 @@ const inputLong = document.querySelector('#taskform-long');
 const inputAddress = document.querySelector('#taskform-address');
 const inputCity = document.querySelector('#taskform-city');
 
+const DEBOUNCE_TIMEOUT = 2000;
+
 const autoCompleteJS = new autoComplete({
     selector: '#autocomplete',  
-    debounce: 2000,
+    debounce: DEBOUNCE_TIMEOUT,
     searchEngine: 'loose',
     wrapper: false,
     data: {

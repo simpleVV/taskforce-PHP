@@ -18,6 +18,9 @@ use yii\db\ActiveRecord;
  */
 class Files extends ActiveRecord
 {
+    const MAX_NAME_LENGTH = 60;
+    const MAX_PATH_LENGTH = 255;
+
     /**
      * {@inheritdoc}
      */
@@ -35,8 +38,8 @@ class Files extends ActiveRecord
             [['dt_creation'], 'safe'],
             [['name', 'path', 'task_uid'], 'required'],
             [['task_id'], 'integer'],
-            [['name'], 'string', 'max' => 60],
-            [['path'], 'string', 'max' => 255],
+            [['name'], 'string', 'max' => self::MAX_NAME_LENGTH],
+            [['path'], 'string', 'max' => self::MAX_PATH_LENGTH],
             [['path'], 'unique'],
         ];
     }
@@ -47,7 +50,6 @@ class Files extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'dt_creation' => 'Дата создания',
             'name' => 'Имя',
             'path' => 'Путь',

@@ -16,6 +16,7 @@ use Yii;
  */
 class Auth extends \yii\db\ActiveRecord
 {
+    const MAX_SOURCE_LENGTH = 255;
     /**
      * {@inheritdoc}
      */
@@ -32,7 +33,7 @@ class Auth extends \yii\db\ActiveRecord
         return [
             [['source', 'source_id', 'user_id'], 'required'],
             [['user_id', 'source_id'], 'integer'],
-            [['source',], 'string', 'max' => 255],
+            [['source',], 'string', 'max' => self::MAX_SOURCE_LENGTH],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -43,7 +44,6 @@ class Auth extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'source' => 'Source',
             'source_id' => 'Source ID',
             'user_id' => 'User ID',

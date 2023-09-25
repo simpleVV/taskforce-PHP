@@ -1,22 +1,28 @@
 <?php
 
-namespace app\models;
+namespace app\models\forms;
 
 use Yii;
 use yii\base\Model;
+use app\models\City;
+use app\models\Task;
+use app\models\User;
+use app\models\Status;
+use app\models\Category;
 
 class TaskForm extends Model
 {
     const MIN_TITLE_LENGTH = 10;
     const MIN_DESCRIPTION_LENGTH = 30;
+    const MIN_PRICE = 0;
 
     public $title;
     public $description;
-    public $category_id;
+    public $categoryId;
     public $location;
     public $price;
-    public $dt_expire;
-    public $task_uid;
+    public $dtExpire;
+    public $taskUid;
     public $address;
     public $city;
     public $lat;
@@ -28,15 +34,15 @@ class TaskForm extends Model
     public function rules()
     {
         return [
-            [['title', 'description', 'category_id',], 'required'],
+            [['title', 'description', 'categoryId',], 'required'],
             [['title', 'description'], 'trim'],
             [['title'], 'string', 'min' => Self::MIN_TITLE_LENGTH],
             [['description'], 'string', 'min' => Self::MIN_DESCRIPTION_LENGTH],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
+            [['categoryId'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['categoryId' => 'id']],
             [['price'], 'integer'],
-            [['price'], 'compare', 'compareValue' => 0, 'operator' => '>', 'type' => 'integer', 'message' => 'Значение «Бюджет» должно быть больше 0'],
-            [['dt_expire'], 'date', 'format' => 'php:Y-m-d'],
-            [['dt_expire'], 'compare', 'compareValue' => date('Y-m-d'), 'operator' => '>=', 'message' => 'Срок исполнения не может быть меньше текущей даты'],
+            [['price'], 'compare', 'compareValue' => self::MIN_PRICE, 'operator' => '>', 'type' => 'integer', 'message' => 'Значение «Бюджет» должно быть больше 0'],
+            [['dtExpire'], 'date', 'format' => 'php:Y-m-d'],
+            [['dtExpire'], 'compare', 'compareValue' => date('Y-m-d'), 'operator' => '>=', 'message' => 'Срок исполнения не может быть меньше текущей даты'],
             [['lat', 'long', 'city', 'address'], 'safe'],
             [['lat', 'long'], 'number'],
             [['city', 'location'], 'string']
@@ -51,10 +57,10 @@ class TaskForm extends Model
         return [
             'title' => 'Опишите суть работы',
             'description' => 'Подробности задания',
-            'category_id' => 'Категория',
+            'categoryId' => 'Категория',
             'location' => 'Локация',
             'price' => 'Бюджет',
-            'dt_expire' => 'Срок исполнения',
+            'dtExpire' => 'Срок исполнения',
             'city' => 'Город',
             'lat' => 'Широта',
             'long' => 'Долгота',
@@ -73,10 +79,15 @@ class TaskForm extends Model
             $city = City::findOne(['name' => $this->city]);
             $client = User::findOne(['id' => Yii::$app->user->id]);
 
-            $task->attributes = $this->attributes;
+            $task->title = $this->title;
+            $task->description = $this->description;
+            $task->price = $this->price;
+            $task->location = $this->location;
+            $task->dt_expire = $this->dtExpire;
+            $task->category_id = $this->categoryId;
             $task->client_id = Yii::$app->user->id;
             $task->status_id = Status::STATUS_NEW;
-            $task->uid = $this->task_uid;
+            $task->uid = $this->taskUid;
             $task->city_id = $city ? $city->id : $client->city->id;
             $task->lat = $this->lat ? $this->lat : $client->city->lat;
             $task->long = $this->long ? $this->long : $client->city->lon;

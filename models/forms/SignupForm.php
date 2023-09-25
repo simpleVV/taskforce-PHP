@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\models\forms;
 
 use Yii;
 use yii\base\Model;
@@ -10,10 +10,13 @@ class SignupForm extends Model
 {
     public $name;
     public $email;
-    public $city_id;
-    public $is_performer;
+    public $cityId;
+    public $isPerformer;
     public $password;
-    public $password_repeat;
+    public $passwordRepeat;
+
+    private const MIN_PASSWORD_LENGTH = 8;
+    private const MAX_NAME_LENGTH = 128;
 
     /**
      * {@inheritdoc}
@@ -21,16 +24,16 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            [['email', 'name', 'city_id'], 'required'],
-            [['password_repeat'], 'safe'],
+            [['email', 'name', 'cityId'], 'required'],
+            [['passwordRepeat'], 'safe'],
             [['password'], 'required', 'on' => 'register'],
-            [['password'], 'compare', 'on' => 'register'],
-            [['name'], 'string', 'max' => 128],
+            [['passwordRepeat'], 'compare', 'compareAttribute' => 'password', 'on' => 'register'],
+            [['name'], 'string', 'max' => Self::MAX_NAME_LENGTH],
             [['email'], 'unique', 'targetClass' => User::class],
             [['email'], 'email'],
-            [['password'], 'string', 'min' => 8],
-            [['is_performer'], 'boolean'],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
+            [['password'], 'string', 'min' => Self::MIN_PASSWORD_LENGTH],
+            [['isPerformer'], 'boolean'],
+            [['cityId'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['cityId' => 'id']],
         ];
     }
 
@@ -43,9 +46,9 @@ class SignupForm extends Model
             'name' => 'Имя',
             'email' => 'Email',
             'password' => 'Пароль',
-            'password_repeat' => 'Повтор пароля',
-            'city_id' => 'Город',
-            'is_performer' => 'я собираюсь откликаться на заказы',
+            'passwordRepeat' => 'Повтор пароля',
+            'cityId' => 'Город',
+            'isPerformer' => 'я собираюсь откликаться на заказы',
         ];
     }
 
@@ -61,7 +64,11 @@ class SignupForm extends Model
             $this->password = Yii::$app->security->generatePasswordHash($this->password);
 
             $user = new User;
-            $user->attributes = $this->attributes;
+            $user->name = $this->name;
+            $user->email = $this->email;
+            $user->password = $this->password;
+            $user->city_id = $this->cityId;
+            $user->is_performer = $this->isPerformer;
 
             if ($user->save(false)) {
                 return Yii::$app->user->login($user);

@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use app\helpers\HtmlHelper;
 
-$starElements = HtmlHelper::getStarElements(0, true, 'big');
+$starElements = HtmlHelper::getStarElements(HtmlHelper::MIN_STARS_NUMBER, true, 'big');
 ?>
 
 <section class="pop-up pop-up--completion pop-up--close">
@@ -31,12 +31,15 @@ $starElements = HtmlHelper::getStarElements(0, true, 'big');
           'errorOptions' => ['tag' => 'span', 'class' => 'help-block']
         ]
       ]); ?>
-      <?= $form->field($model, 'description')->textarea(); ?>
+      <?= $form->field($model, 'description')
+        ->textarea();
+      ?>
       <?= $form->field($model, 'rate', [
         'labelOptions' => ['class' => 'completion-head control-label'],
         'template' => "{label}{input}$starElements{error}"
       ])
-        ->hiddenInput(); ?>
+        ->hiddenInput();
+      ?>
 
       <input type="submit" class="button button--pop-up button--blue" value="Завершить" />
       <?php ActiveForm::end() ?>

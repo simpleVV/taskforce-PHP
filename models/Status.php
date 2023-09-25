@@ -23,6 +23,7 @@ class Status extends ActiveRecord
     const STATUS_COMPLETE = 4;
     const STATUS_FAILED = 5;
     const STATUS_OVERDUE = 6;
+    const MAX_NAME_LENGTH = 60;
 
     /**
      * {@inheritdoc}
@@ -39,7 +40,7 @@ class Status extends ActiveRecord
     {
         return [
             [['name', 'code'], 'required'],
-            [['name', 'code'], 'string', 'max' => 60],
+            [['name', 'code'], 'string', 'max' => self::MAX_NAME_LENGTH],
             [['name'], 'unique'],
             [['code'], 'unique'],
         ];
@@ -51,7 +52,6 @@ class Status extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'name' => 'Имя',
             'code' => 'Код',
         ];

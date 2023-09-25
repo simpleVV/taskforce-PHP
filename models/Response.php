@@ -33,25 +33,9 @@ class Response extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
-        return [
-            [['dt_creation'], 'safe'],
-            [['comment', 'price', 'task_id', 'user_id'], 'required'],
-            [['comment'], 'string'],
-            [['price', 'is_approved', 'task_id', 'user_id', 'is_deny'], 'integer'],
-            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'dt_creation' => 'Дата создания',
             'comment' => 'Комментарий',
             'price' => 'Цена',
@@ -60,6 +44,26 @@ class Response extends ActiveRecord
             'task_id' => 'Задание',
             'user_id' => 'Пользователь',
         ];
+    }
+
+    /**
+     * Assigns the response approved property to true.
+     * 
+     * @return void
+     */
+    public function approvedResponse()
+    {
+        $this->is_approved = true;
+    }
+
+    /**
+     * Assigns the response deny property to true.
+     * 
+     * @return void
+     */
+    public function denyResponse()
+    {
+        $this->is_deny = true;
     }
 
     /**

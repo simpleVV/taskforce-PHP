@@ -49,10 +49,4 @@ abstract class SecuredController extends Controller
 
         return $reply;
     }
-
-    //??
-    public function getUser()
-    {
-        return \Yii::$app->user->getIdentity();
-    }
 }

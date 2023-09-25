@@ -1,16 +1,14 @@
 <?php
 
-namespace app\models;
+namespace app\models\forms;
 
-use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
+use app\models\User;
+use app\models\UserCategory;
 
 class SettingForm extends Model
 {
-    private const MAX_NAME_LENGTH = 128;
-    private const MAX_TELEGRAM_LENGTH = 64;
-
     public $name;
     public $email;
     public $bdDate;
@@ -20,6 +18,8 @@ class SettingForm extends Model
     public $categoryId;
     public $checked;
 
+    private const MAX_NAME_LENGTH = 128;
+    private const MAX_TELEGRAM_LENGTH = 64;
     private $_userId;
 
     /**
@@ -30,11 +30,11 @@ class SettingForm extends Model
         return [
             [['email', 'name'], 'required'],
             [['bdDate'], 'date', 'format' => 'php:Y-m-d',],
+            [['phone'], 'number'],
             [['phone'], 'match', 'pattern' => '/^[+-]?\d{11}$/', 'message' => 'Номер телефона должен состоять из 11 символов'],
             [['telegram'], 'string', 'max' => self::MAX_TELEGRAM_LENGTH],
             [['name'], 'string', 'max' => self::MAX_NAME_LENGTH],
             [['about'], 'string'],
-            [['phone'], 'number'],
             [['email'], 'email'],
             [['email'], 'validateEmail'],
             [['categoryId'], 'each', 'rule' => [

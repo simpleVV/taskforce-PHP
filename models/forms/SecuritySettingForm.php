@@ -1,9 +1,10 @@
 <?php
 
-namespace app\models;
+namespace app\models\forms;
 
 use Yii;
 use yii\base\Model;
+use app\models\User;
 
 class SecuritySettingForm extends Model
 {
@@ -105,7 +106,7 @@ class SecuritySettingForm extends Model
      * @return ?User user records if there is one in the database
      * or null
      */
-    public function getUser(int $id): ?User
+    private function getUser(int $id): ?User
     {
         if ($this->_user === null) {
             $this->_user = User::findOne($id);

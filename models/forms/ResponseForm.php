@@ -1,15 +1,21 @@
 <?php
 
-namespace app\models;
+namespace app\models\forms;
 
 use yii\base\Model;
+use app\models\Response;
+use app\models\Task;
+use app\models\User;
 
 class ResponseForm extends Model
 {
+    const MIN_PRICE = 0;
+    const MAX_COMMENT_LENGTH = 255;
+
     public $comment;
     public $price;
-    public $user_id;
-    public $task_id;
+    public $taskId;
+    public $userId;
 
     /**
      * {@inheritdoc}
@@ -19,11 +25,11 @@ class ResponseForm extends Model
         return [
             [['comment', 'price'], 'required'],
             [['price'], 'integer'],
-            [['price'], 'compare', 'compareValue' => 0, 'operator' => '>', 'type' => 'integer', 'message' => 'Значение «Цена» должно быть больше 0'],
-            ['comment', 'string', 'max' => 255],
+            [['price'], 'compare', 'compareValue' => self::MIN_PRICE, 'operator' => '>', 'type' => 'integer', 'message' => 'Значение «Цена» должно быть больше 0'],
+            ['comment', 'string', 'max' => self::MAX_COMMENT_LENGTH],
             [['comment', 'price'], 'validateResponseExist', 'skipOnError' => false],
-            [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['taskId'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['taskId' => 'id']],
+            [['userId'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['userId' => 'id']],
 
         ];
     }
@@ -50,8 +56,8 @@ class ResponseForm extends Model
     public function validateResponseExist($attribute, $params): void
     {
         $response = Response::find()
-            ->where(['task_id' => $this->task_id])
-            ->andWhere(['user_id' => $this->user_id]);
+            ->where(['task_id' => $this->taskId])
+            ->andWhere(['user_id' => $this->userId]);
         if ($response->exists()) {
             $this->addError($attribute, 'Вы уже подали заявку на это задание!');
         }
@@ -68,7 +74,10 @@ class ResponseForm extends Model
     {
         if ($this->validate()) {
             $response = new Response;
-            $response->attributes = $this->attributes;
+            $response->comment = $this->comment;
+            $response->price = $this->price;
+            $response->user_id = $this->userId;
+            $response->task_id = $this->taskId;
 
             $task->link('responses', $response);
         }

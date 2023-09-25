@@ -1,13 +1,18 @@
 <?php
 
-namespace app\models;
+namespace app\models\forms;
 
 use yii\base\Model;
+use app\models\Task;
+use app\models\Review;
 
 class ReviewForm extends Model
 {
+    const MAX_DESCRIPTION_LENGTH = 200;
+
     public $description;
     public $rate;
+
     /**
      * {@inheritdoc}
      */
@@ -15,8 +20,8 @@ class ReviewForm extends Model
     {
         return [
             [['description', 'rate'], 'required'],
-            [['description'], 'string'],
-            [['rate'], 'integer', 'min' => 1, 'max' => 5],
+            [['description'], 'string', 'max' => self::MAX_DESCRIPTION_LENGTH],
+            [['rate'], 'integer', 'min' => Review::LOWEST_RATING, 'max' => Review::HIGHEST_RATING],
         ];
     }
 

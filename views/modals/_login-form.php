@@ -2,7 +2,7 @@
 
 /** 
  * @var yii\web\View $this 
- * @var LoginForm $form
+ * @var LoginForm $model
  * */
 
 use yii\widgets\ActiveForm;
@@ -23,10 +23,14 @@ use yii\widgets\ActiveForm;
     ]); ?>
 
     <p>
-        <?= $form->field($model, 'email')->textInput(['autofocus' => true]); ?>
+        <?= $form->field($model, 'email')
+            ->textInput(['autofocus' => true]);
+        ?>
     </p>
     <p>
-        <?= $form->field($model, 'password')->passwordInput(); ?>
+        <?= $form->field($model, 'password')
+            ->passwordInput();
+        ?>
     </p>
 
     <button class="button" type="submit">Войти</button>

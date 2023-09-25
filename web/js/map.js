@@ -8,8 +8,7 @@ let init = () => {
         zoom: 16
     })
     : null;
-    console.log(coords);
-    
+     
     if (myMap) {
         myMap.controls.remove('trafficControl');
         myMap.controls.remove('searchControl');

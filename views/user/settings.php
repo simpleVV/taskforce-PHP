@@ -2,6 +2,10 @@
 
 /** 
  * @var yii\web\View $this
+ * @var Category[] $categories 
+ * @var User $model
+ * @var AvatarUpload $avatar
+ * 
  */
 
 use yii\helpers\ArrayHelper;
@@ -43,11 +47,13 @@ $this->title = 'Настройки';
             <img class="avatar-preview" src=<?= $user->avatar_path ?> width="83" height="83" />
         </div>
 
-        <?= $form->field($avatar, 'file')->fileInput([
-            'value' => 'Сменить аватар',
-            'hidden' => true,
-            'id' => 'button-input',
-        ])->label(false); ?>
+        <?= $form->field($avatar, 'file')
+            ->fileInput([
+                'value' => 'Сменить аватар',
+                'hidden' => true,
+                'id' => 'button-input',
+            ])->label(false);
+        ?>
 
         <label for="button-input" class="button button--black">
             Сменить аватар</label>
@@ -55,31 +61,37 @@ $this->title = 'Настройки';
     <?= $form->field($model, 'name')
         ->textInput([
             'value' => $user->name
-        ]); ?>
+        ]);
+    ?>
     <div class="half-wrapper">
         <?= $form->field($model, 'email')
             ->input('email', [
                 'value' => $user->email
-            ]); ?>
+            ]);
+        ?>
         <?= $form->field($model, 'bdDate')
             ->input('date', [
                 'value' => $user->bd_date
-            ]); ?>
+            ]);
+        ?>
     </div>
     <div class="half-wrapper">
         <?= $form->field($model, 'phone')
             ->input('tel', [
                 'value' => $user->phone
-            ]); ?>
+            ]);
+        ?>
         <?= $form->field($model, 'telegram')
             ->textInput([
                 'value' => $user->telegram
-            ]); ?>
+            ]);
+        ?>
     </div>
     <?= $form->field($model, 'about')
         ->textarea([
             'value' => $user->about
-        ]); ?>
+        ]);
+    ?>
 
     <div class="form-group">
         <?php if ($user->is_performer) : ?>
