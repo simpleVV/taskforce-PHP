@@ -20,7 +20,7 @@ use taskforce\logic\actions\RespondAction;
  */
 class HtmlHelper
 {
-    const MIN_STARS_NUMBER = 0;
+    public const MIN_STARS_NUMBER = 0;
 
     public static function getActionButtons(array $availableActions, int $id): array
     {

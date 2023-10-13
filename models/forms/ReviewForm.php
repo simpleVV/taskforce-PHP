@@ -8,7 +8,7 @@ use app\models\Review;
 
 class ReviewForm extends Model
 {
-    const MAX_DESCRIPTION_LENGTH = 200;
+    private const MAX_DESCRIPTION_LENGTH = 200;
 
     public $description;
     public $rate;
@@ -47,7 +47,8 @@ class ReviewForm extends Model
     {
         if ($this->validate()) {
             $review = new Review();
-            $review->attributes = $this->attributes;
+            $review->description = $this->description;
+            $review->rate = $this->rate;
             $review->client_id = $task->client_id;
             $review->user_id = $task->performer_id;
             $review->task_id = $task->id;

@@ -13,6 +13,37 @@ use app\models\Status;
 class ResponsesController extends SecuredController
 {
     /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        $rules = parent::behaviors();
+
+        $rulePerformer = [
+            'allow' => false,
+            'actions' => ['deny', 'accept'],
+            'matchCallback' => function ($rule, $action) {
+                $isPerformer = Yii::$app->user->getIdentity()->is_performer;
+                return empty($isPerformer) ? false : true;
+            }
+        ];
+
+        $ruleClient = [
+            'allow' => false,
+            'actions' => ['create'],
+            'matchCallback' => function ($rule, $action) {
+                $isPerformer = Yii::$app->user->getIdentity()->is_performer;
+                return empty($isPerformer) ? true : false;
+            }
+        ];
+
+        array_unshift($rules['access']['rules'], $rulePerformer);
+        array_unshift($rules['access']['rules'], $ruleClient);
+
+        return $rules;
+    }
+
+    /**
      * Display selected task.
      * 
      * @param int $id id of the selected response

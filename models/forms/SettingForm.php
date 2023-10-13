@@ -6,6 +6,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use app\models\User;
 use app\models\UserCategory;
+use app\models\Category;
 
 class SettingForm extends Model
 {
@@ -20,7 +21,7 @@ class SettingForm extends Model
 
     private const MAX_NAME_LENGTH = 128;
     private const MAX_TELEGRAM_LENGTH = 64;
-    private $_userId;
+    private $userId;
 
     /**
      * {@inheritdoc}
@@ -73,7 +74,7 @@ class SettingForm extends Model
     {
         $user = User::findOne(['email' => $this->email]);
 
-        if ($user && $user->id !== $this->_userId) {
+        if ($user && $user->id !== $this->userId) {
             $this->addError($attribute, 'Указанный Email уже зарегистрирован');
         }
     }
@@ -87,7 +88,7 @@ class SettingForm extends Model
     public function saveUserSettings(int $id): bool
     {
         $user = User::findOne($id);
-        $this->_userId = $id;
+        $this->userId = $id;
 
         if ($this->validate() && $user) {
 

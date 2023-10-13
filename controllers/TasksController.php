@@ -20,7 +20,28 @@ use taskforce\logic\actions\RefusalAction;
 
 class TasksController extends SecuredController
 {
-    const TASKS_PAGE_SIZE = 5;
+    private const TASKS_PAGE_SIZE = 5;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        $rules = parent::behaviors();
+
+        $rule = [
+            'allow' => false,
+            'actions' => ['create', 'cancel'],
+            'matchCallback' => function ($rule, $action) {
+                $isPerformer = Yii::$app->user->getIdentity()->is_performer;
+                return empty($isPerformer) ? false : true;
+            }
+        ];
+
+        array_unshift($rules['access']['rules'], $rule);
+
+        return $rules;
+    }
 
     /**
      * Display tasks page.

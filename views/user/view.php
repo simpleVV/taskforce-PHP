@@ -8,6 +8,8 @@
 use yii\helpers\Html;
 use app\helpers\HtmlHelper;
 
+$user = Yii::$app->user->identity;
+
 $this->title = 'Профиль пользователя';
 ?>
 
@@ -48,7 +50,7 @@ $this->title = 'Профиль пользователя';
                 </span>
                 <?php if ($model->bd_date) : ?>
                     , <span class="age-info">
-                        <?= $model->bd_date; ?>
+                        <?= $model->getAge(); ?>
                     </span> лет
                 <?php endif; ?>
             </p>
@@ -84,24 +86,26 @@ $this->title = 'Профиль пользователя';
             ?>
         </dl>
     </div>
-    <div class="right-card white">
-        <h4 class="head-card">Контакты</h4>
-        <ul class="enumeration-list">
-            <li class="enumeration-item">
-                <a href="#" class="link link--block link--phone">
-                    <?= Html::encode($model->phone); ?>
-                </a>
-            </li>
-            <li class="enumeration-item">
-                <a href="#" class="link link--block link--email">
-                    <?= Html::encode($model->email); ?>
-                </a>
-            </li>
-            <li class="enumeration-item">
-                <a href="#" class="link link--block link--tg">
-                    <?= Html::encode($model->telegram); ?>
-                </a>
-            </li>
-        </ul>
-    </div>
+    <?php if ($model->showContacts($user->id)) : ?>
+        <div class="right-card white">
+            <h4 class="head-card">Контакты</h4>
+            <ul class="enumeration-list">
+                <li class="enumeration-item">
+                    <a href="#" class="link link--block link--phone">
+                        <?= Html::encode($model->phone); ?>
+                    </a>
+                </li>
+                <li class="enumeration-item">
+                    <a href="#" class="link link--block link--email">
+                        <?= Html::encode($model->email); ?>
+                    </a>
+                </li>
+                <li class="enumeration-item">
+                    <a href="#" class="link link--block link--tg">
+                        <?= Html::encode($model->telegram); ?>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    <?php endif; ?>
 </div>

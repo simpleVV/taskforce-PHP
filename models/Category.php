@@ -16,7 +16,7 @@ use yii\db\ActiveRecord;
  */
 class Category extends ActiveRecord
 {
-    const MAX_NAME_LENGTH = 60;
+    private const MAX_NAME_LENGTH = 60;
     /**
      * {@inheritdoc}
      */

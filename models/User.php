@@ -43,18 +43,6 @@ class User extends BaseUser implements IdentityInterface
         return 'users';
     }
 
-    // public function behaviors()
-    // {
-    //     return [
-    //         'saveRelations' => [
-    //             'class'     => SaveRelationsBehavior::class,
-    //             'relations' => [
-    //                 'categories'
-    //             ],
-    //         ],
-    //     ];
-    // }
-
     /**
      * {@inheritdoc}
      */
@@ -113,6 +101,25 @@ class User extends BaseUser implements IdentityInterface
     public function increaseFailTasks(): void
     {
         $this->updateCounters(['fail_tasks' => 1]);
+    }
+
+    /**
+     * Get the user age in years
+     * 
+     * @return ?int user age in years
+     */
+    public function getAge(): ?int
+    {
+        $result = null;
+
+        if ($this->bd_date) {
+            $bd = new \DateTime($this->bd_date);
+            $now = new \DateTime();
+            $diff = $now->diff($bd);
+            $result = $diff->y;
+        }
+
+        return $result;
     }
 
     /**
@@ -179,7 +186,7 @@ class User extends BaseUser implements IdentityInterface
             $position = ($highestRating + $goodRating + $averageRating + $poorRating + $lowestRating) / $totalCount;
         }
 
-        return $position;
+        return round($position);
     }
 
     /**
@@ -190,20 +197,32 @@ class User extends BaseUser implements IdentityInterface
      * @param int $city user city title from VK
      * @return bool true - if the user's data is successfully saved
      */
-    public function saveUserFromVk(string $name, string $email, int $city_id): bool
+    public function saveUserFromVk(string $name, string $email, int $cityId): bool
     {
         $password = Yii::$app->security->generateRandomString(self::MIN_PASSWORD_LENGTH);
 
         $this->name = $name;
         $this->email = $email;
-        $this->city_id = $city_id;
+        $this->city_id = $cityId;
         $this->password = Yii::$app->security->generatePasswordHash($password);;
 
         return $this->save();
     }
 
-    public function getUserCategoriesId()
+    /**
+     * show user contacts
+     * 
+     * @param int $clientId client id
+     * @return bool show contacts if the user does not hide contacts or shows
+     * contacts only to his clients
+     */
+    public function showContacts(int $clientId): bool
     {
+        $task = Task::findOne(['client_id' => $clientId]);
+
+        return $this->hide_contacts
+            ? !empty($task)
+            : true;
     }
 
     /**

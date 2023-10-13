@@ -18,8 +18,8 @@ use yii\db\ActiveRecord;
  */
 class Files extends ActiveRecord
 {
-    const MAX_NAME_LENGTH = 60;
-    const MAX_PATH_LENGTH = 255;
+    private const MAX_NAME_LENGTH = 60;
+    private const MAX_PATH_LENGTH = 255;
 
     /**
      * {@inheritdoc}

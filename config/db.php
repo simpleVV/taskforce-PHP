@@ -3,8 +3,8 @@
 return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=taskforce',
-    'username' => 'root',
-    'password' => 'Z89Vhgf3',
+    'username' => $_ENV['BD_USER'],
+    'password' => $_ENV['BD_PASSWORD'],
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)

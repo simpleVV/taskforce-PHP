@@ -48,8 +48,10 @@ class UploadForm extends BaseUpload
             $fileInfo->path = $this->filePath;
             $fileInfo->size = $this->size;
             $fileInfo->task_uid = $this->taskUid;
+
+            return $fileInfo->save(false);
         }
 
-        return $fileInfo->save(false);
+        return false;
     }
 }

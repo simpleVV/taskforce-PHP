@@ -1,6 +1,5 @@
 <?php
-//Of7xGWuXZikhS1c8IlmQ
-//163631e4163631e4163631e4ea152377ab11636163631e472e27ffe40ce841ff076913b
+
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -68,6 +67,7 @@ $config = [
                 'user/security-settings/<id:\d+>' => 'user/security-settings',
                 'user/settings/<id:\d+>' => 'user/settings',
                 'ajax/autocomplete/<address:.*>' => 'ajax/autocomplete',
+                'tasks' => 'tasks/index'
             ],
         ],
 

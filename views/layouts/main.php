@@ -35,7 +35,7 @@ $user = Yii::$app->user->identity;
 
     <header class="page-header">
         <nav class="main-nav">
-            <a href="#" class="header-logo">
+            <a href="<?= Url::toRoute(['tasks/index']); ?>" class="header-logo">
                 <img class="logo-image" src="../../img/logotype.png" width="227" height="60" alt="taskforce" />
             </a>
 
@@ -64,7 +64,8 @@ $user = Yii::$app->user->identity;
                             ],
                             [
                                 'label' => 'Создать задание',
-                                'url' => ['tasks/create']
+                                'url' => ['tasks/create'],
+                                'visible' => !$user->is_performer
                             ],
                             [
                                 'label' => 'Настройки',

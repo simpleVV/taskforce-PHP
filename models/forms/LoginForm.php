@@ -11,7 +11,7 @@ class LoginForm extends Model
     public $email;
     public $password;
 
-    private $_user;
+    private $user;
 
     /**
      * {@inheritdoc}
@@ -75,10 +75,10 @@ class LoginForm extends Model
      */
     private function getUser(): ?User
     {
-        if ($this->_user === null) {
-            $this->_user = User::findByEmail($this->email);
+        if ($this->user === null) {
+            $this->user = User::findByEmail($this->email);
         }
 
-        return $this->_user;
+        return $this->user;
     }
 }

@@ -16,7 +16,7 @@ use Yii;
  */
 class Auth extends \yii\db\ActiveRecord
 {
-    const MAX_SOURCE_LENGTH = 255;
+    private const MAX_SOURCE_LENGTH = 255;
     /**
      * {@inheritdoc}
      */

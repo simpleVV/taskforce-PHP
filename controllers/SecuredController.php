@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use Yii;
 use yii\db\ActiveRecord;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -25,12 +26,6 @@ abstract class SecuredController extends Controller
                 ]
             ]
         ];
-        // 'verbs' => [
-        //     'class' => VerbFilter::class,
-        //     'actions' => [
-        //         'logout' => ['get', 'post'],
-        //     ],
-        // ],
     }
 
     /**
@@ -44,7 +39,7 @@ abstract class SecuredController extends Controller
         $reply = $modelClass::findOne($id);
 
         if (!$reply) {
-            throw new NotFoundHttpException('Страница не найдена');
+            throw new NotFoundHttpException(Yii::t('app', 'Страница не найдена'), 404);
         }
 
         return $reply;

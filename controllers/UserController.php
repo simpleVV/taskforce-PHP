@@ -25,7 +25,11 @@ class UserController extends SecuredController
         $user = User::findOne($id);
 
         if (!$user) {
-            throw new NotFoundHttpException('Пользователь с таким ID не найден');
+            throw new NotFoundHttpException(Yii::t('app', 'Пользователь с таким ID не найден'), 404);
+        }
+
+        if (empty($user->is_performer)) {
+            throw new NotFoundHttpException(Yii::t('app', 'Страница не найдена.'), 404);
         }
 
         return $this->render('view', [
@@ -57,7 +61,9 @@ class UserController extends SecuredController
             $settingForm->load(Yii::$app->request->post());
 
             if ($settingForm->saveUserSettings($id)) {
-                return $this->redirect(['user/view', 'id' => $id]);
+                return $user->is_performer
+                    ? $this->redirect(['user/view', 'id' => $id])
+                    : $this->redirect(['tasks/index']);
             }
         }
 
@@ -77,12 +83,15 @@ class UserController extends SecuredController
     public function actionSecuritySettings(int $id): string|\Yii\web\Response
     {
         $securitySettingForm = new SecuritySettingForm();
+        $user = User::findOne($id);
 
         if (Yii::$app->request->getIsPost()) {
             $securitySettingForm->load(Yii::$app->request->post());
 
             if ($securitySettingForm->saveUserSettings($id)) {
-                return $this->redirect(['user/view', 'id' => $id]);
+                return $user->is_performer
+                    ? $this->redirect(['user/view', 'id' => $id])
+                    : $this->redirect(['tasks/index']);
             }
         }
 

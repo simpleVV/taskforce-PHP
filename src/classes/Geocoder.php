@@ -11,35 +11,34 @@ use GuzzleHttp\Psr7\Request;
 
 class Geocoder
 {
-    // public const API_KEY = '26dbc710-0877-4d4d-bcf6-f2e43dae3ee9';
+    private const GEOCODER_URL = [
+        'base_uri' => 'https://geocode-maps.yandex.ru'
+    ];
+    private const KEYS = [
+        'options' => 'response.GeoObjectCollection.featureMember',
+        'coordinates' => 'GeoObject.Point.pos',
+        'components' => 'GeoObject.metaDataProperty.GeocoderMetaData.Address.Components',
+    ];
 
     /**
      * Finds a list of suitable addresses.
      * 
-     * @param string $address - task category id
+     * @param string $city the user's city specified in the profile
+     * @param string $address the address entered by the user
      * @return array array of suitable addresses
      */
-    public function getSimilarAddress(string $address): array
+    public function getSimilarAddress(string $city, string $address): array
     {
-        $client = new Client([
-            'base_uri' => 'https://geocode-maps.yandex.ru'
-        ]);
-
-        $keys = [
-            'options' => 'response.GeoObjectCollection.featureMember',
-            'coordinates' => 'GeoObject.Point.pos',
-            'address' => 'GeoObject.metaDataProperty.GeocoderMetaData.Address.formatted',
-            'components' => 'GeoObject.metaDataProperty.GeocoderMetaData.Address.Components',
-        ];
+        $client = new Client(self::GEOCODER_URL);
+        $result = [];
 
         $query =   [
             'apikey' => $_ENV['YA_API_KEY'],
-            'geocode' => $address,
+            'geocode' => "{$city}+{$address}",
             'kind' => 'house',
             'format' => 'json',
             'results' => '5'
         ];
-        $result = [];
 
         try {
             $request = new Request('GET', '1.x/');
@@ -56,21 +55,15 @@ class Geocoder
                 throw new ServerException("Invalid json format", $request, $response);
             }
 
-            $options = ArrayHelper::getValue($data, $keys['options']);
-            $city = '';
+            $options = ArrayHelper::getValue($data, self::KEYS['options']);
             $street = '';
             $house = '';
 
             foreach ($options as $option) {
-                $latLong = explode(' ', ArrayHelper::getValue($option, $keys['coordinates']));
-                $address = ArrayHelper::getValue($option, $keys['address']);
-                $components = ArrayHelper::getValue($option, $keys['components']);
+                $latLong = explode(' ', ArrayHelper::getValue($option, self::KEYS['coordinates']));
+                $components = ArrayHelper::getValue($option, self::KEYS['components']);
 
                 foreach ($components as $component) {
-                    if (in_array('locality', $component)) {
-                        $city = $component['name'];
-                    }
-
                     if (in_array('street', $component)) {
                         $street = $component['name'];
                     }

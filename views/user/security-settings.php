@@ -46,11 +46,14 @@ $this->title = 'Настройки';
     <?= $form->field($model, 'confirmNewPassword')
         ->passwordInput();
     ?>
-    <?= $form->field($model, 'hideContacts')
-        ->checkbox([
-            'checked' => !empty($user->hide_contacts)
-        ]);
-    ?>
+
+    <?php if ($user->is_performer) : ?>
+        <?= $form->field($model, 'hideContacts')
+            ->checkbox([
+                'checked' => !empty($user->hide_contacts)
+            ]);
+        ?>
+    <?php endif; ?>
 
     <input type="submit" class="button button--blue" value="Сохранить" />
     <?php ActiveForm::end(); ?>

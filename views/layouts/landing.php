@@ -75,7 +75,7 @@ LandingAsset::register($this);
                     <p>Сломался кран на кухне? Надо отправить документы? Нет времени самому гулять с собакой?
                         У нас вы быстро найдёте исполнителя для любой жизненной ситуации?<br>
                         Быстро, безопасно и с гарантией. Просто, как раз, два, три. </p>
-                    <button class="button">Создать аккаунт</button>
+                    <?= HTML::a('Создать аккаунт', ['auth/signup'], ['class' => 'button']) ?>
                 </div>
                 <div class="landing-center">
                     <div class="landing-instruction">

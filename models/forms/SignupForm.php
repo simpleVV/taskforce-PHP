@@ -5,6 +5,7 @@ namespace app\models\forms;
 use Yii;
 use yii\base\Model;
 use app\models\User;
+use app\models\City;
 
 class SignupForm extends Model
 {
@@ -74,5 +75,7 @@ class SignupForm extends Model
                 return Yii::$app->user->login($user);
             };
         }
+
+        return false;
     }
 }

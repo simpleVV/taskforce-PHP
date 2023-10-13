@@ -12,9 +12,9 @@ use app\models\Category;
 
 class TaskForm extends Model
 {
-    const MIN_TITLE_LENGTH = 10;
-    const MIN_DESCRIPTION_LENGTH = 30;
-    const MIN_PRICE = 0;
+    private const MIN_TITLE_LENGTH = 10;
+    private const MIN_DESCRIPTION_LENGTH = 30;
+    private const MIN_PRICE = 0;
 
     public $title;
     public $description;
@@ -76,8 +76,8 @@ class TaskForm extends Model
     {
         if ($this->validate()) {
             $task = new Task;
-            $city = City::findOne(['name' => $this->city]);
             $client = User::findOne(['id' => Yii::$app->user->id]);
+            $city = City::findOne(['name' => $this->city]);
 
             $task->title = $this->title;
             $task->description = $this->description;
@@ -88,11 +88,13 @@ class TaskForm extends Model
             $task->client_id = Yii::$app->user->id;
             $task->status_id = Status::STATUS_NEW;
             $task->uid = $this->taskUid;
-            $task->city_id = $city ? $city->id : $client->city->id;
+            $task->city_id = isset($city) ? $city->id : $client->city->id;
             $task->lat = $this->lat ? $this->lat : $client->city->lat;
             $task->long = $this->long ? $this->long : $client->city->lon;
 
             return $task->save(false) ? $task->id : null;
         }
+
+        return false;
     }
 }

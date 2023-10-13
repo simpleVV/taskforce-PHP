@@ -13,7 +13,7 @@ class SecuritySettingForm extends Model
     public $confirmNewPassword;
     public $hideContacts;
 
-    private $_user;
+    private $user;
     private const MAX_PASS_LENGTH = 8;
 
     /**
@@ -69,7 +69,7 @@ class SecuritySettingForm extends Model
     public function validatePassword(string $attribute, $params)
     {
         if (!$this->hasErrors()) {
-            $user = $this->_user;
+            $user = $this->user;
 
             if (!$user || !$user->validatePassword($this->oldPassword)) {
                 $this->addError($attribute, 'Старый пароль указан неверно!');
@@ -108,10 +108,10 @@ class SecuritySettingForm extends Model
      */
     private function getUser(int $id): ?User
     {
-        if ($this->_user === null) {
-            $this->_user = User::findOne($id);
+        if ($this->user === null) {
+            $this->user = User::findOne($id);
         }
 
-        return $this->_user;
+        return $this->user;
     }
 }

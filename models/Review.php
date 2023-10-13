@@ -22,11 +22,11 @@ use yii\db\ActiveRecord;
  */
 class Review extends ActiveRecord
 {
-    const HIGHEST_RATING = 5;
-    const GOOD_RATING = 4;
-    const AVERAGE_RATING = 3;
-    const POOR_RATING = 2;
-    const LOWEST_RATING = 1;
+    public const HIGHEST_RATING = 5;
+    public const GOOD_RATING = 4;
+    public const AVERAGE_RATING = 3;
+    public const POOR_RATING = 2;
+    public const LOWEST_RATING = 1;
 
     /**
      * {@inheritdoc}

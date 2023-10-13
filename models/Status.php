@@ -17,13 +17,13 @@ use yii\db\ActiveRecord;
 class Status extends ActiveRecord
 {
 
-    const STATUS_NEW = 1;
-    const STATUS_CANCEL = 2;
-    const STATUS_IN_PROGRESS = 3;
-    const STATUS_COMPLETE = 4;
-    const STATUS_FAILED = 5;
-    const STATUS_OVERDUE = 6;
-    const MAX_NAME_LENGTH = 60;
+    public const STATUS_NEW = 1;
+    public const STATUS_CANCEL = 2;
+    public const STATUS_IN_PROGRESS = 3;
+    public const STATUS_COMPLETE = 4;
+    public const STATUS_FAILED = 5;
+    public const STATUS_OVERDUE = 6;
+    private const MAX_NAME_LENGTH = 60;
 
     /**
      * {@inheritdoc}

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use Yii;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -13,13 +14,14 @@ class AjaxController extends Controller
      * By entering the address in the field, the user will receive a list of
      * suitable options.
      * 
-     * @param string $address - task category id
+     * @param string $address the address entered by the user
      * @return Response address options in json format
      */
     public function actionAutocomplete(string $address): Response
     {
         $geocoder = new Geocoder();
+        $city = Yii::$app->user->getIdentity()->city->name;
 
-        return $this->asJson($geocoder->getSimilarAddress($address));
+        return $this->asJson($geocoder->getSimilarAddress($city, $address));
     }
 }

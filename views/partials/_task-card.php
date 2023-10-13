@@ -34,6 +34,6 @@ use yii\helpers\Url;
         <p class="info-text category-text">
             <?= $model->category->name; ?>
         </p>
-        <a href="#" class="button button--black">Смотреть Задание</a>
+        <?= HTML::a('Смотреть Задание', ['tasks/view', "id" => $model->id], ['class' => 'button button--black']) ?>
     </div>
 </div>

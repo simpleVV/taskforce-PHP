@@ -46,7 +46,7 @@ $user = Yii::$app->user->identity;
     $is_visible = !$model->task->performer_id && !$model->is_deny
     ?>
 
-    <?php if ($model->user_id !== $user->id && $is_visible) : ?>
+    <?php if ($model->task->client_id === $user->id && $is_visible) : ?>
         <div class="button-popup">
             <a href="<?= Url::to(["responses/accept", "id" => $model->id]); ?>" class="button button--blue button--small">Принять</a>
             <a href="<?= Url::to(["responses/deny", "id" => $model->id]); ?>" class="button button--orange button--small">Отказать</a>

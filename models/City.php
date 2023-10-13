@@ -17,7 +17,7 @@ use yii\db\ActiveRecord;
  */
 class City extends ActiveRecord
 {
-    const MAX_NAME_LENGTH = 255;
+    private const MAX_NAME_LENGTH = 255;
     /**
      * {@inheritdoc}
      */

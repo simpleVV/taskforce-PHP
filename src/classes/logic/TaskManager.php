@@ -12,15 +12,15 @@ use taskforce\utils\exception\StatusValidException;
 
 class TaskManager
 {
-    const STATUS_NEW = 'new';
-    const STATUS_CANCEL = 'cancelled';
-    const STATUS_IN_PROGRESS = 'in_progress';
-    const STATUS_COMPLETE = 'complete';
-    const STATUS_FAILED = 'failed';
-    const STATUS_OVERDUE = 'overdue';
+    public const STATUS_NEW = 'new';
+    public const STATUS_CANCEL = 'cancelled';
+    public const STATUS_IN_PROGRESS = 'in_progress';
+    public const STATUS_COMPLETE = 'complete';
+    public const STATUS_FAILED = 'failed';
+    public const STATUS_OVERDUE = 'overdue';
 
-    const ROLE_PERFORMER = 'performer';
-    const ROLE_CLIENT = 'client';
+    public const ROLE_PERFORMER = 'performer';
+    public const ROLE_CLIENT = 'client';
 
     private ?int $performerId;
     private int $clientId;

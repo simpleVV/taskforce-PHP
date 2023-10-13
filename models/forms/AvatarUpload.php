@@ -10,7 +10,7 @@ use app\models\User;
 class AvatarUpload extends BaseUpload
 {
     public $userId;
-    private $_user;
+    private $user;
 
     /**
      * {@inheritdoc}
@@ -46,7 +46,7 @@ class AvatarUpload extends BaseUpload
         $user = $this->getUser();
 
         if ($this->saveFileInFolder() && $user) {
-            $this->_user->avatar_path = $this->filePath;
+            $this->user->avatar_path = $this->filePath;
 
             return $user->save(false);
         }
@@ -62,10 +62,10 @@ class AvatarUpload extends BaseUpload
     {
         $userId = Yii::$app->user->identity->id;
 
-        if ($this->_user === null) {
-            $this->_user = User::findOne($userId);
+        if ($this->user === null) {
+            $this->user = User::findOne($userId);
         }
 
-        return $this->_user;
+        return $this->user;
     }
 }

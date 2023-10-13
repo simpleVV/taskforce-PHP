@@ -32,7 +32,7 @@ class AuthController extends Controller
      * Redirects the user to the tasks page if 
      * he has successfully logged in or if user already login
      * 
-     * @return array|Response - array — the error message indexed by the
+     * @return array|Response - array the error message indexed by the
      * attribute ID|the current response object.
      */
     public function actionLogin(): array|Response
