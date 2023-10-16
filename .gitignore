@@ -36,4 +36,5 @@ tests/_support/_generated
 #vagrant folder
 /.vagrant
 
-/upload
+# upload image
+/web/uploads
