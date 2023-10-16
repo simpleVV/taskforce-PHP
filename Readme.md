@@ -1,4 +1,4 @@
-# Личный проект «YetiCave»
+# Личный проект «Taskforce»
 
 * Студент: `SimpleVV`.
 
